@@ -12,7 +12,7 @@ export default function Index() {
       if (!hasOnboarded) {
         router.replace("/onboarding");
       } else if (!user) {
-        router.replace("/(auth)/login");
+        router.replace("/(auth)/register");
       }
       // If user exists, AuthContext will handle role-based redirect
     }
