@@ -1,3 +1,4 @@
+import SocialLogin from "@/components/auth/SocialLogin";
 import { Image } from "expo-image";
 import React, { useState } from "react";
 import {
@@ -22,11 +23,6 @@ const Register = () => {
   const handleSignIn = () => {
     // Handle navigation to sign in
     console.log("Navigate to sign in...");
-  };
-
-  const handleGoogleSignIn = () => {
-    // Handle Google sign in
-    console.log("Sign in with Google...");
   };
 
   return (
@@ -54,17 +50,30 @@ const Register = () => {
 
       {/* Form Content */}
       <View className="flex-1 px-6">
-        <Text className="text-2xl font-semibold text-center mb-5 text-gray-800">
+        <Text
+          style={{ fontFamily: "SourceSans3-SemiBold" }}
+          className="text-2xl text-center mb-5 text-neutral-dark-active"
+        >
           Create an Account
         </Text>
 
         {/* Email Input */}
-        <View className="mb-4">
-          <Text className="text-gray-600 mb-2 font-medium">Email</Text>
+        <View className="mb-5">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-neutral-normal mb-2"
+          >
+            Email
+          </Text>
           <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-700 bg-white"
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
             placeholder="example@gmail.com"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#7C7C7C"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -73,12 +82,22 @@ const Register = () => {
         </View>
 
         {/* New Password Input */}
-        <View className="mb-4">
-          <Text className="text-gray-600 mb-2 font-medium">New Password</Text>
+        <View className="mb-5">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-neutral-normal mb-2"
+          >
+            New Password
+          </Text>
           <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-700 bg-white"
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
             placeholder="Type new password"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#7C7C7C"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -86,14 +105,22 @@ const Register = () => {
         </View>
 
         {/* Confirm Password Input */}
-        <View className="mb-8">
-          <Text className="text-gray-600 mb-2 font-medium">
+        <View className="mb-5">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-neutral-normal mb-2"
+          >
             Confirm Password
           </Text>
           <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-700 bg-white"
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
             placeholder="Re-type new password"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#7C7C7C"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
@@ -102,43 +129,58 @@ const Register = () => {
 
         {/* Next Button */}
         <TouchableOpacity
-          className="bg-green-600 rounded-lg py-4 mb-6"
+          className="bg-green-normal rounded-lg py-2.5 mb-5"
           onPress={handleNext}
           activeOpacity={0.8}
         >
-          <Text className="text-white text-center font-semibold text-lg">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-green-light text-center text-lg"
+          >
             Next
           </Text>
         </TouchableOpacity>
 
         {/* Sign In Link */}
-        <TouchableOpacity onPress={handleSignIn} className="mb-6">
-          <Text className="text-center text-gray-600">
+        <TouchableOpacity onPress={handleSignIn} className="mb-5">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-center text-neutral-dark"
+          >
             Already have an account?{" "}
-            <Text className="text-green-600 font-medium">Sign In</Text>
+            <Text
+              style={{
+                fontFamily: "SourceSans3-Medium",
+              }}
+              className="text-green-normal"
+            >
+              Sign In
+            </Text>
           </Text>
         </TouchableOpacity>
 
         {/* Divider */}
         <View className="flex-row items-center mb-6">
-          <View className="flex-1 h-px bg-gray-300" />
-          <Text className="mx-4 text-gray-500 font-medium">OR</Text>
-          <View className="flex-1 h-px bg-gray-300" />
+          <View className="flex-1 h-px bg-neutral-light-active" />
+
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="mx-4 text-neutral-normal"
+          >
+            OR
+          </Text>
+
+          <View className="flex-1 h-px bg-neutral-light-active" />
         </View>
 
         {/* Google Sign In Button */}
-        <TouchableOpacity
-          className="border border-gray-300 rounded-lg py-4 flex-row items-center justify-center bg-gray-50"
-          onPress={handleGoogleSignIn}
-          activeOpacity={0.8}
-        >
-          <View className="w-5 h-5 mr-3 bg-white rounded-full items-center justify-center">
-            <Text className="text-xs font-bold text-red-500">G</Text>
-          </View>
-          <Text className="text-gray-700 font-medium text-base">
-            Continue with Google
-          </Text>
-        </TouchableOpacity>
+        <SocialLogin />
       </View>
     </SafeAreaView>
   );

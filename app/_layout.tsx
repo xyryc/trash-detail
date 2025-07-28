@@ -5,19 +5,30 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import "react-native-reanimated";
 import "./global.css";
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+
+  const [fontsLoaded] = useFonts({
+    "SourceSans3-Regular": require("@/assets/fonts/SourceSans3-Regular.ttf"),
+    "SourceSans3-Medium": require("@/assets/fonts/SourceSans3-Medium.ttf"),
+    "SourceSans3-SemiBold": require("@/assets/fonts/SourceSans3-SemiBold.ttf"),
   });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
     return null;
   }
 
