@@ -1,4 +1,5 @@
 import SocialLogin from "@/components/auth/SocialLogin";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -132,20 +133,7 @@ const Register = () => {
         </View>
 
         {/* Next Button */}
-        <TouchableOpacity
-          className="bg-green-normal rounded-lg py-2.5 mb-5"
-          onPress={handleNext}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={{
-              fontFamily: "SourceSans3-Medium",
-            }}
-            className="text-green-light text-center text-lg"
-          >
-            Next
-          </Text>
-        </TouchableOpacity>
+        <ButtonPrimary title={"Next"} onPress={handleNext} />
 
         {/* Sign In Link */}
         <TouchableOpacity onPress={handleSignIn} className="mb-5">

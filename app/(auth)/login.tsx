@@ -1,4 +1,5 @@
 import SocialLogin from "@/components/auth/SocialLogin";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -8,7 +9,6 @@ import {
   StatusBar,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -116,20 +116,7 @@ const Login = () => {
         </View>
 
         {/* Next Button */}
-        <TouchableOpacity
-          className="bg-green-normal rounded-lg py-2.5 mb-5"
-          onPress={handleNext}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={{
-              fontFamily: "SourceSans3-Medium",
-            }}
-            className="text-green-light text-center text-lg"
-          >
-            Next
-          </Text>
-        </TouchableOpacity>
+        <ButtonPrimary title={"Next"} onPress={handleNext} />
 
         {/* Divider */}
         <View className="flex-row items-center mb-6">

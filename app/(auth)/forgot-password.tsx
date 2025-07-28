@@ -1,20 +1,17 @@
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, StatusBar, Text, TextInput, View } from "react-native";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleNext = () => {
-    // Handle account creation logic
-    console.log("Logging in...");
+    router.push({
+      pathname: "/(auth)/verify-code",
+      params: { email },
+    });
   };
 
   return (
@@ -62,20 +59,7 @@ const ForgotPassword = () => {
         </View>
 
         {/* Next Button */}
-        <TouchableOpacity
-          className="bg-green-normal rounded-lg py-2.5 mb-5"
-          onPress={handleNext}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={{
-              fontFamily: "SourceSans3-Medium",
-            }}
-            className="text-green-light text-center text-lg"
-          >
-            Next
-          </Text>
-        </TouchableOpacity>
+        <ButtonPrimary title={"Next"} onPress={handleNext} />
       </View>
     </SafeAreaView>
   );
