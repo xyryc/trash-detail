@@ -1,7 +1,9 @@
 import SocialLogin from "@/components/auth/SocialLogin";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Pressable,
   SafeAreaView,
   StatusBar,
   Text,
@@ -13,6 +15,7 @@ import {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleNext = () => {
     // Handle account creation logic
@@ -97,14 +100,19 @@ const Login = () => {
             secureTextEntry
           />
 
-          <Text
-            style={{
-              fontFamily: "SourceSans3-Medium",
-            }}
-            className="mt-2 text-neutral-dark text-right"
+          <Pressable
+            onPress={() => router.push("/(auth)/forgot-password")}
+            className="mt-2"
           >
-            Forgot Password?
-          </Text>
+            <Text
+              style={{
+                fontFamily: "SourceSans3-Medium",
+              }}
+              className=" text-neutral-dark text-right"
+            >
+              Forgot Password?
+            </Text>
+          </Pressable>
         </View>
 
         {/* Next Button */}

@@ -1,5 +1,6 @@
 import SocialLogin from "@/components/auth/SocialLogin";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -14,15 +15,18 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
 
   const handleNext = () => {
     // Handle account creation logic
     console.log("Creating account...");
+    router.push("/(auth)/login");
   };
 
   const handleSignIn = () => {
     // Handle navigation to sign in
     console.log("Navigate to sign in...");
+    router.push("/(auth)/login");
   };
 
   return (
