@@ -10,8 +10,7 @@ const VerifyCode = () => {
   const [otp, setOTP] = useState("");
 
   const handleNext = () => {
-    // Handle account creation logic
-    console.log("Logging in...");
+    router.push("/(auth)/ResetPassword");
   };
 
   return (

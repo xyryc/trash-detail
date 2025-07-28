@@ -136,7 +136,7 @@ const Register = () => {
         <ButtonPrimary title={"Next"} onPress={handleNext} />
 
         {/* Sign In Link */}
-        <TouchableOpacity onPress={handleSignIn} className="mb-5">
+        <View className="mb-5 flex-row items-center justify-center">
           <Text
             style={{
               fontFamily: "SourceSans3-Medium",
@@ -144,6 +144,9 @@ const Register = () => {
             className="text-center text-neutral-dark"
           >
             Already have an account?{" "}
+          </Text>
+
+          <TouchableOpacity onPress={handleSignIn}>
             <Text
               style={{
                 fontFamily: "SourceSans3-Medium",
@@ -152,8 +155,8 @@ const Register = () => {
             >
               Sign In
             </Text>
-          </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
 
         {/* Divider */}
         <View className="flex-row items-center mb-6">

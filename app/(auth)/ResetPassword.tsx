@@ -3,15 +3,12 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, StatusBar, Text, TextInput, View } from "react-native";
 
-const ForgotPassword = () => {
-  const [email, setEmail] = useState("example@email.com");
+const ResetPassword = () => {
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleNext = () => {
-    router.push({
-      pathname: "/(auth)/verify-code",
-      params: { email },
-    });
+    router.push("/(auth)/PasswordChanged");
   };
 
   return (
@@ -24,17 +21,17 @@ const ForgotPassword = () => {
           style={{ fontFamily: "SourceSans3-SemiBold" }}
           className="text-2xl text-center text-neutral-dark-active"
         >
-          Forgot password?
+          Set New Password
         </Text>
 
         <Text
           style={{ fontFamily: "SourceSans3-Regular" }}
-          className="text-center mb-5 text-neutral-normal"
+          className="text-center text-neutral-normal mb-5"
         >
-          Enter your email to reset your password.
+          Set a new password and continue your journey.
         </Text>
 
-        {/* Email Input */}
+        {/* New Password Input */}
         <View className="mb-5">
           <Text
             style={{
@@ -42,19 +39,41 @@ const ForgotPassword = () => {
             }}
             className="text-neutral-normal mb-2"
           >
-            Email
+            New Password
           </Text>
           <TextInput
             style={{
               fontFamily: "SourceSans3-Medium",
             }}
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
-            placeholder="example@gmail.com"
+            placeholder="Type your password"
             placeholderTextColor="#7C7C7C"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+
+        {/* Confirm Password Input */}
+        <View className="mb-5">
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-neutral-normal mb-2"
+          >
+            Confirm Password
+          </Text>
+          <TextInput
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
+            placeholder="Type your password"
+            placeholderTextColor="#7C7C7C"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
           />
         </View>
 
@@ -65,4 +84,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
