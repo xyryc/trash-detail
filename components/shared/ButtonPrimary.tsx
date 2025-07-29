@@ -5,7 +5,7 @@ import { Text, TouchableOpacity } from "react-native";
 const ButtonPrimary = ({ title, onPress }: ButtonPrimaryProps) => {
   return (
     <TouchableOpacity
-      className="bg-green-normal rounded-lg py-2.5 mb-5 mt-6"
+      className="bg-green-normal rounded-lg py-2.5"
       onPress={onPress}
       activeOpacity={0.8}
     >

@@ -2,7 +2,13 @@ import { OTPInput } from "@/components/auth/OTPInput";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const VerifyCode = () => {
   const router = useRouter();
@@ -44,7 +50,28 @@ const VerifyCode = () => {
         <OTPInput length={4} value={otp} onChange={setOTP} autoFocus />
 
         {/* Next Button */}
-        <ButtonPrimary title={"Next"} onPress={handleNext} />
+        <View className="mb-5 mt-6">
+          <ButtonPrimary title={"Next"} onPress={handleNext} />
+        </View>
+
+        {/* resend */}
+        <View className="flex-row justify-center gap-1">
+          <Text
+            style={{ fontFamily: "SourceSans3-Medium" }}
+            className="text-neutral-normal"
+          >
+            Don't receive OTP?
+          </Text>
+
+          <TouchableOpacity>
+            <Text
+              style={{ fontFamily: "SourceSans3-Medium" }}
+              className="text-green-normal"
+            >
+              Send
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

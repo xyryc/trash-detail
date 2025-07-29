@@ -4,8 +4,8 @@ import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   const hasOnboarded = true;
-  const user = false;
   const isLoading = false;
+  const user = { id: "123", role: "employee" };
 
   useEffect(() => {
     if (!isLoading) {
@@ -15,6 +15,17 @@ export default function Index() {
         router.replace("/(auth)/register");
       }
       // If user exists, AuthContext will handle role-based redirect
+      else {
+        switch (user.role) {
+          case "employee":
+            router.replace("/(employee)");
+            break;
+
+          case "user":
+          default:
+            router.replace("/(customer)");
+        }
+      }
     }
   }, [isLoading, hasOnboarded, user]);
 

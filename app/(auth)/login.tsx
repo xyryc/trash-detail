@@ -31,14 +31,14 @@ const Login = () => {
         <View className="flex-row items-center justify-center gap-2">
           {/* left guy */}
           <Image
-            source={require("@/assets/images/left-guy.png")}
+            source={require("@/assets/images/left-guy.svg")}
             style={{ width: 108, height: 168 }}
             contentFit="contain"
           />
 
           {/* right guy */}
           <Image
-            source={require("@/assets/images/right-guy.png")}
+            source={require("@/assets/images/right-guy.svg")}
             style={{ width: 108, height: 168 }}
             contentFit="contain"
           />
@@ -116,7 +116,9 @@ const Login = () => {
         </View>
 
         {/* Next Button */}
-        <ButtonPrimary title={"Next"} onPress={handleNext} />
+        <View className="mb-5">
+          <ButtonPrimary title={"Next"} onPress={handleNext} />
+        </View>
 
         {/* Divider */}
         <View className="flex-row items-center mb-6">

@@ -78,7 +78,7 @@ const ResetPassword = () => {
         </View>
 
         {/* Next Button */}
-        <ButtonPrimary title={"Next"} onPress={handleNext} />
+        <ButtonPrimary title={"Save"} onPress={handleNext} />
       </View>
     </SafeAreaView>
   );
