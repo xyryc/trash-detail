@@ -18,7 +18,7 @@ export default function Index() {
       else {
         switch (user.role) {
           case "employee":
-            router.replace("/(employee)");
+            router.replace("/(employee)/problem");
             break;
 
           case "user":

@@ -5,3 +5,8 @@ type ButtonPrimaryProps = {
   onPress: (event: GestureResponderEvent) => void;
   disabled?: boolean;
 };
+
+type EmployeeHeaderProps = {
+  name: string;
+  email: string;
+};

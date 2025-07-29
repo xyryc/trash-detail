@@ -1,16 +1,18 @@
-import { Stack } from "expo-router";
+import { Tabs } from "expo-router";
+import React from "react";
 
-export default function EmployeeLayout() {
+const TabLayout = () => {
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          title: "Employee Portal",
-          headerStyle: { backgroundColor: "#10B981" },
-          headerTintColor: "white",
-        }}
-      />
-    </Stack>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tabs.Screen name="problem" />
+      <Tabs.Screen name="create" />
+      <Tabs.Screen name="profile" />
+    </Tabs>
   );
-}
+};
+
+export default TabLayout;
