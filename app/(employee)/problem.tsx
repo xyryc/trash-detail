@@ -3,10 +3,20 @@ import problems from "@/assets/data/problems.json";
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
 import ProblemCard from "@/components/employee/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
+import { useRouter } from "expo-router";
 import React from "react";
-import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 
 const Problem = () => {
+  const router = useRouter();
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -19,7 +29,7 @@ const Problem = () => {
         </View>
 
         {/* problem list */}
-        <View>
+        <View className="flex-1">
           <Text style={{ fontFamily: "SourceSans3-Medium" }}>
             Previous problem
           </Text>
@@ -52,7 +62,11 @@ const Problem = () => {
           <FlatList
             data={problems}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <ProblemCard data={item} />}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => router.push(`/details/${item.id}`)}>
+                <ProblemCard data={item} />
+              </Pressable>
+            )}
             contentContainerStyle={{ gap: 12 }}
             showsVerticalScrollIndicator={false}
           />

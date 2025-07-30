@@ -20,6 +20,7 @@ export default function RootLayout() {
     "SourceSans3-Regular": require("@/assets/fonts/SourceSans3-Regular.ttf"),
     "SourceSans3-Medium": require("@/assets/fonts/SourceSans3-Medium.ttf"),
     "SourceSans3-SemiBold": require("@/assets/fonts/SourceSans3-SemiBold.ttf"),
+    "SourceSans3-Bold": require("@/assets/fonts/SourceSans3-Bold.ttf"),
   });
 
   useEffect(() => {

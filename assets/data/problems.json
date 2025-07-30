@@ -38,5 +38,45 @@
     "location": "Harlem, Manhattan",
     "date": "Jul 03",
     "status": "forwarded"
+  },
+   {
+    "id": 5,
+    "image": "https://images.pexels.com/photos/15964433/pexels-photo-15964433.jpeg",
+    "problemCode": "P-12",
+    "problemStatus": "Car Parked",
+    "customerCode": "C-12",
+    "location": "5th Avenue Manhattan, Russia",
+    "date": "Apr 19",
+    "status": "forwarded"
+  },
+  {
+    "id": 6,
+    "image": "https://images.pexels.com/photos/15964433/pexels-photo-15964433.jpeg",
+    "problemCode": "P-07",
+    "problemStatus": "Blocked Driveway",
+    "customerCode": "C-07",
+    "location": "Brooklyn Heights, New York",
+    "date": "May 02",
+    "status": "pending"
+  },
+  {
+    "id": 7,
+    "image": "https://images.pexels.com/photos/15964433/pexels-photo-15964433.jpeg",
+    "problemCode": "P-22",
+    "problemStatus": "Wrong Parking",
+    "customerCode": "C-22",
+    "location": "Queens Plaza, New York",
+    "date": "Jun 12",
+    "status": "resolved"
+  },
+  {
+    "id": 8,
+    "image": "https://images.pexels.com/photos/15964433/pexels-photo-15964433.jpeg",
+    "problemCode": "P-15",
+    "problemStatus": "Fire Hydrant Block",
+    "customerCode": "C-15",
+    "location": "Harlem, Manhattan",
+    "date": "Jul 03",
+    "status": "forwarded"
   }
 ]

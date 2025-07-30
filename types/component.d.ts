@@ -1,9 +1,10 @@
 import { GestureResponderEvent } from "react-native";
 
-type ButtonPrimaryProps = {
+type ButtonProps = {
   title: string;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
+  icon?: ReactNode;
 };
 
 type EmployeeHeaderProps = {
