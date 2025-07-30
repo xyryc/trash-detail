@@ -1,18 +1,28 @@
+import { ProblemItem } from "@/types";
 import { Image } from "expo-image";
 import React from "react";
 import { Text, View } from "react-native";
 
-const ProblemCard = () => {
+const ProblemCard = ({ data }: { data: ProblemItem }) => {
+  const {
+    image,
+    problemCode,
+    problemStatus,
+    customerCode,
+    location,
+    date,
+    status,
+  } = data;
+
   return (
     <View className="bg-neutral-light p-2 rounded-lg">
-      {/* second */}
       <View className="flex-row">
-        {/* first */}
+        {/* first - problem */}
         <View className="w-[38%] flex-row items-center gap-3.5">
           <Image
-            source={require("@/assets/images/car.png")}
+            source={image}
             style={{ width: 40, height: 40, borderRadius: 6 }}
-            contentFit="contain"
+            contentFit="fill"
           />
 
           <View>
@@ -21,7 +31,7 @@ const ProblemCard = () => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              P- 12
+              {problemCode}
             </Text>
 
             <Text
@@ -29,12 +39,12 @@ const ProblemCard = () => {
               className="text-neutral-dark-active text-[10px]"
               numberOfLines={1}
             >
-              Car Parked
+              {problemStatus}
             </Text>
           </View>
         </View>
 
-        {/* second */}
+        {/* second - customer */}
         <View className="w-[41%] flex-row items-center">
           {/* Left Border */}
           <View className="h-[7px] w-[1px] bg-neutral-light-active" />
@@ -46,7 +56,7 @@ const ProblemCard = () => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              P- 12
+              {customerCode}
             </Text>
 
             <Text
@@ -54,12 +64,12 @@ const ProblemCard = () => {
               className="text-neutral-dark-active text-[10px]"
               numberOfLines={1}
             >
-              5th Avenue Manhattan, Russia
+              {location}
             </Text>
           </View>
         </View>
 
-        {/* third */}
+        {/* third - status */}
         <View className="w-[21%] flex-row items-center">
           {/* Left Border */}
           <View className="h-[7px] w-[1px] bg-neutral-light-active" />
@@ -71,7 +81,7 @@ const ProblemCard = () => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              Apr 19
+              {date}
             </Text>
 
             <Text
@@ -79,7 +89,7 @@ const ProblemCard = () => {
               className="text-green-normal text-[10px]"
               numberOfLines={1}
             >
-              forwareded
+              {status}
             </Text>
           </View>
         </View>

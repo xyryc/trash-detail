@@ -1,8 +1,10 @@
+import "@/assets/data/problems";
+import problems from "@/assets/data/problems.json";
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
 import ProblemCard from "@/components/employee/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import React from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native";
 
 const Problem = () => {
   return (
@@ -18,14 +20,42 @@ const Problem = () => {
 
         {/* problem list */}
         <View>
-          <Text className="mb-3" style={{ fontFamily: "SourceSans3-Medium" }}>
+          <Text style={{ fontFamily: "SourceSans3-Medium" }}>
             Previous problem
           </Text>
 
           {/* title */}
+          <View className="px-2 flex-row py-3">
+            <Text
+              style={{ fontFamily: "SourceSans3-Medium" }}
+              className="text-neutral-normal text-[10px] w-[38%]"
+            >
+              Problem
+            </Text>
+
+            <Text
+              style={{ fontFamily: "SourceSans3-Medium" }}
+              className="text-neutral-normal text-[10px] w-[41%]"
+            >
+              Customer
+            </Text>
+
+            <Text
+              style={{ fontFamily: "SourceSans3-Medium" }}
+              className="text-neutral-normal text-[10px] w-[21%]"
+            >
+              Status
+            </Text>
+          </View>
 
           {/* problem cards */}
-          <ProblemCard />
+          <FlatList
+            data={problems}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ProblemCard data={item} />}
+            contentContainerStyle={{ gap: 12 }}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
       </View>
     </SafeAreaView>
