@@ -3,7 +3,7 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -18,6 +18,9 @@ const EditProblemScreen = () => {
   const { id } = useLocalSearchParams();
   const problem = problems.find(
     (item) => item.id?.toString() === id?.toString()
+  );
+  const [charCount, setCharCount] = useState(
+    problem?.problemStatus?.length || 0
   );
 
   return (
@@ -111,7 +114,16 @@ const EditProblemScreen = () => {
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
                   defaultValue={problem?.problemStatus}
+                  maxLength={20}
+                  onChangeText={(text) => setCharCount(text.length)}
                 />
+
+                <Text
+                  style={{ fontFamily: "SourceSans3-Regular" }}
+                  className="text-neutral-normal text-xs text-right mt-1"
+                >
+                  {charCount}/20
+                </Text>
               </View>
 
               <View>

@@ -1,62 +1,65 @@
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: true,
+        tabBarActiveTintColor: "#374151", // Active text/icon color
+        tabBarInactiveTintColor: "#9CA3AF", // Inactive text/icon color
         tabBarStyle: {
+          backgroundColor: "white",
+          borderTopWidth: 1,
+          borderTopColor: "#E5E7EB",
+          paddingTop: 8,
+          paddingBottom: 8,
           height: 80,
-          backgroundColor: "#fff",
-          borderTopWidth: 0,
-          elevation: 0,
         },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+          marginTop: 4,
+        },
+        tabBarIconStyle: {
+          marginBottom: -4,
+        },
+        headerShown: false, // Hide the header if you don't want it
       }}
     >
-      {/* Problem Tab */}
       <Tabs.Screen
         name="problem"
         options={{
           title: "Problem",
-          tabBarIcon: ({ focused }) => (
-            <View className="items-center justify-center">
-              <MaterialIcons
-                name="report-problem"
-                size={24}
-                color={focused ? "#3B82F6" : "#9CA3AF"}
-              />
-              <Text
-                className={`text-xs mt-1 ${
-                  focused ? "text-blue-500" : "text-gray-400"
-                }`}
-              >
-                Problem
-              </Text>
+          tabBarIcon: ({ color, focused }) => (
+            <View className={` rounded-2xl ${focused ? "bg-gray-100" : ""}`}>
+              <Ionicons name="document-text-outline" size={24} color={color} />
             </View>
           ),
         }}
       />
 
-      {/* Create Tab (Center Button) */}
       <Tabs.Screen
         name="create"
         options={{
           title: "",
-          tabBarIcon: () => (
-            <View className="absolute -top-8">
-              <TouchableOpacity
-                className="w-16 h-16 rounded-full bg-blue-500 items-center justify-center shadow-lg"
-                activeOpacity={0.8}
-              >
-                <FontAwesome name="plus" size={24} color="white" />
-              </TouchableOpacity>
+          tabBarIcon: ({ focused }) => (
+            <View className="bg-green-600 w-14 h-14 rounded-full items-center justify-center shadow-lg">
+              <Ionicons name="add" size={28} color="white" />
             </View>
           ),
-          tabBarButton: (props) => (
-            <View className="flex-1 items-center">{props.children}</View>
+          tabBarLabel: () => null, // Hide the label for the add button
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, focused }) => (
+            <View className={`rounded-2xl ${focused ? "bg-gray-100" : ""}`}>
+              <Ionicons name="person-outline" size={24} color={color} />
+            </View>
           ),
         }}
       />
