@@ -3,12 +3,14 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 
 const ProblemDetailsScreen = () => {
   const router = useRouter();
+  const { id } = useLocalSearchParams();
+  console.log(id);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -142,11 +144,16 @@ const ProblemDetailsScreen = () => {
               </Text>
             </View>
 
+            {/* edit */}
             <ButtonSecondary
+              onPress={() => {
+                router.push();
+              }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
             />
 
+            {/* warning */}
             <Text
               style={{ fontFamily: "SourceSans3-Regular" }}
               className="text-info-normal-active bg-info-light p-2 rounded-lg my-5"
@@ -160,6 +167,7 @@ const ProblemDetailsScreen = () => {
               </Text>
             </Text>
 
+            {/* contact */}
             <ButtonPrimary title="Contact with Support" />
           </View>
         </ScrollView>

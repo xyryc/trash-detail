@@ -63,7 +63,11 @@ const Problem = () => {
             data={problems}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <Pressable onPress={() => router.push(`/details/${item.id}`)}>
+              <Pressable
+                onPress={() =>
+                  router.push(`/employee-problem/details/${item.id}`)
+                }
+              >
                 <ProblemCard data={item} />
               </Pressable>
             )}
