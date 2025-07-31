@@ -7,7 +7,8 @@
     "customerCode": "C-12",
     "location": "5th Avenue Manhattan, Russia",
     "date": "Apr 19",
-    "status": "forwarded"
+    "status": "forwarded",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "customerCode": "C-07",
     "location": "Brooklyn Heights, New York",
     "date": "May 02",
-    "status": "pending"
+    "status": "pending",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "customerCode": "C-22",
     "location": "Queens Plaza, New York",
     "date": "Jun 12",
-    "status": "resolved"
+    "status": "resolved",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "customerCode": "C-15",
     "location": "Harlem, Manhattan",
     "date": "Jul 03",
-    "status": "forwarded"
+    "status": "forwarded",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
    {
     "id": 5,
@@ -47,7 +51,8 @@
     "customerCode": "C-12",
     "location": "5th Avenue Manhattan, Russia",
     "date": "Apr 19",
-    "status": "forwarded"
+    "status": "forwarded",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "customerCode": "C-07",
     "location": "Brooklyn Heights, New York",
     "date": "May 02",
-    "status": "pending"
+    "status": "pending",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@
     "customerCode": "C-22",
     "location": "Queens Plaza, New York",
     "date": "Jun 12",
-    "status": "resolved"
+    "status": "resolved",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
     "id": 8,
@@ -77,6 +84,7 @@
     "customerCode": "C-15",
     "location": "Harlem, Manhattan",
     "date": "Jul 03",
-    "status": "forwarded"
+    "status": "forwarded",
+    "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   }
 ]

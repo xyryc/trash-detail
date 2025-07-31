@@ -1,4 +1,3 @@
-import "@/assets/data/problems";
 import problems from "@/assets/data/problems.json";
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
 import ProblemCard from "@/components/employee/ProblemCard";

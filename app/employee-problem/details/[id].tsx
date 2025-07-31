@@ -1,3 +1,4 @@
+import problems from "@/assets/data/problems.json";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
@@ -10,7 +11,10 @@ import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 const ProblemDetailsScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  console.log(id);
+
+  const problem = problems.find(
+    (item) => item.id?.toString() === id?.toString()
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -21,10 +25,14 @@ const ProblemDetailsScreen = () => {
         <CustomHeader />
 
         {/* main content */}
-        <ScrollView className="py-4" contentContainerClassName="pb-10">
+        <ScrollView
+          className="py-4"
+          contentContainerClassName="pb-10"
+          showsVerticalScrollIndicator={false}
+        >
           <Image
             className="rounded-md"
-            source={require("@/assets/images/car.png")}
+            source={problem?.image}
             style={{ width: "100%", height: 326 }}
             contentFit="fill"
           />
@@ -32,9 +40,9 @@ const ProblemDetailsScreen = () => {
           <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
             <Text
               style={{ fontFamily: "SourceSans3-Regular" }}
-              className="text-secondary-orange-600 mb-5"
+              className="text-secondary-orange-600 mb-5 capitalize"
             >
-              Pending
+              {problem?.status}
             </Text>
 
             {/* first row */}
@@ -50,7 +58,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  P-02
+                  {problem?.problemCode}
                 </Text>
               </View>
 
@@ -65,7 +73,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  C-12
+                  {problem?.customerCode}
                 </Text>
               </View>
             </View>
@@ -86,7 +94,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  Car Parked
+                  {problem?.problemStatus}
                 </Text>
               </View>
 
@@ -101,7 +109,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  April 9, 2025
+                  {problem?.date}
                 </Text>
               </View>
             </View>
@@ -121,7 +129,7 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                5th Avenue, Manhattan, New York
+                {problem?.location}
               </Text>
             </View>
 
@@ -140,14 +148,14 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                We couldn't collect the trash because a car is blocking the bin.
+                {problem?.additionalNote}
               </Text>
             </View>
 
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push();
+                router.push(`/employee-problem/edit/${id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
