@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { Tabs, useRouter } from "expo-router";
+import { TouchableOpacity, View } from "react-native";
 
 export default function TabLayout() {
+  const router = useRouter();
+
   return (
     <Tabs
       screenOptions={{
@@ -44,11 +46,22 @@ export default function TabLayout() {
         options={{
           title: "",
           tabBarIcon: ({ focused }) => (
-            <View className="bg-green-600 w-14 h-14 rounded-full items-center justify-center shadow-lg">
+            <TouchableOpacity
+              className="bg-green-600 w-14 h-14 rounded-full items-center justify-center shadow-lg"
+              onPress={() => router.push("/employee-create/ProgressFlow")}
+              activeOpacity={0.8}
+            >
               <Ionicons name="add" size={28} color="white" />
-            </View>
+            </TouchableOpacity>
           ),
-          tabBarLabel: () => null, // Hide the label for the add button
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              activeOpacity={0.8}
+              onPress={() => router.push("/employee-create/ProgressFlow")}
+            />
+          ),
+          tabBarLabel: () => null,
         }}
       />
 
