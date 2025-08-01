@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 
@@ -14,9 +15,6 @@ export default function TabLayout() {
           backgroundColor: "white",
           borderTopWidth: 1,
           borderTopColor: "#E5E7EB",
-          paddingTop: 8,
-          paddingBottom: 8,
-          height: 80,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -44,22 +42,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="create"
         options={{
-          title: "",
-          tabBarIcon: ({ focused }) => (
-            <TouchableOpacity
-              className="bg-green-600 w-14 h-14 rounded-full items-center justify-center shadow-lg"
-              onPress={() => router.push("/employee-create/ProgressFlow")}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="add" size={28} color="white" />
-            </TouchableOpacity>
+          tabBarIcon: () => (
+            <Image
+              source={require("@/assets/images/add.svg")}
+              style={{ width: 82, height: 82 }}
+              contentFit="contain"
+            />
           ),
           tabBarButton: (props) => (
             <TouchableOpacity
-              {...props}
+              className="mx-auto"
               activeOpacity={0.8}
               onPress={() => router.push("/employee-create/ProgressFlow")}
-            />
+            >
+              {props.children}
+            </TouchableOpacity>
           ),
           tabBarLabel: () => null,
         }}
