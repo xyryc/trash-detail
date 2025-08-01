@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-export default function SearchBar() {
+export default function SearchBar({ className }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -17,7 +17,7 @@ export default function SearchBar() {
 
   return (
     <View
-      className={`flex-row items-center rounded-lg px-3 py-2 bg-white border border-neutral-light-active ${
+      className={`flex-row items-center rounded-lg px-3 py-2 ${className} border border-neutral-light-active ${
         isFocused ? "border border-neutral-light-active " : ""
       }`}
     >

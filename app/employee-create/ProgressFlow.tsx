@@ -93,7 +93,12 @@ export default function ProgressFlow() {
             />
           )}
           {currentStep === 3 && (
-            <Step3 onComplete={handleNext} entering={getAnimationStyle(3)} />
+            <Step3
+              imageUri={capturedImage}
+              onComplete={handleNext}
+              entering={getAnimationStyle(3)}
+              goToStep={setCurrentStep}
+            />
           )}
         </View>
 

@@ -25,7 +25,7 @@ export default function Step2({
       entering={FadeIn.duration(300)}
       exiting={FadeOut.duration(200)}
       layout={Layout.springify()}
-      className="py-4 flex justify-between h-full"
+      className="py-4 flex-1"
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -61,7 +61,7 @@ export default function Step2({
           )}
 
           {/* form */}
-          <View className="bg-white border-[0.5px] border-neutral-light-hover p-4 mx-2 rounded-lg my-6">
+          <View className="bg-white border-[0.5px] border-neutral-light-hover p-4 mx-2 rounded-lg mt-10 mb-20">
             <View>
               <Text
                 style={{ fontFamily: "SourceSans3-Regular" }}
@@ -121,7 +121,7 @@ export default function Step2({
       </KeyboardAvoidingView>
 
       {/* retake and next buttons */}
-      <View className="flex-row gap-8 pt-4 px-6 bg-white">
+      <View className="absolute bottom-0 left-0 right-0 flex-row gap-8 py-4 px-6 bg-white border-t border-neutral-light-hover">
         <ButtonSecondary
           title="Retake"
           onPress={() => goToStep?.(1)}
