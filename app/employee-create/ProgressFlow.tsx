@@ -1,58 +1,14 @@
 import CustomHeader from "@/components/shared/CustomHeader";
+import { getStepName } from "@/constants/Steps";
 import React, { useState } from "react";
-import { Button, SafeAreaView, StatusBar, Text, View } from "react-native";
+import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  Layout,
-  SlideInRight,
-  SlideOutLeft,
-} from "react-native-reanimated";
+import Animated, { Layout, SlideInRight } from "react-native-reanimated";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
-
-// Step names configuration
-const STEP_NAMES = {
-  1: "Problem Details",
-  2: "Additional Info",
-  3: "Review & Submit",
-};
-
-const Step1 = ({ onComplete }) => (
-  <AnimatedView
-    entering={FadeIn.duration(300)}
-    exiting={FadeOut.duration(200)}
-    layout={Layout.springify()}
-    className="p-4"
-  >
-    <Button title="Next" onPress={onComplete} />
-  </AnimatedView>
-);
-
-const Step2 = ({ onComplete }) => (
-  <AnimatedView
-    entering={SlideInRight.duration(300)}
-    exiting={SlideOutLeft.duration(200)}
-    layout={Layout.springify()}
-    className="p-4"
-  >
-    <Text className="text-lg font-bold">Additional Information</Text>
-    <Button title="Next" onPress={onComplete} />
-  </AnimatedView>
-);
-
-const Step3 = ({ onComplete }) => (
-  <AnimatedView
-    entering={SlideInRight.duration(300)}
-    exiting={SlideOutLeft.duration(200)}
-    layout={Layout.springify()}
-    className="p-4"
-  >
-    <Text className="text-lg font-bold">Review & Submit</Text>
-    <Button title="Submit" onPress={onComplete} />
-  </AnimatedView>
-);
 
 export default function ProgressFlow() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -70,7 +26,7 @@ export default function ProgressFlow() {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const getAnimationStyle = (step) => {
+  const getAnimationStyle = (step: number) => {
     if (step === currentStep) {
       return direction === "forward"
         ? SlideInRight.duration(300)
@@ -87,14 +43,14 @@ export default function ProgressFlow() {
         <CustomHeader text="New Problem" />
       </View>
 
-      <View className="flex-1 px-6 bg-[#F5F9F6]">
+      <View className="flex-1 px-6">
         {/* Progress Bar with Animation */}
         <View className="flex-row items-center justify-between mt-4 mb-1">
           <Text
             style={{ fontFamily: "SourceSans3-Medium" }}
             className="text-sm text-neutral-dark-active"
           >
-            Step {currentStep} of {totalSteps}
+            {getStepName(currentStep)}
           </Text>
 
           <Text

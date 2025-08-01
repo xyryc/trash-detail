@@ -1,10 +1,16 @@
 import { GestureResponderEvent } from "react-native";
+import {
+  EnteringAnimation,
+  ExitingAnimation,
+  LayoutAnimation,
+} from "react-native-reanimated";
 
 type ButtonProps = {
   title: string;
   onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
   icon?: ReactNode;
+  className?: string;
 };
 
 type EmployeeHeaderProps = {
@@ -21,4 +27,12 @@ type ProblemItem = {
   location: string;
   date: string;
   status: string;
+};
+
+export type StepComponentProps = {
+  onComplete: () => void;
+  onBack?: () => void;
+  entering?: EnteringAnimation;
+  exiting?: ExitingAnimation;
+  layout?: LayoutAnimation;
 };
