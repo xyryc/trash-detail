@@ -1,5 +1,5 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { StepComponentProps } from "@/types";
+import { CameraStepProps } from "@/types";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { Image } from "expo-image";
 import { useRef, useState } from "react";
@@ -8,10 +8,10 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export default function Step1({ onComplete }: StepComponentProps) {
+export default function Step1({ onComplete }: CameraStepProps) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef(null);
+  const cameraRef = useRef<CameraView | null>(null);
 
   const handleCapture = async () => {
     if (cameraRef.current) {

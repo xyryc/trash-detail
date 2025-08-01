@@ -38,3 +38,11 @@ export type StepComponentProps = {
   imageUri?: string | null;
   goToStep?: (step: number) => void;
 };
+
+export type CameraStepProps = {
+  onComplete: (data: { imageUri: string }) => void; // Explicitly requires imageUri
+  onBack?: () => void;
+  entering?: EnteringAnimation;
+  exiting?: ExitingAnimation;
+  layout?: LayoutAnimation;
+};
