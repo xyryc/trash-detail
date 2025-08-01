@@ -15,16 +15,20 @@ export default function ProgressFlow() {
   const [direction, setDirection] = useState("forward");
   const totalSteps = 3;
   const progress = currentStep / totalSteps;
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
-  const handleNext = () => {
-    setDirection("forward");
-    setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+  const handleNext = (data?: any) => {
+    if (data?.imageUri) {
+      setCapturedImage(data.imageUri);
+    }
+
+    setCurrentStep((prev) => prev + 1);
   };
 
-  const handleBack = () => {
-    setDirection("backward");
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
-  };
+  // const handleBack = () => {
+  //   setDirection("backward");
+  //   setCurrentStep((prev) => Math.max(prev - 1, 1));
+  // };
 
   const getAnimationStyle = (step: number) => {
     if (step === currentStep) {
@@ -43,9 +47,9 @@ export default function ProgressFlow() {
         <CustomHeader text="New Problem" />
       </View>
 
-      <View className="flex-1 px-6">
+      <View className="flex-1 bg-[#F5F9F6]">
         {/* Progress Bar with Animation */}
-        <View className="flex-row items-center justify-between mt-4 mb-1">
+        <View className="flex-row px-6 items-center justify-between mt-4 mb-1">
           <Text
             style={{ fontFamily: "SourceSans3-Medium" }}
             className="text-sm text-neutral-dark-active"
@@ -61,7 +65,7 @@ export default function ProgressFlow() {
           </Text>
         </View>
 
-        <AnimatedView layout={Layout.springify()}>
+        <AnimatedView layout={Layout.springify()} className="px-6">
           <Progress.Bar
             progress={progress}
             width={null}
@@ -81,7 +85,12 @@ export default function ProgressFlow() {
             <Step1 onComplete={handleNext} entering={getAnimationStyle(1)} />
           )}
           {currentStep === 2 && (
-            <Step2 onComplete={handleNext} entering={getAnimationStyle(2)} />
+            <Step2
+              imageUri={capturedImage}
+              onComplete={handleNext}
+              entering={getAnimationStyle(2)}
+              goToStep={setCurrentStep}
+            />
           )}
           {currentStep === 3 && (
             <Step3 onComplete={handleNext} entering={getAnimationStyle(3)} />

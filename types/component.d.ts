@@ -35,4 +35,6 @@ export type StepComponentProps = {
   entering?: EnteringAnimation;
   exiting?: ExitingAnimation;
   layout?: LayoutAnimation;
+  imageUri?: string | null;
+  goToStep?: (step: number) => void;
 };

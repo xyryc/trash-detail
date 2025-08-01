@@ -2,10 +2,10 @@ import { ButtonProps } from "@/types";
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 
-const ButtonSecondary = ({ title, onPress, icon }: ButtonProps) => {
+const ButtonSecondary = ({ title, onPress, icon, className }: ButtonProps) => {
   return (
     <TouchableOpacity
-      className="bg-neutral-light-hover rounded-lg py-2.5 flex-row justify-center gap-2.5"
+      className={`bg-neutral-light-hover rounded-lg py-2.5 flex-row justify-center gap-2.5 ${className}`}
       onPress={onPress}
       activeOpacity={0.8}
     >

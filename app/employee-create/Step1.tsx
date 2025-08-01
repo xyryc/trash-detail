@@ -2,7 +2,7 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { StepComponentProps } from "@/types";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { Image } from "expo-image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
@@ -11,6 +11,14 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 export default function Step1({ onComplete }: StepComponentProps) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef(null);
+
+  const handleCapture = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+      onComplete({ imageUri: photo.uri });
+    }
+  };
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -60,12 +68,16 @@ export default function Step1({ onComplete }: StepComponentProps) {
       </View>
 
       {/* camera preview */}
-      <CameraView style={{ flex: 1, borderRadius: 6 }} facing={facing} />
+      <CameraView
+        ref={cameraRef}
+        style={{ flex: 1, borderRadius: 6, marginHorizontal: 8 }}
+        facing={facing}
+      />
 
       {/* capture button */}
       <View className="mt-10">
         {/* <Button title="Next" onPress={onComplete} /> */}
-        <TouchableOpacity onPress={onComplete}>
+        <TouchableOpacity onPress={handleCapture}>
           <Image
             source={require("@/assets/images/capture.svg")}
             style={{
