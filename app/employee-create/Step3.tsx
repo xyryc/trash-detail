@@ -47,7 +47,7 @@ export default function Step3({
           {/* customer list */}
           <View className="my-4">
             <SearchBar className="bg-[#F2F2F2]" />
-            // TODO: fix not scrolling issue
+            {/* TODO: fix not scrolling issue */}
             <ScrollView className="my-3 p-2 bg-neutral-light-hover rounded-lg">
               <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
                 <Text

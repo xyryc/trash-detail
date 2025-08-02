@@ -48,17 +48,19 @@ export default function Step2({
           </View>
 
           {/* image */}
-          {imageUri && (
-            <Image
-              source={{ uri: imageUri }}
-              style={{
-                height: 300,
-                borderRadius: 10,
-                marginHorizontal: 8,
-              }}
-              contentFit="cover"
-            />
-          )}
+          <View>
+            {imageUri && (
+              <Image
+                source={{ uri: imageUri }}
+                style={{
+                  height: 300,
+                  borderRadius: 10,
+                  marginHorizontal: 8,
+                }}
+                contentFit="cover"
+              />
+            )}
+          </View>
 
           {/* form */}
           <View className="bg-white border-[0.5px] border-neutral-light-hover p-4 mx-2 rounded-lg mt-10 mb-20">
