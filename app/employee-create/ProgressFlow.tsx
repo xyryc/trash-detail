@@ -1,5 +1,6 @@
 import CustomHeader from "@/components/shared/CustomHeader";
 import { getStepName } from "@/constants/Steps";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
@@ -17,13 +18,22 @@ export default function ProgressFlow() {
   const totalSteps = 4;
   const progress = currentStep / totalSteps;
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleNext = (data?: any) => {
     if (data?.imageUri) {
       setCapturedImage(data.imageUri);
     }
 
-    setCurrentStep((prev) => prev + 1);
+    if (currentStep < totalSteps) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      // After Step 4 → Go to Overview Screen
+      router.push({
+        pathname: "/employee-create/Successful",
+        params: { imageUri: capturedImage },
+      });
+    }
   };
 
   // const handleBack = () => {
@@ -45,7 +55,9 @@ export default function ProgressFlow() {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
       <View className="px-6">
         {/* header */}
-        <CustomHeader text="New Problem" />
+        <CustomHeader
+          text={`${currentStep === 4 ? "Overview" : "New Problem"}`}
+        />
       </View>
 
       <View className="flex-1 bg-[#F5F9F6]">

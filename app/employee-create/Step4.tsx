@@ -126,7 +126,7 @@ export default function Step4({
             <View className="h-px bg-neutral-light-hover my-5" />
 
             {/* fourth row */}
-            <View className="mb-5">
+            <View>
               <Text
                 style={{ fontFamily: "SourceSans3-Regular" }}
                 className="text-neutral-normal mb-2"
