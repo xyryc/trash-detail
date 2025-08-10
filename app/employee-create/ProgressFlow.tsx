@@ -7,13 +7,14 @@ import Animated, { Layout, SlideInRight } from "react-native-reanimated";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function ProgressFlow() {
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState("forward");
-  const totalSteps = 3;
+  const totalSteps = 4;
   const progress = currentStep / totalSteps;
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
@@ -97,6 +98,14 @@ export default function ProgressFlow() {
               imageUri={capturedImage}
               onComplete={handleNext}
               entering={getAnimationStyle(3)}
+              goToStep={setCurrentStep}
+            />
+          )}
+          {currentStep === 4 && (
+            <Step4
+              imageUri={capturedImage}
+              onComplete={handleNext}
+              entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
             />
           )}

@@ -173,7 +173,7 @@ export default function Step3({
         </View>
       </KeyboardAvoidingView>
 
-      {/* retake and next buttons */}
+      {/* back and next buttons */}
       <View className="absolute bottom-0 left-0 right-0 flex-row gap-8 py-4 px-6 bg-white border-t border-neutral-light-hover">
         <ButtonSecondary
           title="Back"

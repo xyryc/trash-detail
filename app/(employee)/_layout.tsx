@@ -47,6 +47,7 @@ export default function TabLayout() {
               source={require("@/assets/images/add.svg")}
               style={{ width: 82, height: 82 }}
               contentFit="contain"
+              cachePolicy="memory-disk"
             />
           ),
           tabBarButton: (props) => (

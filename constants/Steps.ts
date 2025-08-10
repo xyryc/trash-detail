@@ -2,6 +2,7 @@ export const STEP_NAMES = {
   1: "Capture Photo",
   2: "Problem Details",
   3: "Select Customer",
+  4: "Overview",
 } as const;
 
 export type StepKey = keyof typeof STEP_NAMES;
