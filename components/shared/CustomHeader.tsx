@@ -7,7 +7,7 @@ const CustomHeader = ({ text = "Details" }) => {
   const router = useRouter();
 
   return (
-    <View className="flex-row items-center my-2.5">
+    <View className="flex-row items-center py-2.5">
       <Pressable onPress={() => router.back()} className="z-10">
         <Feather name="chevron-left" size={24} color="black" />
       </Pressable>

@@ -7,6 +7,7 @@ import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 
 const EmployeeProfile = () => {
   const router = useRouter();
+  const employeeId = "E45";
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -18,11 +19,10 @@ const EmployeeProfile = () => {
 
         {/* main content */}
         <ScrollView
-          className="py-4"
           contentContainerClassName="pb-10"
           showsVerticalScrollIndicator={false}
         >
-          <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
+          <View className="border border-neutral-light-hover p-4 rounded-lg">
             {/* first row */}
             <View>
               <Text
@@ -35,7 +35,7 @@ const EmployeeProfile = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                E45
+                {employeeId}
               </Text>
             </View>
 
@@ -200,7 +200,7 @@ const EmployeeProfile = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/`);
+                router.push(`/employee-profile/edit/${employeeId}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
