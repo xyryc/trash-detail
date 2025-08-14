@@ -3,13 +3,17 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Successful = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6 justify-center items-center">

@@ -4,18 +4,13 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StatusBar, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditProblemScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+
   const problem = problems.find(
     (item) => item.id?.toString() === id?.toString()
   );
@@ -24,7 +19,10 @@ const EditProblemScreen = () => {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">

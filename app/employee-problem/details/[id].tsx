@@ -6,7 +6,8 @@ import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { ScrollView, StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProblemDetailsScreen = () => {
   const router = useRouter();
@@ -17,7 +18,10 @@ const ProblemDetailsScreen = () => {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">

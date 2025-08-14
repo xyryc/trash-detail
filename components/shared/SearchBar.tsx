@@ -1,8 +1,9 @@
+import { SearchBarProps } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-export default function SearchBar({ className }) {
+export default function SearchBar({ className }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 

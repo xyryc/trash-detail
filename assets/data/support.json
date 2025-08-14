@@ -1,0 +1,86 @@
+[{
+  "id": "S45",
+  "timestamp": "Just now",
+  "title": "Car blocked",
+  "message": "hi this is your employ mr mahmud id ...",
+  "fullMessage": "hi this is your employ mr mahmud id requesting assistance with blocked car in parking area",
+  "unreadCount": 2,
+  "type": "problem_report",
+  "status": "unread",
+  "category": "parking",
+  "sender": {
+    "id": "emp_123",
+    "name": "Mr. Mahmud",
+    "role": "employee",
+    "avatar": null
+  },
+  "recipient": {
+    "id": "admin_456",
+    "role": "admin"
+  },
+  "metadata": {
+    "location": "Parking Area B",
+    "urgency": "medium",
+    "attachments": []
+  },
+  "createdAt": "2024-08-15T10:30:00Z",
+  "updatedAt": "2024-08-15T10:30:00Z"
+},
+{
+  "id": "S67",
+  "timestamp": "Just now",
+  "title": "Car blocked",
+  "message": "hi this is your employ mr mahmud id ...",
+  "fullMessage": "hi this is your employ mr mahmud id requesting assistance with blocked car in parking area",
+  "unreadCount": 2,
+  "type": "problem_report",
+  "status": "unread",
+  "category": "parking",
+  "sender": {
+    "id": "emp_123",
+    "name": "Mr. Mahmud",
+    "role": "employee",
+    "avatar": null
+  },
+  "recipient": {
+    "id": "admin_456",
+    "role": "admin"
+  },
+  "metadata": {
+    "location": "Parking Area B",
+    "urgency": "medium",
+    "attachments": []
+  },
+  "createdAt": "2024-08-15T10:30:00Z",
+  "updatedAt": "2024-08-15T10:30:00Z"
+},
+{
+  "id": "S15",
+  "timestamp": "Just now",
+  "title": "Car blocked",
+  "message": "hi this is your employ mr mahmud id ...",
+  "fullMessage": "hi this is your employ mr mahmud id requesting assistance with blocked car in parking area",
+  "unreadCount": 2,
+  "type": "problem_report",
+  "status": "unread",
+  "category": "parking",
+  "sender": {
+    "id": "emp_123",
+    "name": "Mr. Mahmud",
+    "role": "employee",
+    "avatar": null
+  },
+  "recipient": {
+    "id": "admin_456",
+    "role": "admin"
+  },
+  "metadata": {
+    "location": "Parking Area B",
+    "urgency": "medium",
+    "attachments": []
+  },
+  "createdAt": "2024-08-15T10:30:00Z",
+  "updatedAt": "2024-08-15T10:30:00Z"
+}
+
+]

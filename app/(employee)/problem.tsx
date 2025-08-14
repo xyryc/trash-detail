@@ -4,20 +4,14 @@ import ProblemCard from "@/components/employee/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useRouter } from "expo-router";
 import React from "react";
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Problem = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">

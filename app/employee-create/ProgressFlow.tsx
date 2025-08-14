@@ -2,9 +2,10 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import { getStepName } from "@/constants/Steps";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
 import Animated, { Layout, SlideInRight } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -51,7 +52,10 @@ export default function ProgressFlow() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
       <View className="px-6">
         {/* header */}

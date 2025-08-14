@@ -74,6 +74,13 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="support-chatlist"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

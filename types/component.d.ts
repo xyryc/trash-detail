@@ -46,3 +46,7 @@ export type CameraStepProps = {
   exiting?: ExitingAnimation;
   layout?: LayoutAnimation;
 };
+
+export type SearchBarProps = {
+  className?: string;
+};

@@ -1,16 +1,23 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { Octicons } from "@expo/vector-icons";
+import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import {
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfile = () => {
   const router = useRouter();
   const employeeId = "E45";
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
@@ -206,6 +213,20 @@ const EmployeeProfile = () => {
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
             />
           </View>
+
+          {/* support */}
+          <TouchableOpacity
+            onPress={() => router.replace("/support-chatlist")}
+            className="border-[0.5px] border-[#F2F2F2] flex-row items-center gap-2 p-3 rounded-lg mt-3"
+          >
+            <AntDesign name="questioncircleo" size={24} color="#2E323C" />
+            <Text
+              style={{ fontFamily: "SourceSans3-SemiBold" }}
+              className="text-xl"
+            >
+              Support
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </SafeAreaView>

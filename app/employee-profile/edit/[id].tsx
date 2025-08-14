@@ -3,7 +3,6 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -12,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfileEditScreen = () => {
   const [value, setValue] = useState<string | null>(null);
@@ -32,7 +32,10 @@ const EmployeeProfileEditScreen = () => {
     { label: "WA", value: "WA" },
   ];
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
