@@ -4,13 +4,7 @@ import SupportHeader from "@/components/shared/SupportHeader";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import {
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportChatList = () => {
@@ -270,12 +264,11 @@ const SupportChatList = () => {
         </ScrollView>
 
         {/* open new button */}
-        <TouchableOpacity
-          onPress={() => router.push("/shared/support/start")}
-          className="absolute bottom-8 right-2.5"
-        >
-          <ButtonPrimary title="Open Now" className="flex-shrink px-3" />
-        </TouchableOpacity>
+        <ButtonPrimary
+          title="Open Now"
+          className="absolute bottom-24 right-2.5 px-3 py-2.5"
+          onPress={() => router.push("/employee/profile/support/start")}
+        />
       </View>
     </SafeAreaView>
   );
