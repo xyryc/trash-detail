@@ -159,7 +159,7 @@ const ProblemDetailsScreen = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee-problem/edit/${id}`);
+                router.push(`/employee/problem/details/edit/${id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}

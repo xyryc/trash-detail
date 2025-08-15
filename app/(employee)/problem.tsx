@@ -58,7 +58,7 @@ const Problem = () => {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() =>
-                  router.push(`/employee-problem/details/${item.id}`)
+                  router.push(`/employee/problem/details/${item.id}`)
                 }
               >
                 <ProblemCard data={item} />

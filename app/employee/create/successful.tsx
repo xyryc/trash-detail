@@ -52,7 +52,7 @@ const Successful = () => {
           />
           <ButtonSecondary
             title="Start New"
-            onPress={() => router.push("/employee-create/ProgressFlow")}
+            onPress={() => router.push("/employee/create/progress")}
           />
         </View>
       </View>

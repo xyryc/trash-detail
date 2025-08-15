@@ -6,10 +6,10 @@ import { StatusBar, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
 import Animated, { Layout, SlideInRight } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
-import Step4 from "./Step4";
+import Step1 from "./step1";
+import Step2 from "./step2";
+import Step3 from "./step3";
+import Step4 from "./step4";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -31,7 +31,7 @@ export default function ProgressFlow() {
     } else {
       // After Step 4 → Go to Overview Screen
       router.push({
-        pathname: "/employee-create/Successful",
+        pathname: "/employee/create/successful",
         params: { imageUri: capturedImage },
       });
     }

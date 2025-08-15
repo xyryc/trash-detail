@@ -54,7 +54,7 @@ export default function TabLayout() {
             <TouchableOpacity
               className="mx-auto"
               activeOpacity={0.8}
-              onPress={() => router.push("/employee-create/ProgressFlow")}
+              onPress={() => router.push("/employee/create/progress")}
             >
               {props.children}
             </TouchableOpacity>
@@ -72,13 +72,6 @@ export default function TabLayout() {
               <Ionicons name="person-outline" size={24} color={color} />
             </View>
           ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="support-chatlist"
-        options={{
-          href: null,
         }}
       />
     </Tabs>

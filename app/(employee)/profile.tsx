@@ -207,7 +207,7 @@ const EmployeeProfile = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee-profile/edit/${employeeId}`);
+                router.push(`/employee/profile/edit/${employeeId}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
@@ -216,7 +216,7 @@ const EmployeeProfile = () => {
 
           {/* support */}
           <TouchableOpacity
-            onPress={() => router.replace("/support-chatlist")}
+            onPress={() => router.replace("/employee/profile/support/chatlist")}
             className="border-[0.5px] border-[#F2F2F2] flex-row items-center gap-2 p-3 rounded-lg mt-3"
           >
             <AntDesign name="questioncircleo" size={24} color="#2E323C" />
