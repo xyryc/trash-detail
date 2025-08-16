@@ -7,7 +7,7 @@
     "timestamp": "2m ago",
     "unreadCount": 3,
     "status": "active",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "problem"
   },
   {
@@ -18,7 +18,7 @@
     "timestamp": "5m ago",
     "unreadCount": 1,
     "status": "active",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "problem"
   },
   {
@@ -29,7 +29,7 @@
     "timestamp": "10m ago",
     "unreadCount": 0,
     "status": "active",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "problem"
   },
   {
@@ -40,7 +40,7 @@
     "timestamp": "15m ago",
     "unreadCount": 0,
     "status": "closed",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "problem"
   },
   {
@@ -51,7 +51,7 @@
     "timestamp": "1h ago",
     "unreadCount": 2,
     "status": "active",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "support"
   },
   {
@@ -62,7 +62,7 @@
     "timestamp": "2h ago",
     "unreadCount": 0,
     "status": "active",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "support"
   },
     {
@@ -73,7 +73,7 @@
     "timestamp": "15m ago",
     "unreadCount": 0,
     "status": "closed",
-    "avatar": "@/assets/images/car-avatar.png",
+    "avatar": "@/assets/images/left-guy.svg",
     "category": "support"
   }
 ]

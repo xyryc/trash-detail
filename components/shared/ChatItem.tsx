@@ -1,4 +1,5 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import React from "react";
 import { Text, View } from "react-native";
 
@@ -12,14 +13,24 @@ const ChatItem = ({ item }: any) => {
     >
       {/* message content */}
       <View className="flex-row gap-4">
-        <View>
-          <AntDesign
-            className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-            name="questioncircleo"
-            size={24}
-            color="black"
-          />
-        </View>
+        {item.category === "problem" ? (
+          <View className="size-[42px] bg-white rounded-lg border border-neutral-light-hover">
+            <Image
+              source={require("@/assets/images/left-guy.svg")}
+              style={{ width: 42, height: 42 }}
+              contentFit="scale-down"
+            />
+          </View>
+        ) : (
+          <View>
+            <AntDesign
+              className="p-2 bg-white rounded-lg border border-neutral-light-hover"
+              name="questioncircleo"
+              size={24}
+              color="black"
+            />
+          </View>
+        )}
 
         <View className="w-3/4">
           <View className="flex-row items-center">
