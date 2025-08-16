@@ -13,9 +13,10 @@ type ButtonProps = {
   className?: string;
 };
 
-type EmployeeHeaderProps = {
-  name: string;
-  email: string;
+type HeaderProps = {
+  title?: string;
+  name?: string;
+  email?: string;
 };
 
 type ProblemItem = {
@@ -29,7 +30,7 @@ type ProblemItem = {
   status: string;
 };
 
-export type StepComponentProps = {
+type StepComponentProps = {
   onComplete: () => void;
   onBack?: () => void;
   entering?: EnteringAnimation;
@@ -39,7 +40,7 @@ export type StepComponentProps = {
   goToStep?: (step: number) => void;
 };
 
-export type CameraStepProps = {
+type CameraStepProps = {
   onComplete: (data: { imageUri: string }) => void; // Explicitly requires imageUri
   onBack?: () => void;
   entering?: EnteringAnimation;
@@ -47,6 +48,6 @@ export type CameraStepProps = {
   layout?: LayoutAnimation;
 };
 
-export type SearchBarProps = {
+type SearchBarProps = {
   className?: string;
 };

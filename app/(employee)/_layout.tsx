@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 
-export default function TabLayout() {
+export default function EmployeeTabLayout() {
   const router = useRouter();
 
   return (

@@ -1,7 +1,8 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
-import SupportHeader from "@/components/shared/SupportHeader";
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
@@ -16,15 +17,18 @@ const SupportChatList = () => {
 
       {/* chatlist */}
       <View className="flex-1">
-        <View className="px-6">
-          {/* support header */}
-          <SupportHeader />
+        <LinearGradient
+          colors={["#EDFDF1", "#FFFFFF"]} // 0% to 100%
+          start={{ x: 0, y: 0 }} // Top
+          end={{ x: 0, y: 1 }} // Bottom (180deg)
+          style={{ paddingHorizontal: 24, paddingBottom: 12 }}
+        >
+          <Header title="Support" />
 
-          <View className="pt-8 pb-6">
-            <SearchBar />
-          </View>
-        </View>
+          <SearchBar />
+        </LinearGradient>
 
+        {/* support chatlist */}
         <ScrollView>
           {/* item-1 */}
           <View className="bg-neutral-light py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">

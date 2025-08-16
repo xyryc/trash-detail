@@ -1,9 +1,9 @@
-import { EmployeeHeaderProps } from "@/types";
+import { HeaderProps } from "@/types";
 import { Image } from "expo-image";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 
-const EmployeeHeader = ({ name, email }: EmployeeHeaderProps) => {
+const EmployeeHeader = ({ name, email }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
 
   return (

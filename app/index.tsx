@@ -5,7 +5,7 @@ import { ActivityIndicator, View } from "react-native";
 export default function Index() {
   const hasOnboarded = true;
   const isLoading = false;
-  const user = { id: "123", role: "employee" };
+  const user = { id: "123", role: "customer" };
 
   useEffect(() => {
     if (!isLoading) {
@@ -21,9 +21,9 @@ export default function Index() {
             router.replace("/(employee)/problem");
             break;
 
-          case "user":
+          case "customer":
           default:
-            router.replace("/(customer)");
+            router.replace("/(customer)/chatlist");
         }
       }
     }

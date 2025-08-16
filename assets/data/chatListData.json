@@ -1,0 +1,57 @@
+[
+  {
+    "id": "chat_001",
+    "problemId": "P45",
+    "title": "Car blocked",
+    "description": "hi this is your employ mr mahmud id ...",
+    "timestamp": "Just now",
+    "unreadCount": 2,
+    "status": "active",
+    "avatar": "@/assets/images/car-avatar.png", 
+    "category": "problem"
+  },
+  {
+    "id": "chat_002",
+    "problemId": "P45",
+    "title": "Car blocked",
+    "description": "hi this is your employ mr mahmud id ...",
+    "timestamp": "Just now",
+    "unreadCount": 2,
+    "status": "active",
+    "avatar": "@/assets/images/car-avatar.png",
+    "category": "problem"
+  },
+  {
+    "id": "chat_003",
+    "problemId": "P45",
+    "title": "Car blocked",
+    "description": "hi this is your employ mr mahmud id ...",
+    "timestamp": "Just now",
+    "unreadCount": 0,
+    "status": "active",
+    "avatar": "@/assets/images/car-avatar.png",
+    "category": "problem"
+  },
+  {
+    "id": "chat_004",
+    "problemId": "P45",
+    "title": "Car blocked",
+    "description": "hi this is your employ mr mahmud id ...",
+    "timestamp": "Just now",
+    "unreadCount": 0,
+    "status": "active",
+    "avatar": "@/assets/images/car-avatar.png",
+    "category": "problem"
+  },
+  {
+    "id": "chat_005",
+    "problemId": "P45",
+    "title": "Car blocked",
+    "description": "hi this is your employ mr mahmud id ...",
+    "timestamp": "Just now",
+    "unreadCount": 0,
+    "status": "closed",
+    "avatar": "@/assets/images/car-avatar.png",
+    "category": "problem"
+  }
+]

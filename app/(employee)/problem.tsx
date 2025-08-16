@@ -2,6 +2,7 @@ import problems from "@/assets/data/problems.json";
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
 import ProblemCard from "@/components/employee/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
@@ -14,15 +15,22 @@ const Problem = () => {
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-      <View className="flex-1 px-6">
-        <EmployeeHeader name={"Anik"} email={"mdtalathunnabi@gmail.com"} />
+      <View className="flex-1">
+        <LinearGradient
+          colors={["#EDFDF1", "#FFFFFF"]} // 0% to 100%
+          start={{ x: 0, y: 0 }} // Top
+          end={{ x: 0, y: 1 }} // Bottom (180deg)
+          style={{ paddingHorizontal: 24 }}
+        >
+          <EmployeeHeader name={"Anik"} email={"mdtalathunnabi@gmail.com"} />
 
-        <View className="pt-8 pb-6">
-          <SearchBar />
-        </View>
+          <View className="pt-8 pb-6">
+            <SearchBar />
+          </View>
+        </LinearGradient>
 
         {/* problem list */}
-        <View className="flex-1">
+        <View className="flex-1 px-6">
           <Text style={{ fontFamily: "SourceSans3-Medium" }}>
             Previous problem
           </Text>
