@@ -1,9 +1,12 @@
+import chatListData from "@/assets/data/chatListData.json";
+import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
-  ScrollView,
+  FlatList,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -13,7 +16,23 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatList = () => {
-  const [selectedTab, setSelectedTab] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [selectedTab, setSelectedTab] = useState("problem");
+
+  // Filter chats based on search and tab
+  const filteredChats = chatListData.filter((chat) => {
+    const matchesSearch =
+      chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      chat.description.toLowerCase().includes(searchText.toLowerCase()) ||
+      chat.problemId.toLowerCase().includes(searchText.toLowerCase());
+
+    const matchesTab =
+      selectedTab === "problem"
+        ? chat.category === "problem"
+        : chat.category === "support";
+
+    return matchesSearch && matchesTab;
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -35,52 +54,64 @@ const ChatList = () => {
         </LinearGradient>
 
         {/* Tabs */}
-        <View className="flex-row px-6">
+        <View className="flex-row gap-3 px-6">
           <TouchableOpacity
             onPress={() => setSelectedTab("problem")}
-            className="px-3.5 py-3 border"
+            className={`px-3.5 py-3 ${selectedTab === "problem" ? "border-b-2 border-green-normal" : ""}`}
           >
             <Text
-              className={`text-sm  font-semibold pb-2 ${
+              className={`text-sm ${
                 selectedTab === "problem"
                   ? "text-green-normal"
-                  : "text-gray-500"
+                  : "text-neutral-normal"
               }`}
               style={{ fontFamily: "SourceSans3-Medium" }}
             >
               Problem
             </Text>
-            {selectedTab === "problem" && (
-              <View className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
-            )}
             {/* Red dot indicator */}
-            <View className="absolute top-0 right-8 w-2 h-2 bg-red-500 rounded-full" />
+            <View className="absolute top-2.5 right-1 w-2 h-2 bg-error-normal-hover rounded-full" />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setSelectedTab("support")}
-            className="px-3.5 py-3 border"
+            className={`px-3.5 py-3 ${selectedTab === "support" ? "border-b-2 border-green-normal" : ""}`}
           >
             <Text
-              className={`text-sm  font-semibold pb-2 ${
+              className={`text-sm ${
                 selectedTab === "support"
                   ? "text-green-normal"
-                  : "text-gray-500"
+                  : "text-neutral-normal"
               }`}
               style={{ fontFamily: "SourceSans3-Medium" }}
             >
               Support
             </Text>
-            {selectedTab === "support" && (
-              <View className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
-            )}
+
             {/* Red dot indicator */}
-            <View className="absolute top-0 right-8 w-2 h-2 bg-red-500 rounded-full" />
+            <View className="absolute top-2.5 right-1 w-2 h-2 bg-error-normal-hover rounded-full" />
           </TouchableOpacity>
         </View>
 
-        {/* chat list */}
-        <ScrollView className="flex-1"></ScrollView>
+        {/* Chat List */}
+        <FlatList
+          data={filteredChats}
+          renderItem={({ item }) => <ChatItem item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
+          ListEmptyComponent={
+            <View className="flex-1 items-center justify-center py-20">
+              <Ionicons name="chatbubbles-outline" size={64} color="#D1D5DB" />
+              <Text
+                className="text-gray-500 text-lg mt-4"
+                style={{ fontFamily: "SourceSans3-Regular" }}
+              >
+                No chats found
+              </Text>
+            </View>
+          }
+        />
       </View>
     </SafeAreaView>
   );
