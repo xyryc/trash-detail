@@ -1,0 +1,279 @@
+{
+  "chatData": {
+    "chatId": "chat_12345",
+    "title": "Pool Cleaning Support",
+    "currentUserId": "user_001",
+    "messages": [
+      {
+        "id": "msg_001",
+        "senderId": "user_001",
+        "senderName": "John Customer",
+        "type": "text",
+        "content": "It's medium-sized, 15x30 feet. Haven't cleaned it in months, so there's algae and leaves.",
+        "timestamp": "2024-08-16T08:35:00.000Z",
+        "status": "read",
+        "isOwn": false
+      },
+      {
+        "id": "msg_002", 
+        "senderId": "user_001",
+        "senderName": "John Customer",
+        "type": "text",
+        "content": "Hi",
+        "timestamp": "2024-08-16T08:35:15.000Z",
+        "status": "read",
+        "isOwn": false
+      },
+      {
+        "id": "msg_003",
+        "senderId": "user_002",
+        "senderName": "Sarah Support", 
+        "type": "text",
+        "content": "Hmm!",
+        "timestamp": "2024-08-16T08:35:30.000Z",
+        "status": "delivered",
+        "isOwn": true
+      },
+      {
+        "id": "msg_004",
+        "senderId": "user_002",
+        "senderName": "Sarah Support",
+        "type": "text",
+        "content": "Yes, we do! Can you tell me the size and condition of your pool?",
+        "timestamp": "2024-08-16T08:35:45.000Z", 
+        "status": "delivered",
+        "isOwn": true
+      },
+      {
+        "id": "msg_005",
+        "senderId": "user_001",
+        "senderName": "John Customer",
+        "type": "image",
+        "imageUrl": "https://images.pexels.com/photos/1933386/pexels-photo-1933386.jpeg",
+        "caption": "Here's the situation",
+        "timestamp": "2024-08-16T08:36:00.000Z",
+        "status": "sent",
+        "isOwn": false
+      }
+    ]
+  },
+
+  "// ============ DIFFERENT MESSAGE TYPES EXAMPLES ============": "",
+
+  "sampleMessages": [
+    {
+      "id": "msg_text_1",
+      "senderId": "user_001", 
+      "senderName": "Customer",
+      "type": "text",
+      "content": "Hello, I need pool cleaning service",
+      "timestamp": "2024-08-16T10:30:00.000Z",
+      "status": "delivered",
+      "isOwn": false
+    },
+    {
+      "id": "msg_text_2",
+      "senderId": "user_002",
+      "senderName": "Support",
+      "type": "text",
+      "content": "Sure! I can help you with that. What's your pool size?",
+      "timestamp": "2024-08-16T10:30:30.000Z",
+      "status": "read", 
+      "isOwn": true
+    },
+    {
+      "id": "msg_image_1",
+      "senderId": "user_001",
+      "senderName": "Customer",
+      "type": "image",
+      "imageUrl": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300",
+      "caption": "This is my pool condition",
+      "timestamp": "2024-08-16T10:31:00.000Z",
+      "status": "sent",
+      "isOwn": false
+    },
+    {
+      "id": "msg_location_1",
+      "senderId": "user_001",
+      "senderName": "Customer", 
+      "type": "location",
+      "latitude": 23.78097305597319,
+      "longitude": 90.40752495392654,
+      "address": "Dhanmondi 27, Dhaka 1209, Bangladesh",
+      "timestamp": "2024-08-16T10:31:30.000Z",
+      "status": "delivered",
+      "isOwn": false
+    },
+    {
+      "id": "msg_file_1",
+      "senderId": "user_002",
+      "senderName": "Support",
+      "type": "file",
+      "fileName": "Pool_Cleaning_Quote.pdf",
+      "fileSize": 245760,
+      "fileUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "timestamp": "2024-08-16T10:32:00.000Z",
+      "status": "sent",
+      "isOwn": true
+    },
+    {
+      "id": "msg_system_1",
+      "type": "system",
+      "content": "Sarah Support joined the chat",
+      "timestamp": "2024-08-16T10:25:00.000Z",
+      "systemType": "user_joined"
+    }
+  ],
+
+  "// ============ CHAT LIST DATA ============": "",
+
+  "chatListData": [
+    {
+      "id": "chat_001",
+      "title": "Pool Cleaning Support",
+      "lastMessage": {
+        "content": "Here's the situation",
+        "type": "image", 
+        "timestamp": "2024-08-16T08:36:00.000Z",
+        "senderName": "John Customer"
+      },
+      "unreadCount": 2,
+      "participants": [
+        {
+          "id": "user_001",
+          "name": "John Customer",
+          "avatar": null,
+          "isOnline": true
+        },
+        {
+          "id": "user_002", 
+          "name": "Sarah Support",
+          "avatar": "https://images.unsplash.com/photo-1494790108755-2616b8e2c0db?w=100&h=100&fit=crop&crop=face",
+          "isOnline": true
+        }
+      ]
+    },
+    {
+      "id": "chat_002",
+      "title": "Car Wash Service",
+      "lastMessage": {
+        "content": "When can you come?",
+        "type": "text",
+        "timestamp": "2024-08-16T07:45:00.000Z",
+        "senderName": "Mike Johnson"
+      },
+      "unreadCount": 0,
+      "participants": [
+        {
+          "id": "user_003",
+          "name": "Mike Johnson", 
+          "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+          "isOnline": false
+        },
+        {
+          "id": "user_002",
+          "name": "Sarah Support",
+          "avatar": "https://images.unsplash.com/photo-1494790108755-2616b8e2c0db?w=100&h=100&fit=crop&crop=face",
+          "isOnline": true
+        }
+      ]
+    },
+    {
+      "id": "chat_003",
+      "title": "Garden Maintenance",
+      "lastMessage": {
+        "content": "Thank you for the service!",
+        "type": "text",
+        "timestamp": "2024-08-15T16:30:00.000Z",
+        "senderName": "Lisa Wong"
+      },
+      "unreadCount": 1,
+      "participants": [
+        {
+          "id": "user_004",
+          "name": "Lisa Wong",
+          "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+          "isOnline": false
+        }
+      ]
+    }
+  ],
+
+  "// ============ USER DATA ============": "",
+
+  "currentUser": {
+    "id": "user_002",
+    "name": "Sarah Support", 
+    "role": "support",
+    "avatar": "https://images.unsplash.com/photo-1494790108755-2616b8e2c0db?w=100&h=100&fit=crop&crop=face",
+    "email": "sarah@company.com",
+    "isOnline": true
+  },
+
+  "// ============ TYPING USERS ============": "",
+
+  "typingUsers": [
+    {
+      "userId": "user_001",
+      "userName": "John Customer", 
+      "chatId": "chat_12345",
+      "timestamp": "2024-08-16T10:35:00.000Z"
+    }
+  ],
+
+  "// ============ FOR REACT COMPONENT ============": "",
+
+  "componentReadyData": {
+    "messages": [
+      {
+        "id": "msg_001",
+        "content": "It's medium-sized, 15x30 feet. Haven't cleaned it in months, so there's algae and leaves.",
+        "timestamp": "2024-08-16T08:35:00.000Z",
+        "isOwn": false,
+        "senderName": "John Customer",
+        "type": "text",
+        "status": "read"
+      },
+      {
+        "id": "msg_002",
+        "content": "Hi", 
+        "timestamp": "2024-08-16T08:35:15.000Z",
+        "isOwn": false,
+        "senderName": "John Customer",
+        "type": "text",
+        "status": "read"
+      },
+      {
+        "id": "msg_003",
+        "content": "Hmm!",
+        "timestamp": "2024-08-16T08:35:30.000Z",
+        "isOwn": true,
+        "senderName": "You",
+        "type": "text", 
+        "status": "delivered"
+      },
+      {
+        "id": "msg_004",
+        "content": "Yes, we do! Can you tell me the size and condition of your pool?",
+        "timestamp": "2024-08-16T08:35:45.000Z",
+        "isOwn": true,
+        "senderName": "You",
+        "type": "text",
+        "status": "delivered"
+      },
+      {
+        "id": "msg_005",
+        "imageUrl": "https://images.pexels.com/photos/1933386/pexels-photo-1933386.jpeg",
+        "caption": "Here's the situation",
+        "timestamp": "2024-08-16T08:36:00.000Z",
+        "isOwn": false,
+        "senderName": "John Customer",
+        "type": "image",
+        "status": "sent"
+      }
+    ],
+    "isConnected": true,
+    "typingUsers": [],
+    "currentUserId": "user_002"
+  }
+}
