@@ -1,4 +1,5 @@
 import chatListData from "@/assets/data/chatListData.json";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
@@ -40,7 +41,16 @@ const ChatList = () => {
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-      <View className="flex-1">
+      <View className="flex-1 relative">
+        {/* open now button */}
+        {selectedTab === "support" && (
+          <ButtonPrimary
+            title="Open Now"
+            className="absolute bottom-8 right-6 px-3 z-10"
+            onPress={() => router.push("/customer/support/start")}
+          />
+        )}
+
         <LinearGradient
           colors={["#EDFDF1", "#FFFFFF"]} // 0% to 100%
           start={{ x: 0, y: 0 }} // Top
