@@ -1,11 +1,12 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
-const ChatItem = ({ item }: any) => {
+const ChatItem = ({ item, onPress }: any) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
       className={` py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active
             ${item.unreadCount > 0 && "bg-neutral-light"}
             ${item.status === "closed" && "bg-neutral-light-active"}
@@ -88,7 +89,7 @@ const ChatItem = ({ item }: any) => {
           {item.unreadCount}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

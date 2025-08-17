@@ -4,6 +4,7 @@ import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -18,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const ChatList = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("problem");
+  const router = useRouter();
 
   // Filter chats based on search and tab
   const filteredChats = chatListData.filter((chat) => {
@@ -96,7 +98,12 @@ const ChatList = () => {
         {/* Chat List */}
         <FlatList
           data={filteredChats}
-          renderItem={({ item }) => <ChatItem item={item} />}
+          renderItem={({ item }) => (
+            <ChatItem
+              item={item}
+              onPress={() => router.push(`/customer/chat/${item.id}`)}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}

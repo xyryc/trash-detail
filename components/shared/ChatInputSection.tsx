@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   Alert,
   Keyboard,
-  Platform,
   TextInput,
   TouchableOpacity,
   View,
@@ -98,7 +97,7 @@ const ChatInputSection = ({
   };
 
   return (
-    <View className="bg-[#F8FAF8]">
+    <View className="bg-[#F8FAF8] py-2">
       {/* Main Input Row */}
       <View className="flex-row items-center px-6 gap-2">
         {/* Attachment Button */}
@@ -147,7 +146,7 @@ const ChatInputSection = ({
       </View>
 
       {/* Bottom safe area for iPhone */}
-      {Platform.OS === "ios" && <View className="h-6" />}
+      {/* {Platform.OS === "ios" && <View className="h-6" />} */}
     </View>
   );
 };

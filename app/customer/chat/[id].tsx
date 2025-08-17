@@ -82,7 +82,7 @@ const ChatScreen = () => {
             <CustomHeader text="Chat" />
           </View>
 
-          <ChatHeader />
+          <ChatHeader componentReadyData={componentReadyData} />
 
           {/* message list */}
           <FlatList
@@ -96,7 +96,7 @@ const ChatScreen = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
             onContentSizeChange={() =>
-              flatListRef.current?.scrollToEnd({ animated: false })
+              flatListRef.current?.scrollToEnd({ animated: true })
             }
           />
 
