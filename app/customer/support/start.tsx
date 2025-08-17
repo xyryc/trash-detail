@@ -57,9 +57,7 @@ const StartChat = () => {
 
           <ButtonPrimary
             title="Start Chat"
-            onPress={() =>
-              router.push(`/employee/profile/support/chat/${supportID}`)
-            }
+            onPress={() => router.push(`/customer/chat/${supportID}`)}
           />
         </ScrollView>
       </View>
