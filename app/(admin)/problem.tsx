@@ -19,7 +19,7 @@ const Problem = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
 
-  // ✅ FIXED: Filter problems (not chatListData) based on search and tab
+  // Filter problems (not chatListData) based on search and tab
   const filteredProblems = problems.filter((problem) => {
     const matchesSearch =
       problem.problemStatus.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -28,7 +28,7 @@ const Problem = () => {
       problem.location.toLowerCase().includes(searchText.toLowerCase()) ||
       problem.additionalNote.toLowerCase().includes(searchText.toLowerCase());
 
-    // ✅ FIXED: Filter by problem status, not category
+    // Filter by problem status, not category
     const matchesTab =
       selectedTab === "all"
         ? true // Show all problems regardless of status
@@ -160,15 +160,13 @@ const Problem = () => {
             </Text>
           </View>
 
-          {/* ✅ FIXED: Use filteredProblems instead of problems */}
+          {/* problem cards */}
           <FlatList
             data={filteredProblems}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() =>
-                  router.push(`/employee/problem/details/${item.id}`)
-                }
+                onPress={() => router.push(`/admin/problem/details/${item.id}`)}
               >
                 <ProblemCard data={item} />
               </TouchableOpacity>

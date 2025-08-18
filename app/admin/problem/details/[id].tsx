@@ -35,6 +35,7 @@ const ProblemDetailsScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <Image
+            className="rounded-md"
             source={problem?.image}
             style={{ width: "100%", height: 326, borderRadius: 6 }}
             contentFit="fill"
@@ -164,22 +165,15 @@ const ProblemDetailsScreen = () => {
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
             />
 
-            {/* warning */}
-            <Text
-              style={{ fontFamily: "SourceSans3-Regular" }}
-              className="text-info-normal-active bg-info-light p-2 rounded-lg my-5"
-            >
-              To resolve the matter, please contact{" "}
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-info-normal-active"
-              >
-                support.
-              </Text>
-            </Text>
-
             {/* contact */}
-            <ButtonPrimary title="Contact with Support" />
+            <View className="flex-row gap-5 pt-5">
+              <ButtonPrimary
+                title="Cancel"
+                className="!bg-error-normal w-[48%]"
+              />
+
+              <ButtonPrimary title="Forward" className="w-[48%]" />
+            </View>
           </View>
         </ScrollView>
       </View>

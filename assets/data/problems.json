@@ -29,7 +29,7 @@
     "customerCode": "C-22",
     "location": "Queens Plaza, New York",
     "date": "Jun 12",
-    "status": "resolved",
+    "status": "cancelled",
     "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {
@@ -73,7 +73,7 @@
     "customerCode": "C-22",
     "location": "Queens Plaza, New York",
     "date": "Jun 12",
-    "status": "resolved",
+    "status": "pending",
     "additionalNote": "We couldn't collect the trash because a car is blocking the bin."
   },
   {

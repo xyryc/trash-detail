@@ -7,7 +7,7 @@ const Header = ({ title }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
 
   return (
-    <View className="flex-row items-center justify-between pt-2.5 pb-3">
+    <View className="flex-row items-center justify-between py-3">
       <Text style={{ fontFamily: "SourceSans3-Medium" }} className="text-lg">
         {title}
       </Text>
