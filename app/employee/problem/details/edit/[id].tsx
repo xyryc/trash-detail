@@ -36,9 +36,8 @@ const EditProblemScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <Image
-            className="rounded-md"
             source={problem?.image}
-            style={{ width: "100%", height: 326 }}
+            style={{ width: "100%", height: 326, borderRadius: 6 }}
             contentFit="fill"
           />
 

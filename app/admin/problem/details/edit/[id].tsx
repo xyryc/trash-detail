@@ -36,15 +36,22 @@ const EditProblemScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <Image
-            className="rounded-md"
             source={problem?.image}
-            style={{ width: "100%", height: 326 }}
+            style={{ width: "100%", height: 326, borderRadius: 6 }}
             contentFit="fill"
           />
 
           <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
+            {/* status */}
+            <Text
+              style={{ fontFamily: "SourceSans3-Regular" }}
+              className="mb-5 text-secondary-orange-600"
+            >
+              Pending
+            </Text>
+
             {/* first row */}
-            <View className="flex-row ">
+            <View className="flex-row">
               <View className="w-[60vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
@@ -56,7 +63,7 @@ const EditProblemScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.id}
+                  {problem?.problemCode}
                 </Text>
               </View>
 
@@ -158,10 +165,7 @@ const EditProblemScreen = () => {
             </View>
 
             {/* save */}
-            <ButtonPrimary
-              title="Save"
-              onPress={() => router.push("/(employee)/problem")}
-            />
+            <ButtonPrimary title="Save" onPress={() => router.back()} />
           </View>
         </ScrollView>
       </View>

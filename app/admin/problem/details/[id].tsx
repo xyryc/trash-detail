@@ -159,7 +159,7 @@ const ProblemDetailsScreen = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee/problem/details/edit/${id}`);
+                router.push(`/admin/problem/details/edit/${id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
@@ -167,12 +167,30 @@ const ProblemDetailsScreen = () => {
 
             {/* contact */}
             <View className="flex-row gap-5 pt-5">
-              <ButtonPrimary
-                title="Cancel"
-                className="!bg-error-normal w-[48%]"
-              />
+              {problem?.status === "forwarded" ? (
+                <>
+                  <ButtonPrimary title="Open chat" className="w-full" />
+                </>
+              ) : (
+                <>
+                  <ButtonPrimary
+                    title={
+                      problem?.status === "cancelled" ? "Cancelled" : "Cancel"
+                    }
+                    className="!bg-error-normal w-[48%]"
+                    disabled={problem?.status === "cancelled"}
+                  />
 
-              <ButtonPrimary title="Forward" className="w-[48%]" />
+                  <ButtonPrimary
+                    title={
+                      problem?.status === "cancelled"
+                        ? "Forward Again"
+                        : "Forward"
+                    }
+                    className="w-[48%]"
+                  />
+                </>
+              )}
             </View>
           </View>
         </ScrollView>
