@@ -28,7 +28,7 @@ const StartChat = () => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal mb-2"
             >
-              Name
+              Support Title
             </Text>
             <TextInput
               style={{ fontFamily: "SourceSans3-Medium" }}
@@ -43,7 +43,7 @@ const StartChat = () => {
               style={{ fontFamily: "SourceSans3-Regular" }}
               className="text-neutral-normal mb-2"
             >
-              Additional Notes:
+              Details
             </Text>
 
             <TextInput

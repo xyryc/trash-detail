@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const AdminHome = () => {
+const Chat = () => {
   return (
     <View>
-      <Text>index</Text>
+      <Text>Chat</Text>
     </View>
   );
 };
 
-export default AdminHome;
+export default Chat;
