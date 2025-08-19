@@ -1,17 +1,21 @@
 import problems from "@/assets/data/problems.json";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
+import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProblemDetailsScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showForwardModal, setShowForwardModal] = useState(false);
+  const [showForwardAgainModal, setShowForwardAgainModal] = useState(false);
 
   const problem = problems.find(
     (item) => item.id?.toString() === id?.toString()
@@ -50,7 +54,7 @@ const ProblemDetailsScreen = () => {
             </Text>
 
             {/* first row */}
-            <View className="flex-row ">
+            <View className="flex-row">
               <View className="w-[60vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
@@ -174,6 +178,7 @@ const ProblemDetailsScreen = () => {
               ) : (
                 <>
                   <ButtonPrimary
+                    onPress={() => setShowCancelModal(true)}
                     title={
                       problem?.status === "cancelled" ? "Cancelled" : "Cancel"
                     }
@@ -182,6 +187,13 @@ const ProblemDetailsScreen = () => {
                   />
 
                   <ButtonPrimary
+                    onPress={() => {
+                      if (problem?.status === "cancelled") {
+                        setShowForwardAgainModal(true);
+                      } else {
+                        setShowForwardModal(true);
+                      }
+                    }}
                     title={
                       problem?.status === "cancelled"
                         ? "Forward Again"
@@ -194,6 +206,48 @@ const ProblemDetailsScreen = () => {
             </View>
           </View>
         </ScrollView>
+
+        {/* Cancel Modal */}
+        <ConfirmationModal
+          visible={showCancelModal}
+          title="Cancel Problem"
+          message="Are you sure?"
+          type="cancel"
+          onConfirm={() => {
+            // Your action here
+            console.log("Cancelled!");
+            setShowCancelModal(false);
+          }}
+          onCancel={() => setShowCancelModal(false)}
+        />
+
+        {/* forward Modal */}
+        <ConfirmationModal
+          visible={showForwardModal}
+          title="Forward Problem"
+          message="Are you sure?"
+          type="warning"
+          onConfirm={() => {
+            // Your action here
+            console.log("Forwarded!");
+            setShowForwardModal(false);
+          }}
+          onCancel={() => setShowForwardModal(false)}
+        />
+
+        {/* forward Modal */}
+        <ConfirmationModal
+          visible={showForwardAgainModal}
+          title="Forward Problem Again"
+          message="Are you sure?"
+          type="warning"
+          onConfirm={() => {
+            // Your action here
+            console.log("Forwarded again!");
+            setShowForwardAgainModal(false);
+          }}
+          onCancel={() => setShowForwardAgainModal(false)}
+        />
       </View>
     </SafeAreaView>
   );
