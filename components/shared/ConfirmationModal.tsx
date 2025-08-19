@@ -1,6 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, Text, View } from "react-native";
+import ButtonPrimary from "./ButtonPrimary";
+import ButtonSecondary from "./ButtonSecondary";
 
 interface ConfirmationModalProps {
   visible: boolean;
@@ -93,29 +95,17 @@ const ConfirmationModal = ({
 
           {/* Buttons */}
           <View className="flex-row gap-3">
-            <TouchableOpacity
+            <ButtonSecondary
               onPress={onCancel}
-              className="flex-1 py-3 bg-gray-200 rounded-lg"
-            >
-              <Text
-                className="text-center font-semibold text-gray-700"
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-              >
-                {cancelText}
-              </Text>
-            </TouchableOpacity>
+              title={cancelText}
+              className="w-[48%]"
+            />
 
-            <TouchableOpacity
+            <ButtonPrimary
               onPress={onConfirm}
-              className={`flex-1 py-3 ${getConfirmButtonColor()} rounded-lg`}
-            >
-              <Text
-                className="text-center font-semibold text-white"
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-              >
-                {confirmText}
-              </Text>
-            </TouchableOpacity>
+              title={confirmText}
+              className={`w-[48%]  ${getConfirmButtonColor()}`}
+            />
           </View>
         </Pressable>
       </Pressable>

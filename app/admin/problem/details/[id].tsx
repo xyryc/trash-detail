@@ -48,7 +48,12 @@ const ProblemDetailsScreen = () => {
           <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
             <Text
               style={{ fontFamily: "SourceSans3-Regular" }}
-              className="text-secondary-orange-600 mb-5 capitalize"
+              className={`mb-5 capitalize ${
+                (problem?.status === "pending" &&
+                  "text-secondary-orange-600") ||
+                (problem?.status === "cancelled" && "text-error-normal") ||
+                (problem?.status === "forwarded" && "text-green-normal")
+              }`}
             >
               {problem?.status}
             </Text>
@@ -169,7 +174,7 @@ const ProblemDetailsScreen = () => {
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
             />
 
-            {/* contact */}
+            {/* buttons */}
             <View className="flex-row gap-5 pt-5">
               {problem?.status === "forwarded" ? (
                 <>
@@ -182,7 +187,7 @@ const ProblemDetailsScreen = () => {
                     title={
                       problem?.status === "cancelled" ? "Cancelled" : "Cancel"
                     }
-                    className="!bg-error-normal w-[48%]"
+                    className={`!bg-error-normal w-[48%] ${problem?.status === "cancelled" && "!bg-error-light-active"}`}
                     disabled={problem?.status === "cancelled"}
                   />
 

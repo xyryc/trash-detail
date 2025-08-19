@@ -86,8 +86,13 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
 
             <Text
               style={{ fontFamily: "SourceSans3-SemiBold" }}
-              className="text-green-normal text-[10px]"
-              numberOfLines={1}
+              className={`text-[10px] capitalize
+                  ${
+                    (status === "pending" && "text-secondary-orange-600") ||
+                    (status === "cancelled" && "text-error-normal") ||
+                    (status === "forwarded" && "text-[#237B10]")
+                  }
+                `}
             >
               {status}
             </Text>
