@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const ChatItem = ({ item, onPress }: any) => {
+const ThreadCard = ({ item, onPress }: any) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -95,4 +95,4 @@ const ChatItem = ({ item, onPress }: any) => {
   );
 };
 
-export default ChatItem;
+export default ThreadCard;
