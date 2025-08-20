@@ -104,7 +104,6 @@ const ChatList = () => {
                 router.push(
                   `/admin/chatlist/problem/thread/${item.customerId}`
                 );
-                console.log(item.customerId);
               }}
             />
           )}

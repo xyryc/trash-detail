@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const ChatHeader = () => {
   return (
@@ -50,6 +50,27 @@ const ChatHeader = () => {
 
       {/* Separator */}
       <View className="h-px bg-neutral-light-hover" />
+
+      {/* buttons */}
+      <View className="mt-2 flex-row items-center justify-between">
+        <TouchableOpacity>
+          <Text
+            style={{ fontFamily: "SourceSans3-Medium" }}
+            className="text-sm text-info-normal-active"
+          >
+            Problem Details
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text
+            style={{ fontFamily: "SourceSans3-Medium" }}
+            className="text-sm text-error-normal"
+          >
+            Close Problem
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -39,7 +39,9 @@ const ProblemThread = () => {
           renderItem={({ item }) => (
             <ChatItem
               item={item}
-              // onPress={() => router.push(`/admin/chatlist/chat/${}`)}
+              onPress={() =>
+                router.push(`/admin/chatlist/chat/${customerChats[0].id}`)
+              }
             />
           )}
           showsVerticalScrollIndicator={false}
