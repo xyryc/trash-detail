@@ -187,7 +187,7 @@ const ProblemDetailsScreen = () => {
                     title={
                       problem?.status === "cancelled" ? "Cancelled" : "Cancel"
                     }
-                    className={`!bg-error-normal w-[48%] ${problem?.status === "cancelled" && "!bg-error-light-active"}`}
+                    className={`${problem?.status === "cancelled" ? "!bg-error-light-active" : "!bg-error-normal"} w-[48%]`}
                     disabled={problem?.status === "cancelled"}
                   />
 

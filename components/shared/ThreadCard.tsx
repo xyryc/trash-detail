@@ -1,5 +1,4 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -9,18 +8,13 @@ const ThreadCard = ({ item, onPress }: any) => {
       onPress={onPress}
       className={` py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active
             ${item.unreadCount > 0 && "bg-neutral-light"}
-            ${item.status === "closed" && "bg-neutral-light-active"}
         `}
     >
       {/* message content */}
       <View className="flex-row gap-4">
         {item.category === "problem" ? (
-          <View className="size-[42px] bg-white rounded-lg border border-neutral-light-hover">
-            <Image
-              source={require("@/assets/images/left-guy.svg")}
-              style={{ width: 42, height: 42 }}
-              contentFit="scale-down"
-            />
+          <View className="size-[42px] bg-white rounded-lg border border-neutral-light-hover items-center justify-center">
+            <Text style={{ fontFamily: "SourceSans3-Medium" }}>S</Text>
           </View>
         ) : (
           <View>
@@ -60,23 +54,13 @@ const ThreadCard = ({ item, onPress }: any) => {
             {item.title}
           </Text>
 
-          {item.status === "closed" ? (
-            <Text
-              style={{ fontFamily: "SourceSans3-Medium" }}
-              className="mt-1 text-sm text-[#FF0000] capitalize"
-              numberOfLines={1}
-            >
-              {item.status}
-            </Text>
-          ) : (
-            <Text
-              style={{ fontFamily: "SourceSans3-Medium" }}
-              className="mt-1 text-xs text-neutral-normal-active"
-              numberOfLines={1}
-            >
-              {item.description}
-            </Text>
-          )}
+          <Text
+            style={{ fontFamily: "SourceSans3-Medium" }}
+            className="mt-1 text-xs text-neutral-normal-active"
+            numberOfLines={1}
+          >
+            Customer
+          </Text>
         </View>
       </View>
 
