@@ -8,7 +8,10 @@
     "unreadCount": 3,
     "status": "active",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "problem"
+    "category": "problem",
+    "customerId": "C34",
+    "customerName": "Sakib",
+    "customerNumber": "+3434 2332 323"
   },
   {
     "id": "chat_102",
@@ -19,7 +22,10 @@
     "unreadCount": 1,
     "status": "active",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "problem"
+    "category": "problem",
+    "customerId": "C34",
+    "customerName": "Anik",
+    "customerNumber": "+3434 2332 323"
   },
   {
     "id": "chat_103",
@@ -30,7 +36,10 @@
     "unreadCount": 0,
     "status": "active",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "problem"
+    "category": "problem",
+    "customerId": "C36",
+    "customerName": "Shafin",
+    "customerNumber": "+3434 2332 323"
   },
   {
     "id": "chat_104",
@@ -41,7 +50,10 @@
     "unreadCount": 0,
     "status": "closed",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "problem"
+    "category": "problem",
+    "customerId": "C34",
+    "customerName": "Manik",
+    "customerNumber": "+3434 2332 323"
   },
   {
     "id": "chat_201",
@@ -52,7 +64,10 @@
     "unreadCount": 2,
     "status": "active",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "support"
+    "category": "support",
+    "customerId": "C32",
+    "customerName": "Anik",
+    "customerNumber": "+3434 2332 323"
   },
   {
     "id": "chat_202",
@@ -63,9 +78,12 @@
     "unreadCount": 0,
     "status": "active",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "support"
+    "category": "support",
+    "customerId": "C34",
+    "customerName": "Anik",
+    "customerNumber": "+3434 2332 323"
   },
-    {
+  {
     "id": "chat_104",
     "problemId": "P70",
     "title": "Road Under Construction",
@@ -74,6 +92,9 @@
     "unreadCount": 0,
     "status": "closed",
     "avatar": "@/assets/images/left-guy.svg",
-    "category": "support"
+    "category": "support",
+    "customerId": "C33",
+    "customerName": "Jahid",
+    "customerNumber": "+3434 2332 323"
   }
 ]

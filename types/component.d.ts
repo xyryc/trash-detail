@@ -20,7 +20,7 @@ type HeaderProps = {
 };
 
 type ProblemItem = {
-  id: number;
+  id?: number;
   image: string;
   problemCode: string;
   problemStatus: string;

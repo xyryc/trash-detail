@@ -33,7 +33,7 @@ const ThreadCard = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-green-normal"
             >
-              {item.problemId}
+              {item.customerId}
             </Text>
 
             <Entypo name="dot-single" size={16} color="#667085" />
@@ -51,7 +51,7 @@ const ThreadCard = ({ item, onPress }: any) => {
             className="text-lg"
             numberOfLines={1}
           >
-            {item.title}
+            {item.customerName}
           </Text>
 
           <Text

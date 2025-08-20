@@ -1,5 +1,4 @@
 import chatListData from "@/assets/data/chatListData.json";
-import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import ThreadCard from "@/components/shared/ThreadCard";
@@ -40,16 +39,7 @@ const ChatList = () => {
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-      <View className="flex-1 relative">
-        {/* open now button */}
-        {selectedTab === "support" && (
-          <ButtonPrimary
-            title="Open Now"
-            className="absolute bottom-8 right-6 px-3 z-10"
-            onPress={() => router.push("/customer/support/start")}
-          />
-        )}
-
+      <View className="flex-1">
         <LinearGradient
           colors={["#EDFDF1", "#FFFFFF"]} // 0% to 100%
           start={{ x: 0, y: 0 }} // Top
@@ -108,12 +98,15 @@ const ChatList = () => {
         <FlatList
           data={filteredChats}
           renderItem={({ item }) => (
-            // <ChatItem
-            //   item={item}
-            //   onPress={() => router.push(`/customer/chat/${item.id}`)}
-            // />
-
-            <ThreadCard item={item} />
+            <ThreadCard
+              item={item}
+              onPress={() => {
+                router.push(
+                  `/admin/chatlist/problem/thread/${item.customerId}`
+                );
+                console.log(item.customerId);
+              }}
+            />
           )}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
