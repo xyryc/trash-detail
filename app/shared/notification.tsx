@@ -1,6 +1,7 @@
-import Header from "@/components/shared/Header";
+import CustomHeader from "@/components/shared/CustomHeader";
+import NotificationCard from "@/components/shared/NotificationCard";
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { ScrollView, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Notification = () => {
@@ -9,8 +10,24 @@ const Notification = () => {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="px-6">
-        <Header title="Notification" />
+        <CustomHeader text="Notification" />
       </View>
+
+      <ScrollView>
+        <NotificationCard />
+
+        <NotificationCard />
+
+        <NotificationCard />
+
+        <NotificationCard />
+
+        <NotificationCard />
+
+        <NotificationCard />
+
+        <NotificationCard />
+      </ScrollView>
     </SafeAreaView>
   );
 };
