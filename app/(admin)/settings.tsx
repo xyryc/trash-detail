@@ -106,7 +106,7 @@ const Settings = () => {
     })
   ).current;
 
-  const handleSidebarNavigation = (screenType: ScreenType | string) => {
+  const handleSidebarNavigation = (screenType: ScreenType) => {
     setActiveScreen(screenType);
     closeSidebar();
   };
@@ -115,9 +115,19 @@ const Settings = () => {
   const renderActiveScreen = () => {
     switch (activeScreen) {
       case "customer":
-        return <CustomerScreen customerData={customerData} />;
+        return (
+          <CustomerScreen
+            activeScreen={activeScreen}
+            customerData={customerData}
+          />
+        );
       case "employee":
-        return <EmployeeScreen employeeData={employeeData} />;
+        return (
+          <EmployeeScreen
+            activeScreen={activeScreen}
+            employeeData={employeeData}
+          />
+        );
       case "admins":
         return <AdminScreen />;
       default:
@@ -165,7 +175,9 @@ const Settings = () => {
 
           {/* Add New Button */}
           <ButtonPrimary
-            onPress={() => router.push(`/admin/settings/add/${activeScreen}`)}
+            onPress={() =>
+              router.push(`/admin/settings/invitation/${activeScreen}`)
+            }
             className="absolute bottom-6 right-6 px-3"
             title="Add New"
             icon={<FontAwesome6 name="add" size={24} color="white" />}

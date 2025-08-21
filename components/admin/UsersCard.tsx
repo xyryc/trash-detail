@@ -1,9 +1,30 @@
+import { useRouter } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
-const UsersCard = ({ item }: { item: any }) => {
+const UsersCard = ({
+  activeScreen,
+  item,
+}: {
+  activeScreen: any;
+  item: any;
+}) => {
+  const router = useRouter();
+  console.log(activeScreen);
+
   return (
-    <View className="flex-row items-center gap-4 px-6 py-4 border-b border-neutral-light-active">
+    <TouchableOpacity
+      onPress={() => {
+        if (activeScreen === "customer") {
+          //@ts-ignore
+          router.push(`/admin/settings/${activeScreen}/details/${item.id}`);
+        } else if (activeScreen === "employee") {
+          //@ts-ignore
+          router.push(`/admin/settings/${activeScreen}/details/${item.id}`);
+        }
+      }}
+      className="flex-row items-center gap-4 px-6 py-4 border-b border-neutral-light-active"
+    >
       <View className="w-[42px] h-[42px] bg-white border border-neutral-light-hover rounded-lg items-center justify-center">
         <Text
           style={{ fontFamily: "SourceSans3-Medium" }}
@@ -27,7 +48,7 @@ const UsersCard = ({ item }: { item: any }) => {
           {item.name}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

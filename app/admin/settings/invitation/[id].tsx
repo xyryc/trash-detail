@@ -6,7 +6,7 @@ import React from "react";
 import { ScrollView, StatusBar, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const AddUser = () => {
+const SendInvitation = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
 
@@ -72,4 +72,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default SendInvitation;
