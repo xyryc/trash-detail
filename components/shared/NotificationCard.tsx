@@ -2,9 +2,11 @@ import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { Text, View } from "react-native";
 
-const NotificationCard = () => {
+const NotificationCard = ({ className }: any) => {
   return (
-    <View className="flex-row gap-3 py-4 px-6 border-b border-green-light">
+    <View
+      className={`flex-row gap-3 py-4 px-6 border-b border-green-light ${className}`}
+    >
       <AntDesign
         className="p-2 bg-white rounded-lg border border-neutral-light-hover"
         name="questioncircleo"

@@ -16,13 +16,13 @@ const Notification = () => {
       <ScrollView>
         <NotificationCard />
 
-        <NotificationCard />
+        <NotificationCard className="bg-neutral-light" />
 
         <NotificationCard />
 
         <NotificationCard />
 
-        <NotificationCard />
+        <NotificationCard className="bg-neutral-light" />
 
         <NotificationCard />
 
