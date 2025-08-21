@@ -1,11 +1,11 @@
+import adminData from "@/assets/data/adminList.json";
 import customerData from "@/assets/data/customerList.json";
-import employeeData from "@/assets/data/employeeData.json";
+import employeeData from "@/assets/data/employeeList.json";
 import { AdminScreen } from "@/components/admin/AdminScreen";
 import { CustomerScreen } from "@/components/admin/CustomerScreen";
 import { EmployeeScreen } from "@/components/admin/EmployeeScreen";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import Header from "@/components/shared/Header";
-import SearchBar from "@/components/shared/SearchBar";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -129,9 +129,13 @@ const Settings = () => {
           />
         );
       case "admins":
-        return <AdminScreen />;
+        return (
+          <AdminScreen activeScreen={activeScreen} adminData={adminData} />
+        );
       default:
-        return <CustomerScreen data={customerData} />;
+        return (
+          <CustomerScreen activeScreen={activeScreen} data={customerData} />
+        );
     }
   };
 
@@ -168,7 +172,6 @@ const Settings = () => {
             }}
           >
             <Header title={getScreenTitle()} />
-            <SearchBar />
           </LinearGradient>
 
           {renderActiveScreen()}
