@@ -35,6 +35,17 @@ const ChatList = () => {
     return matchesSearch && matchesTab;
   });
 
+  // Handle navigation based on card type
+  const handleCardPress = (item: any) => {
+    if (item.category === "problem") {
+      // Navigate to problem thread
+      router.push(`/admin/chatlist/problem/thread/${item.customerId}`);
+    } else if (item.category === "support") {
+      // Navigate to support thread
+      router.push(`/admin/chatlist/support/thread/${item.customerId}`);
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -100,11 +111,8 @@ const ChatList = () => {
           renderItem={({ item }) => (
             <ThreadCard
               item={item}
-              onPress={() => {
-                router.push(
-                  `/admin/chatlist/problem/thread/${item.customerId}`
-                );
-              }}
+              onPress={() => handleCardPress(item)}
+              category={item.category}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

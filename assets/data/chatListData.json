@@ -11,7 +11,10 @@
     "category": "problem",
     "customerId": "C34",
     "customerName": "Sakib",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_102",
@@ -25,7 +28,10 @@
     "category": "problem",
     "customerId": "C34",
     "customerName": "Anik",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_103",
@@ -39,7 +45,10 @@
     "category": "problem",
     "customerId": "C36",
     "customerName": "Shafin",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_104",
@@ -53,7 +62,10 @@
     "category": "problem",
     "customerId": "C34",
     "customerName": "Manik",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_201",
@@ -67,7 +79,10 @@
     "category": "support",
     "customerId": "C32",
     "customerName": "Anik",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_202",
@@ -81,7 +96,10 @@
     "category": "support",
     "customerId": "C34",
     "customerName": "Anik",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   },
   {
     "id": "chat_104",
@@ -95,6 +113,9 @@
     "category": "support",
     "customerId": "C33",
     "customerName": "Jahid",
-    "customerNumber": "+3434 2332 323"
+    "customerNumber": "+3434 2332 323",
+    "employeeId": "E34",
+    "employeeName": "Anik",
+    "employeeNumber": "+3434 2332 323"
   }
 ]
