@@ -14,7 +14,7 @@ const CustomHeader = ({ text = "Details" }) => {
 
       <Text
         style={{ fontFamily: "SourceSans3-Medium" }}
-        className="text-lg absolute left-0 right-0 text-center"
+        className="text-lg absolute left-0 right-0 text-center capitalize"
       >
         {text}
       </Text>

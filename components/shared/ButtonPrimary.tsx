@@ -11,10 +11,10 @@ const ButtonPrimary = ({
 }: ButtonProps) => {
   return (
     <TouchableOpacity
-      className={`bg-green-normal rounded-lg py-2.5 flex-row justify-center gap-2.5 ${className}`}
+      className={`bg-green-normal rounded-lg py-3 flex-row justify-center gap-2.5 ${className}`}
       onPress={onPress}
       activeOpacity={0.8}
-      disabled={disabled} // Native disabled prop
+      disabled={disabled}
     >
       {icon}
       <Text

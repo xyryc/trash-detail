@@ -8,6 +8,7 @@ import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
   Animated,
@@ -27,8 +28,8 @@ const navigationItems = [
     icon: "person",
   },
   {
-    id: "employees",
-    title: "Employees",
+    id: "employee",
+    title: "Employee",
     icon: "people",
   },
   {
@@ -45,6 +46,7 @@ const Settings = () => {
 
   const sidebarTranslateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const router = useRouter();
 
   const openSidebar = () => {
     Animated.parallel([
@@ -104,7 +106,7 @@ const Settings = () => {
     })
   ).current;
 
-  const handleSidebarNavigation = (screenType: ScreenType) => {
+  const handleSidebarNavigation = (screenType: ScreenType | string) => {
     setActiveScreen(screenType);
     closeSidebar();
   };
@@ -114,7 +116,7 @@ const Settings = () => {
     switch (activeScreen) {
       case "customer":
         return <CustomerScreen customerData={customerData} />;
-      case "employees":
+      case "employee":
         return <EmployeeScreen employeeData={employeeData} />;
       case "admins":
         return <AdminScreen />;
@@ -128,7 +130,7 @@ const Settings = () => {
     switch (activeScreen) {
       case "customer":
         return "Customer List";
-      case "employees":
+      case "employee":
         return "Employee List";
       case "admins":
         return "Admin List";
@@ -163,6 +165,7 @@ const Settings = () => {
 
           {/* Add New Button */}
           <ButtonPrimary
+            onPress={() => router.push(`/admin/settings/add/${activeScreen}`)}
             className="absolute bottom-6 right-6 px-3"
             title="Add New"
             icon={<FontAwesome6 name="add" size={24} color="white" />}
