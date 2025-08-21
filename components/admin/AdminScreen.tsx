@@ -7,7 +7,7 @@ const adminData = [
   { id: "A47", name: "Admin Three", permissions: "Read Only" },
 ];
 
-const AdminScreen = () => {
+export const AdminScreen = () => {
   const renderAdminItem = ({ item, index }: { item: any; index: number }) => (
     <TouchableOpacity className="flex-row items-center px-6 py-4 border-b border-gray-100">
       <View className="w-10 h-10 bg-purple-100 rounded-full items-center justify-center mr-4">

@@ -1,12 +1,16 @@
+import customerData from "@/assets/data/customerList.json";
+import employeeData from "@/assets/data/employeeData.json";
+import { AdminScreen } from "@/components/admin/AdminScreen";
+import { CustomerScreen } from "@/components/admin/CustomerScreen";
+import { EmployeeScreen } from "@/components/admin/EmployeeScreen";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useRef, useState } from "react";
 import {
   Animated,
-  Dimensions,
-  FlatList,
   PanResponder,
   Pressable,
   StatusBar,
@@ -16,16 +20,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Screen Types
-type ScreenType = "customer" | "employees" | "admins";
-
-interface NavItem {
-  id: ScreenType;
-  title: string;
-  icon: keyof typeof Ionicons.glyphMap;
-}
-
-const navigationItems: NavItem[] = [
+const navigationItems = [
   {
     id: "customer",
     title: "Customer",
@@ -43,34 +38,11 @@ const navigationItems: NavItem[] = [
   },
 ];
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SIDEBAR_WIDTH = 280;
-
-// Sample data for different screens
-const customerData = [
-  { id: "C45", name: "Sakib Ahmed" },
-  { id: "C46", name: "Mahmudur Rahman" },
-  { id: "C47", name: "Anik Hassan" },
-  { id: "C48", name: "Shafin Ahmed" },
-];
-
-const employeeData = [
-  { id: "E45", name: "Rahim Khan" },
-  { id: "E46", name: "Sumiya Begum" },
-  { id: "E47", name: "Hasan Ali" },
-  { id: "E48", name: "Farzana Khatun" },
-];
-
-const adminData = [
-  { id: "A45", name: "Admin One" },
-  { id: "A46", name: "Admin Two" },
-  { id: "A47", name: "Admin Three" },
-];
 
 const Settings = () => {
   const [activeScreen, setActiveScreen] = useState<ScreenType>("customer");
 
-  // Sidebar animation values
   const sidebarTranslateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
 
@@ -137,6 +109,20 @@ const Settings = () => {
     closeSidebar();
   };
 
+  // render active screen
+  const renderActiveScreen = () => {
+    switch (activeScreen) {
+      case "customer":
+        return <CustomerScreen customerData={customerData} />;
+      case "employees":
+        return <EmployeeScreen employeeData={employeeData} />;
+      case "admins":
+        return <AdminScreen />;
+      default:
+        return <CustomerScreen data={customerData} />;
+    }
+  };
+
   // Get screen title based on active screen
   const getScreenTitle = () => {
     switch (activeScreen) {
@@ -150,40 +136,6 @@ const Settings = () => {
         return "Customer List";
     }
   };
-
-  // Get data based on active screen
-  const getScreenData = () => {
-    switch (activeScreen) {
-      case "customer":
-        return customerData;
-      case "employees":
-        return employeeData;
-      case "admins":
-        return adminData;
-      default:
-        return customerData;
-    }
-  };
-
-  // Render list item
-  const renderListItem = ({ item, index }: { item: any; index: number }) => (
-    <View className="flex-row items-center px-6 py-4 border-b border-gray-100">
-      <View className="w-10 h-10 bg-green-100 rounded-full items-center justify-center mr-4">
-        <Text className="text-green-600 font-semibold">
-          {item.name.charAt(0)}
-        </Text>
-      </View>
-      <View className="flex-1">
-        <Text className="text-gray-500 text-sm">{item.id}</Text>
-        <Text
-          className="text-black font-medium text-base"
-          style={{ fontFamily: "SourceSans3-Medium" }}
-        >
-          {item.name}
-        </Text>
-      </View>
-    </View>
-  );
 
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
@@ -207,25 +159,14 @@ const Settings = () => {
             <SearchBar />
           </LinearGradient>
 
-          {/* Screen Content */}
-          <FlatList
-            data={getScreenData()}
-            renderItem={renderListItem}
-            keyExtractor={(item, index) => `${item.id}-${index}`}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 100 }}
-          />
+          {renderActiveScreen()}
 
           {/* Add New Button */}
-          <TouchableOpacity className="absolute bottom-6 right-6 bg-green-normal w-14 h-14 rounded-full items-center justify-center shadow-lg">
-            <Ionicons name="add" size={24} color="white" />
-            <Text
-              className="absolute -bottom-6 text-xs text-green-normal font-medium"
-              style={{ fontFamily: "SourceSans3-Medium" }}
-            >
-              Add New
-            </Text>
-          </TouchableOpacity>
+          <ButtonPrimary
+            className="absolute bottom-6 right-6 px-3"
+            title="Add New"
+            icon={<FontAwesome6 name="add" size={24} color="white" />}
+          />
         </View>
 
         {/* Overlay */}
@@ -265,20 +206,17 @@ const Settings = () => {
         >
           <SafeAreaView className="flex-1" edges={["top", "left", "bottom"]}>
             {/* Sidebar Header */}
-            <View className="flex-row items-center justify-between px-6 py-4 border-b border-gray-200">
-              <Text
-                className="text-lg font-semibold"
-                style={{ fontFamily: "SourceSans3-Medium" }}
-              >
+            <View className="flex-row items-center justify-between px-6 py-4">
+              <Text className="" style={{ fontFamily: "SourceSans3-Medium" }}>
                 Settings
               </Text>
               <TouchableOpacity onPress={closeSidebar}>
-                <Ionicons name="close" size={24} color="#6B7280" />
+                <Ionicons name="close" size={24} color="#4F4F4F" />
               </TouchableOpacity>
             </View>
 
             {/* Navigation Items */}
-            <View className="flex-1 pt-4">
+            <View className="flex-1">
               {navigationItems.map((item) => {
                 const isActive = activeScreen === item.id;
 
@@ -286,27 +224,21 @@ const Settings = () => {
                   <TouchableOpacity
                     key={item.id}
                     onPress={() => handleSidebarNavigation(item.id)}
-                    className={`flex-row items-center px-6 py-4 mx-4 rounded-lg mb-2 ${
-                      isActive
-                        ? "bg-green-50 border-l-4 border-green-normal"
-                        : "bg-transparent"
-                    }`}
+                    className="flex-row items-center gap-6 px-6 py-4 mx-6"
                   >
                     <Ionicons
                       name={item.icon}
-                      size={20}
-                      color={isActive ? "#22C55E" : "#6B7280"}
+                      size={24}
+                      color={isActive ? "#386b45" : "#667085"}
                     />
                     <Text
-                      className={`ml-3 text-base ${
-                        isActive
-                          ? "text-green-normal font-semibold"
-                          : "text-gray-700 font-medium"
+                      className={`${
+                        isActive ? "text-green-normal" : "text-neutral-normal"
                       }`}
                       style={{
                         fontFamily: isActive
                           ? "SourceSans3-SemiBold"
-                          : "SourceSans3-Medium",
+                          : "SourceSans3-Regular",
                       }}
                     >
                       {item.title}
