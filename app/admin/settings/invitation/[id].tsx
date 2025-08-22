@@ -2,13 +2,27 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
-import { ScrollView, StatusBar, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SendInvitation = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
+  const [value, setValue] = useState<string | null>(null);
+
+  const states = [
+    { label: "Super Admin", value: "super" },
+    { label: "Admin", value: "admin" },
+  ];
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -22,7 +36,7 @@ const SendInvitation = () => {
           contentContainerClassName="border-[0.5px] border-neutral-light p-4 rounded-lg"
           showsVerticalScrollIndicator={false}
         >
-          {/* support title */}
+          {/* email */}
           <View>
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
@@ -37,8 +51,32 @@ const SendInvitation = () => {
             />
           </View>
 
-          {/* details */}
+          {/* role */}
           <View className="my-5">
+            <Text
+              style={{ fontFamily: "SourceSans3-Medium" }}
+              className="text-neutral-normal mb-2"
+            >
+              Select Role
+            </Text>
+
+            <Dropdown
+              data={states}
+              labelField="label"
+              valueField="value"
+              placeholder="Admin"
+              value={value}
+              onChange={(item) => setValue(item.value)}
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              containerStyle={styles.containerStyle}
+              itemTextStyle={styles.itemTextStyle}
+            />
+          </View>
+
+          {/* password */}
+          <View className="mb-5">
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal mb-2"
@@ -71,5 +109,35 @@ const SendInvitation = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  dropdown: {
+    fontFamily: "SourceSans3-Medium",
+
+    borderWidth: 1,
+    borderColor: "#D0D3D9",
+    borderRadius: 8,
+    padding: 12,
+  },
+  placeholderStyle: {
+    fontFamily: "SourceSans3-Medium",
+    fontSize: 14,
+    color: "#9CA3AF",
+  },
+  selectedTextStyle: {
+    fontFamily: "SourceSans3-Medium",
+    fontSize: 14,
+    color: "#4D5464",
+  },
+  containerStyle: {
+    borderRadius: 8,
+    backgroundColor: "white",
+  },
+  itemTextStyle: {
+    fontSize: 14,
+    color: "#3D3D3D",
+    fontFamily: "SourceSans3-Medium",
+  },
+});
 
 export default SendInvitation;

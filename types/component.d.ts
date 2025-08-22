@@ -11,6 +11,7 @@ type ButtonProps = {
   disabled?: boolean;
   icon?: ReactNode;
   className?: string;
+  textColor?: string;
 };
 
 type HeaderProps = {

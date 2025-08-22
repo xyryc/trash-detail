@@ -1,4 +1,5 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -21,7 +22,7 @@ const EditCustomer = () => {
   const router = useRouter();
 
   const states = [
-    { label: "Super", value: "super" },
+    { label: "Super Admin", value: "super" },
     { label: "Admin", value: "admin" },
   ];
 
@@ -100,6 +101,11 @@ const EditCustomer = () => {
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
                 defaultValue={"123456"}
               />
+            </View>
+
+            {/* remove  */}
+            <View className="mb-5">
+              <ButtonSecondary title="Remove" textColor="!text-error-normal" />
             </View>
 
             {/* edit */}
