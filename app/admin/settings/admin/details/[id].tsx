@@ -6,7 +6,7 @@ import React from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CustomerDetails = () => {
+const AdminDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
@@ -16,7 +16,7 @@ const CustomerDetails = () => {
 
       <View className="flex-1 px-6">
         {/* header */}
-        <CustomHeader text="Employee Details" />
+        <CustomHeader text="Admin Profile" />
 
         {/* main content */}
         <ScrollView
@@ -30,13 +30,13 @@ const CustomerDetails = () => {
                 style={{ fontFamily: "SourceSans3-Regular" }}
                 className="text-neutral-normal mb-2"
               >
-                ID:
+                Role
               </Text>
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {id}
+                Admin
               </Text>
             </View>
 
@@ -44,25 +44,6 @@ const CustomerDetails = () => {
             <View className="h-px bg-neutral-light-hover my-5" />
 
             {/* second row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                Name
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                Anik
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* third row */}
             <View>
               <Text
                 style={{ fontFamily: "SourceSans3-Regular" }}
@@ -81,127 +62,26 @@ const CustomerDetails = () => {
             {/* divider */}
             <View className="h-px bg-neutral-light-hover my-5" />
 
-            {/* fourth row */}
-            <View>
+            {/* third row */}
+            <View className="mb-5">
               <Text
                 style={{ fontFamily: "SourceSans3-Regular" }}
                 className="text-neutral-normal mb-2"
               >
-                Number
+                Password
               </Text>
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                +8801570233979
+                123456
               </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* fifth row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                Address Line 1
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                5th Avenue
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* sixth row */}
-            <View>
-              <View className="flex-row gap-1">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Address Line 2
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  (optional)
-                </Text>
-              </View>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                Bay City Avenue
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* seventh row */}
-            <View className="mb-5 flex-row justify-between pr-6">
-              {/* city */}
-              <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  City
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  New York
-                </Text>
-              </View>
-
-              {/* state */}
-              <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  State
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  NY
-                </Text>
-              </View>
-
-              {/* zip code */}
-              <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  ZIP Code
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  34356
-                </Text>
-              </View>
             </View>
 
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/admin/settings/employee/details/edit/${id}`);
+                router.push(`/admin/settings/admin/details/edit/${id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
@@ -213,4 +93,4 @@ const CustomerDetails = () => {
   );
 };
 
-export default CustomerDetails;
+export default AdminDetails;

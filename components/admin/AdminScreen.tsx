@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import AdminCard from "./AdminCard";
 
 export const AdminScreen = ({ activeScreen, adminData }: any) => {
+  console.log(activeScreen);
   const superAdmins = useMemo(() => {
     return adminData.filter((admin: any) => admin.role === "super");
   }, [adminData]);
@@ -20,10 +21,7 @@ export const AdminScreen = ({ activeScreen, adminData }: any) => {
       {/* Super Admins Section */}
       {superAdmins.length > 0 && (
         <>
-          <Text
-            className="text-lg px-6"
-            style={{ fontFamily: "SourceSans3-Regular" }}
-          >
+          <Text className="px-6" style={{ fontFamily: "SourceSans3-Regular" }}>
             Super Admins ({superAdmins.length})
           </Text>
 
@@ -41,7 +39,7 @@ export const AdminScreen = ({ activeScreen, adminData }: any) => {
       {regularAdmins.length > 0 && (
         <>
           <Text
-            className="text-lg px-6 mt-6"
+            className="px-6 mt-6"
             style={{ fontFamily: "SourceSans3-Regular" }}
           >
             Admins ({regularAdmins.length})

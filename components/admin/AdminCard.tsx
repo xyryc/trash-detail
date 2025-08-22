@@ -10,7 +10,6 @@ const AdminCard = ({
   item: any;
 }) => {
   const router = useRouter();
-  console.log(activeScreen);
 
   return (
     <TouchableOpacity

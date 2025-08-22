@@ -33,8 +33,8 @@ const navigationItems = [
     icon: "people",
   },
   {
-    id: "admins",
-    title: "Admins",
+    id: "admin",
+    title: "Admin",
     icon: "shield",
   },
 ];
@@ -128,7 +128,7 @@ const Settings = () => {
             employeeData={employeeData}
           />
         );
-      case "admins":
+      case "admin":
         return (
           <AdminScreen activeScreen={activeScreen} adminData={adminData} />
         );
@@ -146,7 +146,7 @@ const Settings = () => {
         return "Customer List";
       case "employee":
         return "Employee List";
-      case "admins":
+      case "admin":
         return "Admin List";
       default:
         return "Customer List";

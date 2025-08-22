@@ -1,6 +1,6 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ScrollView,
@@ -16,20 +16,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const EditCustomer = () => {
   const [value, setValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState(false);
+  const { id } = useLocalSearchParams();
 
   const router = useRouter();
 
   const states = [
-    { label: "AL", value: "AL" },
-    { label: "AK", value: "AK" },
-    { label: "ZA", value: "ZA" },
-    { label: "CA", value: "CA" },
-    { label: "CO", value: "CO" },
-    { label: "FL", value: "FL" },
-    { label: "GA", value: "GA" },
-    { label: "NY", value: "NY" },
-    { label: "TX", value: "TX" },
-    { label: "WA", value: "WA" },
+    { label: "Super", value: "super" },
+    { label: "Admin", value: "admin" },
   ];
 
   return (
@@ -41,7 +34,7 @@ const EditCustomer = () => {
 
       <View className="flex-1 px-6">
         {/* header */}
-        <CustomHeader text="Edit Employee" />
+        <CustomHeader text="Edit Admin" />
 
         {/* main content */}
         <ScrollView
@@ -52,41 +45,31 @@ const EditCustomer = () => {
             {/* first row */}
             <View>
               <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                ID:
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                E45
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* second row */}
-            <View>
-              <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-neutral-normal mb-2"
               >
-                Name
+                Select Role
               </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Anik"}
+
+              <Dropdown
+                data={states}
+                labelField="label"
+                valueField="value"
+                placeholder="Admin"
+                value={value}
+                onChange={(item) => setValue(item.value)}
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                containerStyle={styles.containerStyle}
+                itemTextStyle={styles.itemTextStyle}
               />
             </View>
 
             {/* divider */}
             <View className="h-px bg-neutral-light-hover my-5" />
 
-            {/* third row */}
+            {/* second row */}
             <View>
               <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}
@@ -104,123 +87,18 @@ const EditCustomer = () => {
             {/* divider */}
             <View className="h-px bg-neutral-light-hover my-5" />
 
-            {/* fourth row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Number
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"+8801570233979"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* fifth row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Address Line 1
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"5th Avenue"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* sixth row */}
-            <View>
-              <View className="flex-row gap-1">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Address Line 2
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  (optional)
-                </Text>
-              </View>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Bay City Avenue"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* seventh row */}
-            <View className="mb-5 flex-row gap-5">
-              {/* city */}
-              <View className="flex-1">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  City
-                </Text>
-                <TextInput
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                  defaultValue={"New York"}
-                />
-              </View>
-
-              {/* state */}
-              <View className="flex-1">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  State
-                </Text>
-
-                <Dropdown
-                  data={states}
-                  labelField="label"
-                  valueField="value"
-                  placeholder="Select state"
-                  value={value}
-                  onChange={(item) => setValue(item.value)}
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  containerStyle={styles.containerStyle}
-                  itemTextStyle={styles.itemTextStyle}
-                />
-              </View>
-            </View>
-
-            {/* zip code */}
+            {/* third row */}
             <View className="mb-5">
               <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-neutral-normal mb-2"
               >
-                ZIP Code
+                Temporary Password
               </Text>
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"343431"}
+                defaultValue={"123456"}
               />
             </View>
 
@@ -240,6 +118,8 @@ const EditCustomer = () => {
 
 const styles = StyleSheet.create({
   dropdown: {
+    fontFamily: "SourceSans3-Medium",
+
     borderWidth: 1,
     borderColor: "#D0D3D9",
     borderRadius: 8,
@@ -251,6 +131,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
   },
   selectedTextStyle: {
+    fontFamily: "SourceSans3-Medium",
     fontSize: 14,
     color: "#4D5464",
   },
