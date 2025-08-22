@@ -1,10 +1,12 @@
 import { HeaderProps } from "@/types";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const EmployeeHeader = ({ name, email }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
+  const router = useRouter();
 
   return (
     <View className="flex-row items-center justify-between py-[5px]">
@@ -19,11 +21,13 @@ const EmployeeHeader = ({ name, email }: HeaderProps) => {
       </View>
 
       {notification ? (
-        <Image
-          source={require("@/assets/images/notification-active.svg")}
-          style={{ width: 24, height: 24 }}
-          contentFit="contain"
-        />
+        <TouchableOpacity onPress={() => router.push("/shared/notification")}>
+          <Image
+            source={require("@/assets/images/notification-active.svg")}
+            style={{ width: 24, height: 24 }}
+            contentFit="contain"
+          />
+        </TouchableOpacity>
       ) : (
         <Image
           source={require("@/assets/images/notification.svg")}

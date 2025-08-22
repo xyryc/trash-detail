@@ -11,7 +11,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SendInvitation = () => {
@@ -23,6 +22,8 @@ const SendInvitation = () => {
     { label: "Super Admin", value: "super" },
     { label: "Admin", value: "admin" },
   ];
+
+  console.log(id);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -52,28 +53,6 @@ const SendInvitation = () => {
           </View>
 
           {/* role */}
-          <View className="my-5">
-            <Text
-              style={{ fontFamily: "SourceSans3-Medium" }}
-              className="text-neutral-normal mb-2"
-            >
-              Select Role
-            </Text>
-
-            <Dropdown
-              data={states}
-              labelField="label"
-              valueField="value"
-              placeholder="Admin"
-              value={value}
-              onChange={(item) => setValue(item.value)}
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              containerStyle={styles.containerStyle}
-              itemTextStyle={styles.itemTextStyle}
-            />
-          </View>
 
           {/* password */}
           <View className="mb-5">
