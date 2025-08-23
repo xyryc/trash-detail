@@ -14,7 +14,7 @@ const Notification = () => {
       </View>
 
       <ScrollView>
-        <NotificationCard />
+        <NotificationCard className="bg-neutral-light" />
 
         <NotificationCard className="bg-neutral-light" />
 

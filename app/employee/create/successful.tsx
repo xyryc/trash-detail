@@ -48,7 +48,7 @@ const Successful = () => {
         <View className="w-full gap-4">
           <ButtonPrimary
             title="Go to Problem List"
-            onPress={() => router.push("/")}
+            onPress={() => router.push("/(employee)/problem")}
           />
           <ButtonSecondary
             title="Start New"

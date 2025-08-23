@@ -47,8 +47,11 @@ const StartChat = () => {
             </Text>
 
             <TextInput
-              style={{ fontFamily: "SourceSans3-Medium" }}
-              className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark h-32"
+              style={{
+                fontFamily: "SourceSans3-Medium",
+                textAlignVertical: "top",
+              }}
+              className=" border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark h-32"
               placeholder="Add more details about your inquiry"
               multiline={true}
               numberOfLines={6}

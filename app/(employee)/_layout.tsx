@@ -2,9 +2,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function EmployeeTabLayout() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -12,7 +14,8 @@ export default function EmployeeTabLayout() {
         tabBarActiveTintColor: "#374151", // Active text/icon color
         tabBarInactiveTintColor: "#9CA3AF", // Inactive text/icon color
         tabBarStyle: {
-          height: 96,
+          height: 70 + insets.bottom,
+
           backgroundColor: "white",
           borderTopWidth: 0,
           shadowOpacity: 0.07, // Very light

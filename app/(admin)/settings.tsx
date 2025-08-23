@@ -181,7 +181,7 @@ const Settings = () => {
             onPress={() =>
               router.push(`/admin/settings/invitation/${activeScreen}`)
             }
-            className="absolute bottom-6 right-6 px-3"
+            className="absolute bottom-6 right-6 px-3 z-10"
             title="Add New"
             icon={<FontAwesome6 name="add" size={24} color="white" />}
           />

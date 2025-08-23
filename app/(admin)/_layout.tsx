@@ -2,15 +2,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AdminTabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         // tabBarActiveTintColor: "#E2F2E5", // Active text/icon color
         // tabBarInactiveTintColor: "#222222", // Inactive text/icon color
         tabBarStyle: {
-          height: 96,
+          height: 70 + insets.bottom,
           paddingTop: 20,
           backgroundColor: "white",
           borderTopWidth: 0,
@@ -38,6 +41,7 @@ export default function AdminTabLayout() {
                   height: 24,
                   tintColor: focused ? "#386B45" : "black",
                 }}
+                cachePolicy="memory-disk"
               />
               <Text
                 style={{
@@ -97,6 +101,7 @@ export default function AdminTabLayout() {
                   height: 24,
                   tintColor: focused ? "#386B45" : "black",
                 }}
+                cachePolicy="memory-disk"
               />
               <Text
                 style={{

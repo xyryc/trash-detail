@@ -1,15 +1,18 @@
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function EmployeeTabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         // tabBarActiveTintColor: "#374151", // Active text/icon color
         // tabBarInactiveTintColor: "#9CA3AF", // Inactive text/icon color
         tabBarStyle: {
-          height: 96,
+          height: 70 + insets.bottom,
           paddingTop: 20,
           backgroundColor: "white",
           borderTopWidth: 0,

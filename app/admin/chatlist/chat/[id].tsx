@@ -18,7 +18,7 @@ const ChatScreen = () => {
   const [inputText, setInputText] = useState("");
   const flatListRef = useRef(null);
 
-  const currentUserId = componentReadyData.currentUserId;
+  const currentUserId = componentReadyData?.currentUserId;
 
   // Send message function
   const handleSendMessage = () => {

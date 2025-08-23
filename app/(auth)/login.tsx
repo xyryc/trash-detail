@@ -1,9 +1,9 @@
-import SocialLogin from "@/components/auth/SocialLogin";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   Pressable,
   SafeAreaView,
   StatusBar,
@@ -18,8 +18,16 @@ const Login = () => {
   const router = useRouter();
 
   const handleNext = () => {
-    // Handle account creation logic
-    console.log("Logging in...");
+    // Simple credential check
+    if (email === "customer" && password === "123456") {
+      router.replace("/(customer)/chatlist");
+    } else if (email === "employee" && password === "123456") {
+      router.replace("/(employee)/problem");
+    } else if (email === "admin" && password === "123456") {
+      router.replace("/(admin)/problem");
+    } else {
+      Alert.alert("Error", "Invalid credentials");
+    }
   };
 
   return (
@@ -27,7 +35,7 @@ const Login = () => {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       {/* Header Illustration */}
-      <View className="items-center pt-8 pb-5">
+      <View className="items-center pt-8">
         <View className="flex-row items-center justify-center gap-2">
           {/* left guy */}
           <Image
@@ -49,7 +57,7 @@ const Login = () => {
       <View className="flex-1 px-6">
         <Text
           style={{ fontFamily: "SourceSans3-SemiBold" }}
-          className="text-2xl text-center mb-5 text-neutral-dark-active"
+          className="text-xl text-center my-5 text-neutral-dark-active"
         >
           Login
         </Text>
@@ -62,23 +70,22 @@ const Login = () => {
             }}
             className="text-neutral-normal mb-2"
           >
-            Email
+            Username
           </Text>
           <TextInput
             style={{
               fontFamily: "SourceSans3-Medium",
             }}
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
-            placeholder="example@gmail.com"
+            placeholder="customer, employee, or admin"
             placeholderTextColor="#7C7C7C"
             value={email}
             onChangeText={setEmail}
-            keyboardType="email-address"
             autoCapitalize="none"
           />
         </View>
 
-        {/* New Password Input */}
+        {/* Password Input */}
         <View className="mb-5">
           <Text
             style={{
@@ -93,7 +100,7 @@ const Login = () => {
               fontFamily: "SourceSans3-Medium",
             }}
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
-            placeholder="Type your password"
+            placeholder="123456"
             placeholderTextColor="#7C7C7C"
             value={password}
             onChangeText={setPassword}
@@ -117,27 +124,8 @@ const Login = () => {
 
         {/* Next Button */}
         <View className="mb-5">
-          <ButtonPrimary title={"Next"} onPress={handleNext} />
+          <ButtonPrimary title={"Login"} onPress={handleNext} />
         </View>
-
-        {/* Divider */}
-        <View className="flex-row items-center mb-6">
-          <View className="flex-1 h-px bg-neutral-light-active" />
-
-          <Text
-            style={{
-              fontFamily: "SourceSans3-Medium",
-            }}
-            className="mx-4 text-neutral-normal"
-          >
-            OR
-          </Text>
-
-          <View className="flex-1 h-px bg-neutral-light-active" />
-        </View>
-
-        {/* Google Sign In Button */}
-        <SocialLogin />
       </View>
     </SafeAreaView>
   );

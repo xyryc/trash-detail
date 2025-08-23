@@ -3,14 +3,7 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StatusBar, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SendInvitation = () => {
@@ -38,7 +31,7 @@ const SendInvitation = () => {
           showsVerticalScrollIndicator={false}
         >
           {/* email */}
-          <View>
+          <View className="mb-5">
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal mb-2"
@@ -51,8 +44,6 @@ const SendInvitation = () => {
               placeholder="mdtalathunnabi@gmail.com"
             />
           </View>
-
-          {/* role */}
 
           {/* password */}
           <View className="mb-5">
@@ -88,35 +79,5 @@ const SendInvitation = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  dropdown: {
-    fontFamily: "SourceSans3-Medium",
-
-    borderWidth: 1,
-    borderColor: "#D0D3D9",
-    borderRadius: 8,
-    padding: 12,
-  },
-  placeholderStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#9CA3AF",
-  },
-  selectedTextStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#4D5464",
-  },
-  containerStyle: {
-    borderRadius: 8,
-    backgroundColor: "white",
-  },
-  itemTextStyle: {
-    fontSize: 14,
-    color: "#3D3D3D",
-    fontFamily: "SourceSans3-Medium",
-  },
-});
 
 export default SendInvitation;
