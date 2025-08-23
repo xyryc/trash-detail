@@ -5,7 +5,7 @@ import { ActivityIndicator, View } from "react-native";
 export default function Index() {
   const hasOnboarded = true;
   const isLoading = false;
-  const user = { id: "123", role: "employee" };
+  const user = { id: "123", role: "admin" };
 
   useEffect(() => {
     if (!isLoading) {
