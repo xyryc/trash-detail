@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 
@@ -6,16 +7,19 @@ export default function AdminTabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#374151", // Active text/icon color
-        tabBarInactiveTintColor: "#9CA3AF", // Inactive text/icon color
+        // tabBarActiveTintColor: "#E2F2E5", // Active text/icon color
+        // tabBarInactiveTintColor: "#222222", // Inactive text/icon color
         tabBarStyle: {
           height: 96,
           paddingTop: 20,
           backgroundColor: "white",
-          borderTopWidth: 1,
-          borderTopColor: "#E5E7EB",
+          borderTopWidth: 0,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 0 }, // no offset
+          shadowOpacity: 0.07, // ~ #00000017
+          shadowRadius: 7, // same as blur radius
+          elevation: 4, // for Android (tweak to match iOS look)
         },
-
         headerShown: false, // Hide the header if you don't want it
       }}
     >
@@ -25,12 +29,15 @@ export default function AdminTabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View
-              className={`w-20 flex justify-center items-center gap-2 rounded-lg h-16 ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
+              className={`w-20 h-16 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
-              <Ionicons
-                name="document-text-outline"
-                size={24}
-                color={focused ? "#386B45" : color}
+              <Image
+                source={require("@/assets/images/task-active.svg")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  tintColor: focused ? "#386B45" : "black",
+                }}
               />
               <Text
                 style={{
@@ -53,7 +60,7 @@ export default function AdminTabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View
-              className={`w-20 flex justify-center items-center gap-2 rounded-lg h-16 ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
+              className={`w-20 h-16 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
               <Ionicons
                 name="chatbubble-ellipses-outline"
@@ -81,12 +88,15 @@ export default function AdminTabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View
-              className={`w-20 flex justify-center items-center gap-2 rounded-lg h-16 ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
+              className={`w-20 h-16 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
-              <Ionicons
-                name="person-outline"
-                size={24}
-                color={focused ? "#386B45" : color}
+              <Image
+                source={require("@/assets/images/setting.svg")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  tintColor: focused ? "#386B45" : "black",
+                }}
               />
               <Text
                 style={{

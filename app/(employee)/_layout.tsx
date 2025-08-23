@@ -1,7 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
-import { TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function EmployeeTabLayout() {
   const router = useRouter();
@@ -12,9 +12,12 @@ export default function EmployeeTabLayout() {
         tabBarActiveTintColor: "#374151", // Active text/icon color
         tabBarInactiveTintColor: "#9CA3AF", // Inactive text/icon color
         tabBarStyle: {
+          height: 96,
           backgroundColor: "white",
-          borderTopWidth: 1,
-          borderTopColor: "#E5E7EB",
+          borderTopWidth: 0,
+          shadowOpacity: 0.07, // Very light
+          shadowRadius: 8, // Less blur
+          elevation: 4, // Lower elevation on Android
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -30,10 +33,30 @@ export default function EmployeeTabLayout() {
       <Tabs.Screen
         name="problem"
         options={{
-          title: "Problem",
+          title: "",
           tabBarIcon: ({ color, focused }) => (
-            <View className={` rounded-2xl ${focused ? "bg-gray-100" : ""}`}>
-              <Ionicons name="document-text-outline" size={24} color={color} />
+            <View
+              className={`w-20 h-16 mt-10 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
+            >
+              <Image
+                source={require("@/assets/images/task-active.svg")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  tintColor: focused ? "#386B45" : "black",
+                }}
+                cachePolicy="memory-disk"
+              />
+              <Text
+                style={{
+                  fontFamily: focused
+                    ? "SourceSans3-SemiBold"
+                    : "SourceSans3-Regular",
+                }}
+                className={`text-sm ${focused ? "text-green-normal" : ""}`}
+              >
+                Problem
+              </Text>
             </View>
           ),
         }}
@@ -43,12 +66,14 @@ export default function EmployeeTabLayout() {
         name="create"
         options={{
           tabBarIcon: () => (
-            <Image
-              source={require("@/assets/images/add.svg")}
-              style={{ width: 82, height: 82 }}
-              contentFit="contain"
-              cachePolicy="memory-disk"
-            />
+            <View className="-mt-8">
+              <Image
+                source={require("@/assets/images/add.svg")}
+                style={{ width: 82, height: 82 }}
+                contentFit="contain"
+                cachePolicy="memory-disk"
+              />
+            </View>
           ),
           tabBarButton: (props) => (
             <TouchableOpacity
@@ -66,10 +91,26 @@ export default function EmployeeTabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: "",
           tabBarIcon: ({ color, focused }) => (
-            <View className={`rounded-2xl ${focused ? "bg-gray-100" : ""}`}>
-              <Ionicons name="person-outline" size={24} color={color} />
+            <View
+              className={`w-20 h-16 mt-10 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
+            >
+              <AntDesign
+                name="user"
+                size={24}
+                color={focused ? "#386B45" : color}
+              />
+              <Text
+                style={{
+                  fontFamily: focused
+                    ? "SourceSans3-SemiBold"
+                    : "SourceSans3-Regular",
+                }}
+                className={`text-sm ${focused ? "text-green-normal" : ""}`}
+              >
+                Profile
+              </Text>
             </View>
           ),
         }}
