@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
-  const hasOnboarded = true;
+  const hasOnboarded = false;
   const isLoading = false;
-  // const user = false;
-  const user = { id: "123", role: "admin" };
+  const user = false;
+  // const user = { id: "123", role: "admin" };
 
   useEffect(() => {
     if (!isLoading) {
@@ -17,6 +17,7 @@ export default function Index() {
       }
       // If user exists, AuthContext will handle role-based redirect
       else {
+        //@ts-ignore
         switch (user?.role) {
           case "employee":
             router.replace("/(employee)/problem");

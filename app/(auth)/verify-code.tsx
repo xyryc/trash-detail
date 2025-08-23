@@ -1,5 +1,6 @@
 import { OTPInput } from "@/components/auth/OTPInput";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -72,6 +73,28 @@ const VerifyCode = () => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <TouchableOpacity
+          onPress={() => router.push("/(auth)/login")}
+          className="flex-row items-center justify-center py-2.5 mt-6"
+        >
+          <Image
+            source={require("@/assets/images/arrow-left.svg")}
+            style={{
+              height: 24,
+              width: 24,
+            }}
+          />
+
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-[#3D3D3D]"
+          >
+            Back to Sign In
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
