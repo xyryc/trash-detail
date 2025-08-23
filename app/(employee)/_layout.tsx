@@ -118,6 +118,14 @@ export default function EmployeeTabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="chatlist"
+        options={{
+          headerShown: false,
+          href: null, // This hides the tab from the tab bar
+        }}
+      />
     </Tabs>
   );
 }

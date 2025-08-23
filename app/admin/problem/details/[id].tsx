@@ -178,7 +178,11 @@ const ProblemDetailsScreen = () => {
             <View className="flex-row gap-5 pt-5">
               {problem?.status === "forwarded" ? (
                 <>
-                  <ButtonPrimary title="Open chat" className="w-full" />
+                  <ButtonPrimary
+                    onPress={() => router.push("/(admin)/chatlist")}
+                    title="Open chat"
+                    className="w-full"
+                  />
                 </>
               ) : (
                 <>

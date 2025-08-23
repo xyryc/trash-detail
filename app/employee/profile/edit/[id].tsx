@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
   },
   selectedTextStyle: {
+    fontFamily: "SourceSans3-Medium",
     fontSize: 14,
     color: "#4D5464",
   },

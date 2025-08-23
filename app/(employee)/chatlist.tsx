@@ -270,7 +270,7 @@ const SupportChatList = () => {
         {/* open new button */}
         <ButtonPrimary
           title="Open Now"
-          className="absolute bottom-24 right-2.5 px-3 py-2.5"
+          className="absolute bottom-16 right-2.5 px-3 py-2.5"
           onPress={() => router.push("/employee/profile/support/start")}
         />
       </View>

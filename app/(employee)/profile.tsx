@@ -216,7 +216,7 @@ const EmployeeProfile = () => {
 
           {/* support */}
           <TouchableOpacity
-            onPress={() => router.replace("/employee/profile/support/chatlist")}
+            onPress={() => router.replace("/(employee)/chatlist")}
             className="border-[0.5px] border-[#F2F2F2] flex-row items-center gap-2 p-3 rounded-lg mt-3"
           >
             <AntDesign name="questioncircleo" size={24} color="#2E323C" />
