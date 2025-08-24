@@ -70,14 +70,14 @@ const Login = () => {
             }}
             className="text-neutral-normal mb-2"
           >
-            Username
+            Email
           </Text>
           <TextInput
             style={{
               fontFamily: "SourceSans3-Medium",
             }}
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
-            placeholder="customer, employee, or admin"
+            placeholder="example@gmail.com"
             placeholderTextColor="#7C7C7C"
             value={email}
             onChangeText={setEmail}
@@ -100,7 +100,7 @@ const Login = () => {
               fontFamily: "SourceSans3-Medium",
             }}
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
-            placeholder="123456"
+            placeholder="Type your password"
             placeholderTextColor="#7C7C7C"
             value={password}
             onChangeText={setPassword}
