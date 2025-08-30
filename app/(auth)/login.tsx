@@ -1,4 +1,5 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { useLoginMutation } from "@/store/authApiSlice";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -16,17 +17,31 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [login, { isLoading }] = useLoginMutation();
 
-  const handleNext = () => {
-    // Simple credential check
-    if (email === "customer" && password === "123456") {
-      router.replace("/(customer)/chatlist");
-    } else if (email === "employee" && password === "123456") {
-      router.replace("/(employee)/problem");
-    } else if (email === "admin" && password === "123456") {
-      router.replace("/(admin)/problem");
-    } else {
-      Alert.alert("Error", "Invalid credentials");
+  const handleNext = async () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert("Error", "Please fill in both fields");
+      return;
+    }
+
+    try {
+      const result = await login({ email, password }).unwrap();
+      console.log(result);
+
+      // Simple credential check
+      if (email === "customer" && password === "123456") {
+        router.replace("/(customer)/chatlist");
+      } else if (email === "employee" && password === "123456") {
+        router.replace("/(employee)/problem");
+      } else if (email === "admin" && password === "123456") {
+        router.replace("/(admin)/problem");
+      }
+    } catch (error: any) {
+      Alert.alert(
+        "Login Failed",
+        error.data?.message || "Something went wrong"
+      );
     }
   };
 
