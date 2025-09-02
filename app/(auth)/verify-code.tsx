@@ -1,9 +1,11 @@
 import { OTPInput } from "@/components/auth/OTPInput";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { useVerifyCodeMutation } from "@/store/authApiSlice";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   StatusBar,
   Text,
@@ -15,9 +17,21 @@ const VerifyCode = () => {
   const router = useRouter();
   const { email } = useLocalSearchParams();
   const [otp, setOTP] = useState("");
+  const [verifyCode, { isLoading }] = useVerifyCodeMutation();
 
-  const handleNext = () => {
-    router.push("/(auth)/ResetPassword");
+  const handleNext = async () => {
+    const numericOTP = parseInt(otp, 10);
+
+    try {
+      const result = await verifyCode({ code: numericOTP }).unwrap();
+      Alert.alert("Success", result.message);
+      if (result?.success) {
+        router.push("/(auth)/ResetPassword");
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Error", error.data?.message || "Failed to send reset code");
+    }
   };
 
   return (
@@ -52,7 +66,11 @@ const VerifyCode = () => {
 
         {/* Next Button */}
         <View className="mb-5 mt-6">
-          <ButtonPrimary title={"Next"} onPress={handleNext} />
+          <ButtonPrimary
+            title={"Next"}
+            onPress={handleNext}
+            isLoading={isLoading}
+          />
         </View>
 
         {/* resend */}

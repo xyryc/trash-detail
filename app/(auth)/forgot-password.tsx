@@ -24,7 +24,7 @@ const ForgotPassword = () => {
 
     try {
       const result = await forgotPassword({ email }).unwrap();
-      console.log(result);
+
       Alert.alert("Success", result.message);
       if (result.success) {
         router.push({

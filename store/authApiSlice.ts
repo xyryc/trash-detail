@@ -32,6 +32,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    verifyCode: builder.mutation({
+      query: (code) => ({
+        url: "/auth/verify-reset-code",
+        method: "POST",
+        body: code,
+      }),
+    }),
+
     logout: builder.mutation<void, void>({
       query: () => ({
         url: "/auth/logout",
@@ -61,4 +69,5 @@ export const {
   useLogoutMutation,
   useGetCurrentUserQuery,
   useForgotPasswordMutation,
+  useVerifyCodeMutation,
 } = authApiSlice;
