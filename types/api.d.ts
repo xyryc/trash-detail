@@ -2,9 +2,9 @@ interface User {
   id: string;
   name: string;
   email: string;
-  createdAt: string,
+  createdAt: string;
   role: "customer" | "employee" | "admin";
-  userId: string
+  userId: string;
 }
 
 interface LoginRequest {
@@ -22,6 +22,26 @@ interface ForgotPasswordRequest {
 }
 
 interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+interface VerifyCodeRequest {
+  code: number;
+}
+
+interface VerifyCodeResponse {
+  success: boolean;
+  message: string;
+}
+
+interface SetNewPasswordResponse {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface SetNewPasswordRequest {
   success: boolean;
   message: string;
 }

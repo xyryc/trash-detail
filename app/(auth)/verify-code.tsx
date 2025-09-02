@@ -25,7 +25,7 @@ const VerifyCode = () => {
     try {
       const result = await verifyCode({ code: numericOTP }).unwrap();
       Alert.alert("Success", result.message);
-      if (result?.success) {
+      if (result.success) {
         router.push({
           pathname: "/(auth)/ResetPassword",
           params: { email },

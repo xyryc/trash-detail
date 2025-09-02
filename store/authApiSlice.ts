@@ -32,7 +32,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    verifyCode: builder.mutation({
+    verifyCode: builder.mutation<VerifyCodeResponse, VerifyCodeRequest>({
       query: (code) => ({
         url: "/auth/verify-reset-code",
         method: "POST",
@@ -40,42 +40,21 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    setNewPassword: builder.mutation({
+    setNewPassword: builder.mutation<
+      SetNewPasswordResponse,
+      SetNewPasswordRequest
+    >({
       query: (credential) => ({
         url: "/auth/reset-password",
         method: "PUT",
         body: credential,
       }),
     }),
-
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: "/auth/logout",
-        method: "POST",
-      }),
-      async onQueryStarted(arg, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-        } catch (error) {
-          console.error("Logout API error:", error);
-        } finally {
-          await AsyncStorage.removeItem("auth_token");
-          await AsyncStorage.removeItem("user_data");
-        }
-      },
-    }),
-
-    getCurrentUser: builder.query<User, void>({
-      query: () => "/auth/me",
-      providesTags: ["User"],
-    }),
   }),
 });
 
 export const {
   useLoginMutation,
-  useLogoutMutation,
-  useGetCurrentUserQuery,
   useForgotPasswordMutation,
   useVerifyCodeMutation,
   useSetNewPasswordMutation,
