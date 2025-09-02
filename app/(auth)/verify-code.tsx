@@ -21,13 +21,15 @@ const VerifyCode = () => {
 
   const handleNext = async () => {
     const numericOTP = parseInt(otp, 10);
+    console.log(numericOTP);
 
     try {
       const result = await verifyCode({ code: numericOTP }).unwrap();
+      console.log(result);
       Alert.alert("Success", result.message);
       if (result.success) {
         router.push({
-          pathname: "/(auth)/ResetPassword",
+          pathname: "/(auth)/reset-password",
           params: { email },
         });
       }

@@ -35,13 +35,13 @@ interface VerifyCodeResponse {
   message: string;
 }
 
-interface SetNewPasswordResponse {
+interface SetNewPasswordRequest {
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-interface SetNewPasswordRequest {
+interface SetNewPasswordResponse {
   success: boolean;
   message: string;
 }
