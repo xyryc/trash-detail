@@ -27,14 +27,16 @@ const Login = () => {
 
     try {
       const result = await login({ email, password }).unwrap();
-      console.log(result);
+      // console.log(result.user);
+      // console.log("Auth token", await AsyncStorage.getItem("auth_token"));
+      // console.log("User data", await AsyncStorage.getItem("user_data"));
 
-      // Simple credential check
-      if (email === "customer" && password === "123456") {
+      // role based navigation
+      if (result.user.role === "customer") {
         router.replace("/(customer)/chatlist");
-      } else if (email === "employee" && password === "123456") {
+      } else if (result.user.role === "employee") {
         router.replace("/(employee)/problem");
-      } else if (email === "admin" && password === "123456") {
+      } else if (result.user.role === "admin") {
         router.replace("/(admin)/problem");
       }
     } catch (error: any) {
@@ -139,7 +141,11 @@ const Login = () => {
 
         {/* Next Button */}
         <View className="mb-5">
-          <ButtonPrimary title={"Login"} onPress={handleNext} />
+          <ButtonPrimary
+            title={"Login"}
+            onPress={handleNext}
+            isLoading={isLoading}
+          />
         </View>
       </View>
     </SafeAreaView>

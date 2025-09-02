@@ -5,7 +5,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  createdAt: string,
   role: "customer" | "employee" | "admin";
+  userId: string
 }
 
 export interface LoginRequest {
@@ -14,8 +16,8 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  accessToken: string;
   user: User;
-  token: string;
 }
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -29,7 +31,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          await AsyncStorage.setItem("auth_token", data.token);
+            // console.log("from auth redux", data.user)
+          await AsyncStorage.setItem("auth_token", data.accessToken);
           await AsyncStorage.setItem("user_data", JSON.stringify(data.user));
         } catch (error) {
           console.error("Login storage error:", error);

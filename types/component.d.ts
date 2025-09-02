@@ -9,6 +9,7 @@ type ButtonProps = {
   title: string;
   onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
+  isLoading?: boolean;
   icon?: ReactNode;
   className?: string;
   textColor?: string;

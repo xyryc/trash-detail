@@ -1,6 +1,6 @@
 import { ButtonProps } from "@/types";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 const ButtonPrimary = ({
   title,
@@ -8,6 +8,7 @@ const ButtonPrimary = ({
   icon,
   className,
   disabled = false,
+  isLoading = false,
 }: ButtonProps) => {
   return (
     <TouchableOpacity
@@ -16,15 +17,21 @@ const ButtonPrimary = ({
       activeOpacity={0.8}
       disabled={disabled}
     >
-      {icon}
-      <Text
-        style={{
-          fontFamily: "SourceSans3-Medium",
-        }}
-        className="text-green-light text-center text-lg"
-      >
-        {title}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color="white" />
+      ) : (
+        <>
+          {icon}
+          <Text
+            style={{
+              fontFamily: "SourceSans3-Medium",
+            }}
+            className="text-green-light text-center text-lg"
+          >
+            {title}
+          </Text>
+        </>
+      )}
     </TouchableOpacity>
   );
 };
