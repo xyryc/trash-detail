@@ -1,14 +1,38 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { useRouter } from "expo-router";
+import { useSetNewPasswordMutation } from "@/store/authApiSlice";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState("");
   const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { email } = useLocalSearchParams();
 
-  const handleNext = () => {
-    router.push("/(auth)/PasswordChanged");
+  const [setNewPassword, { isLoading }] = useSetNewPasswordMutation();
+
+  const handleNext = async () => {
+    try {
+      const result = await setNewPassword({
+        email,
+        password,
+        confirmPassword,
+      }).unwrap();
+      if (result?.success) {
+        router.push("/(auth)/PasswordChanged");
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Error", error.data?.message || "Password reset failed");
+    }
   };
 
   return (
@@ -71,14 +95,18 @@ const ResetPassword = () => {
             className="border border-neutral-light-active rounded-lg p-3 text-neutral-normal bg-white"
             placeholder="Type your password"
             placeholderTextColor="#7C7C7C"
-            value={password}
-            onChangeText={setPassword}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
             secureTextEntry
           />
         </View>
 
         {/* Next Button */}
-        <ButtonPrimary title={"Save"} onPress={handleNext} />
+        <ButtonPrimary
+          title={"Save"}
+          onPress={handleNext}
+          isLoading={isLoading}
+        />
       </View>
     </SafeAreaView>
   );

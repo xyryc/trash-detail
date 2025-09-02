@@ -26,11 +26,14 @@ const VerifyCode = () => {
       const result = await verifyCode({ code: numericOTP }).unwrap();
       Alert.alert("Success", result.message);
       if (result?.success) {
-        router.push("/(auth)/ResetPassword");
+        router.push({
+          pathname: "/(auth)/ResetPassword",
+          params: { email },
+        });
       }
     } catch (error: any) {
       console.log(error);
-      Alert.alert("Error", error.data?.message || "Failed to send reset code");
+      Alert.alert("Error", error.data?.message || "Failed to verify code");
     }
   };
 

@@ -25,7 +25,7 @@ const ForgotPassword = () => {
     try {
       const result = await forgotPassword({ email }).unwrap();
 
-      Alert.alert("Success", result.message);
+      // Alert.alert("Success", result.message);
       if (result.success) {
         router.push({
           pathname: "/(auth)/verify-code",
