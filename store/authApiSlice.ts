@@ -1,25 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiSlice } from "./apiSlice";
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string,
-  role: "customer" | "employee" | "admin";
-  userId: string
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  accessToken: string;
-  user: User;
-}
-
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
@@ -31,13 +12,24 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-            // console.log("from auth redux", data.user)
+          // console.log("from auth redux", data.user)
           await AsyncStorage.setItem("auth_token", data.accessToken);
           await AsyncStorage.setItem("user_data", JSON.stringify(data.user));
         } catch (error) {
           console.error("Login storage error:", error);
         }
       },
+    }),
+
+    forgotPassword: builder.mutation<
+      ForgotPasswordResponse,
+      ForgotPasswordRequest
+    >({
+      query: (credentials) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: credentials,
+      }),
     }),
 
     logout: builder.mutation<void, void>({
@@ -64,5 +56,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useGetCurrentUserQuery } =
-  authApiSlice;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useGetCurrentUserQuery,
+  useForgotPasswordMutation,
+} = authApiSlice;

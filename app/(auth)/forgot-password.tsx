@@ -1,17 +1,41 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { useForgotPasswordMutation } from "@/store/authApiSlice";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("example@email.com");
+  const [email, setEmail] = useState("");
   const router = useRouter();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-  const handleNext = () => {
-    router.push({
-      pathname: "/(auth)/verify-code",
-      params: { email },
-    });
+  const handleNext = async () => {
+    if (!email) {
+      Alert.alert("Error", "Please enter your email");
+      return;
+    }
+
+    try {
+      const result = await forgotPassword({ email }).unwrap();
+      console.log(result);
+      Alert.alert("Success", result.message);
+      if (result.success) {
+        router.push({
+          pathname: "/(auth)/verify-code",
+          params: { email },
+        });
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Error", error.data?.message || "Failed to send reset code");
+    }
   };
 
   return (
@@ -59,7 +83,11 @@ const ForgotPassword = () => {
         </View>
 
         {/* Next Button */}
-        <ButtonPrimary title={"Next"} onPress={handleNext} />
+        <ButtonPrimary
+          title={"Next"}
+          onPress={handleNext}
+          isLoading={isLoading}
+        />
       </View>
     </SafeAreaView>
   );
