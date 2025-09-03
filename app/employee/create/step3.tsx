@@ -1,14 +1,16 @@
+import CustomerCard from "@/components/employee/CustomerCard";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import SearchBar from "@/components/shared/SearchBar";
 import { useGetCustomerListQuery } from "@/store/slices/employeeApiSlice";
 import { StepComponentProps } from "@/types";
 import { Image } from "expo-image";
+import { useState } from "react";
 import {
+  ActivityIndicator,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-  Text,
   View,
 } from "react-native";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
@@ -20,8 +22,22 @@ export default function Step3({
   onComplete,
   goToStep,
 }: StepComponentProps) {
-  const [customerList, { isLoading }] = useGetCustomerListQuery();
-  console.log(customerList);
+  const [customerId, setCustomerId] = useState(data.customerId);
+  const [selected, setSelected] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const { data: customerList, isLoading } = useGetCustomerListQuery();
+  const customers = customerList?.data || [];
+
+  // console.log("step3", customerId, selectedCustomerId);
+
+  const handleNext = () => {
+    const updatedData = {
+      customerId,
+    };
+
+    // Call onComplete function to update the data object in the parent component
+    onComplete(updatedData);
+  };
 
   return (
     <AnimatedView
@@ -51,59 +67,32 @@ export default function Step3({
           {/* customer list */}
           <View className="my-4">
             <SearchBar className="bg-[#F2F2F2]" />
-            {/* TODO: fix not scrolling issue */}
-            <ScrollView
-              className="my-3 p-2 bg-neutral-light-hover rounded-lg h-[55%]"
-              showsVerticalScrollIndicator={false}
-            >
-              <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mb-2 text-neutral-dark-active"
-                >
-                  C-13
-                </Text>
 
-                <View className="flex-row items-center gap-1">
-                  <Image
-                    source={require("@/assets/images/location.svg")}
-                    style={{ width: 16, height: 16 }}
-                    contentFit="contain"
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-dark-active"
-                  >
-                    5th Avenue, Manhattan, New York
-                  </Text>
+            <View className="my-3 px-2 bg-neutral-light rounded-lg h-2/3 border border-neutral-light-hover">
+              {isLoading ? (
+                <View className="flex-1 justify-center items-center">
+                  <ActivityIndicator size="large" />
                 </View>
-              </View>
-
-              <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mb-2 text-neutral-dark-active"
-                >
-                  C-13
-                </Text>
-
-                <View className="flex-row items-center gap-1">
-                  <Image
-                    source={require("@/assets/images/location.svg")}
-                    style={{ width: 16, height: 16 }}
-                    contentFit="contain"
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-dark-active"
-                  >
-                    5th Avenue, Manhattan, New York
-                  </Text>
-                </View>
-              </View>
-            </ScrollView>
+              ) : (
+                <FlatList
+                  data={customers}
+                  renderItem={({ item }) => (
+                    <CustomerCard
+                      customer={item}
+                      isSelected={selectedCustomerId === item._id}
+                      onPress={(customer: any) => {
+                        setSelectedCustomerId(customer._id);
+                        setCustomerId(item.userId);
+                        setSelected(true);
+                      }}
+                    />
+                  )}
+                  keyExtractor={(item) => item._id}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: 8 }}
+                />
+              )}
+            </View>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -117,8 +106,8 @@ export default function Step3({
         />
 
         <ButtonPrimary
-          title="Next"
-          onPress={onComplete}
+          title="Overview"
+          onPress={handleNext}
           className="flex-grow"
         />
       </View>

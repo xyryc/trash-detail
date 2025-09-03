@@ -32,14 +32,25 @@ type ProblemItem = {
   status: string;
 };
 
+type StepFormData = {
+  imageUri?: string | null;
+  location?: string;
+  problemTitle?: string;
+  additionalNotes?: string;
+  customerId?: string;
+  reportedDate?: string;
+};
+
 type StepComponentProps = {
-  onComplete: () => void;
+  data: StepFormData;
+  onComplete: (data: StepFormData) => void;
   onBack?: () => void;
   entering?: EnteringAnimation;
   exiting?: ExitingAnimation;
   layout?: LayoutAnimation;
   imageUri?: string | null;
   goToStep?: (step: number) => void;
+  isLoading?: boolean;
 };
 
 type CameraStepProps = {
@@ -52,4 +63,24 @@ type CameraStepProps = {
 
 type SearchBarProps = {
   className?: string;
+};
+
+type Customer = {
+  _id: string;
+  __v: number;
+  userId: string;
+  name: string;
+  email: string;
+  addressLane1: string;
+  addressLane2?: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  passwordResetVerified: boolean;
+};
+
+type CustomerListProps = {
+  customer: Customer;
+  isSelected: boolean;
+  onPress?: (customer: Customer) => void;
 };

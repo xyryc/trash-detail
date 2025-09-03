@@ -45,3 +45,24 @@ interface SetNewPasswordResponse {
   success: boolean;
   message: string;
 }
+
+interface Customer {
+  _id: string;
+  __v: number;
+  userId: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  addressLane1: string;
+  addressLane2?: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  passwordResetVerified: boolean;
+}
+
+interface GetCustomerListResponse {
+  success: boolean;
+  data: Customer[];
+}

@@ -2,6 +2,7 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { StepComponentProps } from "@/types";
 import { Octicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { Image } from "expo-image";
 import {
   KeyboardAvoidingView,
@@ -18,6 +19,7 @@ export default function Step4({
   data,
   onComplete,
   goToStep,
+  isLoading,
 }: StepComponentProps) {
   return (
     <AnimatedView
@@ -63,7 +65,7 @@ export default function Step4({
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                C-12
+                {data.customerId}
               </Text>
             </View>
 
@@ -72,7 +74,7 @@ export default function Step4({
 
             {/* second row */}
             <View className="flex-row">
-              <View className="w-[60vw]">
+              <View className="w-[50vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
@@ -83,7 +85,7 @@ export default function Step4({
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  Car parked
+                  {data.problemTitle}
                 </Text>
               </View>
 
@@ -98,7 +100,10 @@ export default function Step4({
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  April 9, 2025
+                  {format(
+                    new Date(data.reportedDate || new Date()),
+                    "MMMM d, yyyy"
+                  )}
                 </Text>
               </View>
             </View>
@@ -118,7 +123,7 @@ export default function Step4({
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                5th Avenue, Manhattan, New York
+                {data.location}
               </Text>
             </View>
 
@@ -137,7 +142,7 @@ export default function Step4({
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                We couldn't collect the trash because a car is blocking the bin.
+                {data.additionalNotes}
               </Text>
             </View>
           </View>
@@ -153,9 +158,12 @@ export default function Step4({
         />
 
         <ButtonPrimary
-          title="Submit"
-          onPress={onComplete}
           className="flex-grow"
+          title="Submit"
+          onPress={() => {
+            onComplete(data);
+          }}
+          isLoading={isLoading}
         />
       </View>
     </AnimatedView>

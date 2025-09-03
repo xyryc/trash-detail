@@ -1,8 +1,10 @@
 import CustomHeader from "@/components/shared/CustomHeader";
 import { getStepName } from "@/constants/Steps";
+import { useCreateProblemMutation } from "@/store/slices/employeeApiSlice";
+import { StepFormData } from "@/types";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StatusBar, Text, View } from "react-native";
+import { Alert, StatusBar, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
 import Animated, { Layout, SlideInRight } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,15 +23,19 @@ export default function ProgressFlow() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const router = useRouter();
   const [stepData, setStepData] = useState({
-    imageUri: null,
+    imageUri: null as string | null,
     location: "",
     problemTitle: "",
     additionalNotes: "",
+    customerId: "",
+    reportedDate: new Date().toISOString(),
   });
 
-  console.log(stepData);
+  const [createProblem, { isLoading }] = useCreateProblemMutation();
 
-  const handleNext = (data?: any) => {
+  // console.log("Step data", stepData);
+
+  const handleNext = async (data: StepFormData) => {
     if (data?.imageUri) {
       setCapturedImage(data.imageUri);
     }
@@ -43,10 +49,24 @@ export default function ProgressFlow() {
       setCurrentStep((prev) => prev + 1);
     } else {
       // After Step 4 → Go to Overview Screen
-      router.push({
-        pathname: "/employee/create/successful",
-        params: { imageUri: capturedImage },
-      });
+      try {
+        const result = await createProblem({
+          title: stepData.problemTitle,
+          additionalNotes: stepData.additionalNotes,
+          imageUrl: stepData.imageUri,
+          locationName: stepData.location,
+          customerId: stepData.customerId,
+          reportedDate: stepData.reportedDate,
+        }).unwrap();
+        console.log(result);
+      } catch (error: any) {
+        Alert.alert("Alert!", error.data?.message || "Something went wrong");
+      }
+
+      // router.push({
+      //   pathname: "/employee/create/successful",
+      //   params: { imageUri: capturedImage },
+      // });
     }
   };
 
@@ -136,6 +156,7 @@ export default function ProgressFlow() {
               onComplete={handleNext}
               entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
+              isLoading={isLoading}
             />
           )}
         </View>
