@@ -58,15 +58,14 @@ export default function ProgressFlow() {
           customerId: stepData.customerId,
           reportedDate: stepData.reportedDate,
         }).unwrap();
-        console.log(result);
+
+        if (result.success) {
+          //@ts-ignore
+          router.push(`/employee/create/successful/${result.data.problemId}`);
+        }
       } catch (error: any) {
         Alert.alert("Alert!", error.data?.message || "Something went wrong");
       }
-
-      // router.push({
-      //   pathname: "/employee/create/successful",
-      //   params: { imageUri: capturedImage },
-      // });
     }
   };
 

@@ -1,13 +1,14 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Successful = () => {
   const router = useRouter();
+  const { id } = useLocalSearchParams();
 
   return (
     <SafeAreaView
@@ -27,7 +28,7 @@ const Successful = () => {
           style={{ fontFamily: "SourceSans3-Medium" }}
           className="text-secondary-orange-600 text-2xl my-4 text-center"
         >
-          Problem ID: P-13
+          Problem ID: {id}
         </Text>
 
         <Text
