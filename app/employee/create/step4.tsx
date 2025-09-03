@@ -15,7 +15,7 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function Step4({
-  imageUri,
+  data,
   onComplete,
   goToStep,
 }: StepComponentProps) {
@@ -36,9 +36,9 @@ export default function Step4({
           }}
         >
           {/* image */}
-          {imageUri && (
+          {data.imageUri && (
             <Image
-              source={{ uri: imageUri }}
+              source={{ uri: data.imageUri }}
               style={{
                 width: "100%",
                 height: 326,

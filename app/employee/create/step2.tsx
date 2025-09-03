@@ -3,6 +3,7 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { StepComponentProps } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,10 +17,25 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function Step2({
-  imageUri,
+  data,
   onComplete,
   goToStep,
 }: StepComponentProps) {
+  const [location, setLocation] = useState(data.location);
+  const [problemTitle, setProblemTitle] = useState(data.problemTitle);
+  const [additionalNotes, setAdditionalNotes] = useState(data.additionalNotes);
+
+  const handleNext = () => {
+    const updatedData = {
+      location,
+      problemTitle,
+      additionalNotes,
+    };
+
+    // Call onComplete function to update the data object in the parent component
+    onComplete(updatedData);
+  };
+
   return (
     <AnimatedView
       entering={FadeIn.duration(300)}
@@ -49,9 +65,9 @@ export default function Step2({
 
           {/* image */}
           <View>
-            {imageUri && (
+            {data.imageUri && (
               <Image
-                source={{ uri: imageUri }}
+                source={{ uri: data.imageUri }}
                 style={{
                   height: 300,
                   borderRadius: 10,
@@ -76,6 +92,8 @@ export default function Step2({
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
                 placeholder="5th Avenue, Manhattan, New York"
+                value={location}
+                onChangeText={setLocation}
               />
             </View>
 
@@ -92,6 +110,8 @@ export default function Step2({
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
                 placeholder="Car Parked"
                 maxLength={20}
+                value={problemTitle}
+                onChangeText={setProblemTitle}
               />
 
               <Text
@@ -116,6 +136,8 @@ export default function Step2({
                 placeholder="We couldn't collect the trash because a car is blocking the bin."
                 multiline={true}
                 numberOfLines={2}
+                value={additionalNotes}
+                onChangeText={setAdditionalNotes}
               />
             </View>
           </View>
@@ -133,7 +155,7 @@ export default function Step2({
 
         <ButtonPrimary
           title="Next"
-          onPress={onComplete}
+          onPress={handleNext}
           className="flex-grow"
         />
       </View>

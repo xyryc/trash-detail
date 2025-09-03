@@ -1,5 +1,5 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { useSetNewPasswordMutation } from "@/store/authApiSlice";
+import { useSetNewPasswordMutation } from "@/store/slices/authApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {

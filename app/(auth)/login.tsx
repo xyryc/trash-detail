@@ -1,5 +1,5 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { useLoginMutation } from "@/store/authApiSlice";
+import { useLoginMutation } from "@/store/slices/authApiSlice";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";

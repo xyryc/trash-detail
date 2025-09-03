@@ -1,6 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import SearchBar from "@/components/shared/SearchBar";
+import { useGetCustomerListQuery } from "@/store/slices/employeeApiSlice";
 import { StepComponentProps } from "@/types";
 import { Image } from "expo-image";
 import {
@@ -15,10 +16,13 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function Step3({
-  imageUri,
+  data,
   onComplete,
   goToStep,
 }: StepComponentProps) {
+  const [customerList, { isLoading }] = useGetCustomerListQuery();
+  console.log(customerList);
+
   return (
     <AnimatedView
       entering={FadeIn.duration(300)}
@@ -31,9 +35,9 @@ export default function Step3({
       >
         <View className="px-6 bg-[#F5F9F6]">
           {/* image */}
-          {imageUri && (
+          {data.imageUri && (
             <Image
-              source={{ uri: imageUri }}
+              source={{ uri: data.imageUri }}
               style={{
                 width: 210,
                 height: 210,
@@ -48,79 +52,10 @@ export default function Step3({
           <View className="my-4">
             <SearchBar className="bg-[#F2F2F2]" />
             {/* TODO: fix not scrolling issue */}
-            <ScrollView className="my-3 p-2 bg-neutral-light-hover rounded-lg">
-              <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mb-2 text-neutral-dark-active"
-                >
-                  C-13
-                </Text>
-
-                <View className="flex-row items-center gap-1">
-                  <Image
-                    source={require("@/assets/images/location.svg")}
-                    style={{ width: 16, height: 16 }}
-                    contentFit="contain"
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-dark-active"
-                  >
-                    5th Avenue, Manhattan, New York
-                  </Text>
-                </View>
-              </View>
-
-              <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mb-2 text-neutral-dark-active"
-                >
-                  C-13
-                </Text>
-
-                <View className="flex-row items-center gap-1">
-                  <Image
-                    source={require("@/assets/images/location.svg")}
-                    style={{ width: 16, height: 16 }}
-                    contentFit="contain"
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-dark-active"
-                  >
-                    5th Avenue, Manhattan, New York
-                  </Text>
-                </View>
-              </View>
-
-              <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mb-2 text-neutral-dark-active"
-                >
-                  C-13
-                </Text>
-
-                <View className="flex-row items-center gap-1">
-                  <Image
-                    source={require("@/assets/images/location.svg")}
-                    style={{ width: 16, height: 16 }}
-                    contentFit="contain"
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-dark-active"
-                  >
-                    5th Avenue, Manhattan, New York
-                  </Text>
-                </View>
-              </View>
-
+            <ScrollView
+              className="my-3 p-2 bg-neutral-light-hover rounded-lg h-[55%]"
+              showsVerticalScrollIndicator={false}
+            >
               <View className="px-4 py-2 bg-[#EBF0EC] mb-2 border border-green-normal rounded-lg">
                 <Text
                   style={{ fontFamily: "SourceSans3-Medium" }}

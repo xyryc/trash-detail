@@ -1,6 +1,6 @@
 import { OTPInput } from "@/components/auth/OTPInput";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { useVerifyCodeMutation } from "@/store/authApiSlice";
+import { useVerifyCodeMutation } from "@/store/slices/authApiSlice";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";

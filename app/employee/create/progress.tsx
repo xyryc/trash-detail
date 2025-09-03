@@ -20,11 +20,24 @@ export default function ProgressFlow() {
   const progress = currentStep / totalSteps;
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const router = useRouter();
+  const [stepData, setStepData] = useState({
+    imageUri: null,
+    location: "",
+    problemTitle: "",
+    additionalNotes: "",
+  });
+
+  console.log(stepData);
 
   const handleNext = (data?: any) => {
     if (data?.imageUri) {
       setCapturedImage(data.imageUri);
     }
+
+    setStepData((prevData) => ({
+      ...prevData,
+      ...data,
+    }));
 
     if (currentStep < totalSteps) {
       setCurrentStep((prev) => prev + 1);
@@ -103,7 +116,7 @@ export default function ProgressFlow() {
           )}
           {currentStep === 2 && (
             <Step2
-              imageUri={capturedImage}
+              data={stepData}
               onComplete={handleNext}
               entering={getAnimationStyle(2)}
               goToStep={setCurrentStep}
@@ -111,7 +124,7 @@ export default function ProgressFlow() {
           )}
           {currentStep === 3 && (
             <Step3
-              imageUri={capturedImage}
+              data={stepData}
               onComplete={handleNext}
               entering={getAnimationStyle(3)}
               goToStep={setCurrentStep}
@@ -119,7 +132,7 @@ export default function ProgressFlow() {
           )}
           {currentStep === 4 && (
             <Step4
-              imageUri={capturedImage}
+              data={stepData}
               onComplete={handleNext}
               entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
