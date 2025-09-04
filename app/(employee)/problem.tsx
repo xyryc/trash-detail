@@ -12,7 +12,6 @@ const Problem = () => {
   const router = useRouter();
   const { data: problemList, isLoading } = useGetProblemListQuery();
   const problems = problemList?.data || [];
-  console.log(problems);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>

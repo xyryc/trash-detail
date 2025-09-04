@@ -1,9 +1,9 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import useUserData from "@/hooks/useUserData";
+import { useGetLoggedInUserDataQuery } from "@/store/slices/employeeApiSlice";
 import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -16,14 +16,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfile = () => {
   const router = useRouter();
-  const { userData, loading } = useUserData();
+  const { data, isLoading } = useGetLoggedInUserDataQuery();
 
-  useEffect(() => {
-    console.log("User data fetched:", userData);
-  }, [userData]);
-
-  if (loading) {
+  // If data is undefined or still loading, show loading indicator or error message
+  if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  // Check if data is undefined before accessing its properties
+  const userData = data?.data;
+
+  // If userData is not available, show an error message or fallback UI
+  if (!userData) {
+    return <Text>Error: User data not found.</Text>;
   }
 
   return (
@@ -36,7 +41,7 @@ const EmployeeProfile = () => {
 
         {/* main content */}
         <ScrollView
-          contentContainerClassName="pb-10"
+          contentContainerStyle={{ paddingBottom: 10 }}
           showsVerticalScrollIndicator={false}
         >
           <View className="border border-neutral-light-hover p-4 rounded-lg">
@@ -105,12 +110,12 @@ const EmployeeProfile = () => {
               >
                 Number
               </Text>
-              {userData.phone ? (
+              {userData.number ? (
                 <Text
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {userData.phone}
+                  {userData.number}
                 </Text>
               ) : (
                 <Text
@@ -171,12 +176,12 @@ const EmployeeProfile = () => {
                   (optional)
                 </Text>
               </View>
-              {userData.addressLine2 ? (
+              {userData.addressLane2 ? (
                 <Text
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {userData.addressLine2}
+                  {userData.addressLane2}
                 </Text>
               ) : (
                 <Text

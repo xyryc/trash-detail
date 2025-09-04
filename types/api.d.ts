@@ -1,4 +1,4 @@
-import { ProblemItem } from "./component";
+import { ProblemItem, UserData } from "./component";
 
 interface User {
   id: string;
@@ -77,5 +77,10 @@ interface UploadImageResponse {
 
 interface GetProblemListResponse {
   data: ProblemItem[];
+  success: boolean;
+}
+
+interface GetLoggedInUserDataResponse {
+  data: UserData;
   success: boolean;
 }

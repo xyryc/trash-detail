@@ -87,3 +87,22 @@ type CustomerListProps = {
   isSelected: boolean;
   onPress?: (customer: Customer) => void;
 };
+
+interface UserData {
+  __v: number;
+  _id: string;
+  addressLane1: string;
+  addressLane2: string;
+  city: string;
+  createdAt: string;
+  email: string;
+  name: string;
+  number: string;
+  passwordResetVerified: boolean;
+  refreshToken: string;
+  role: string;
+  userId: string;
+  state: string;
+  zipCode: string;
+  success: boolean;
+}
