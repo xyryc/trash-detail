@@ -15,7 +15,6 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // In your API slice (employeeApiSlice.ts or new uploadApiSlice.ts)
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData) => ({
         url: "/upload",
