@@ -66,3 +66,9 @@ interface GetCustomerListResponse {
   success: boolean;
   data: Customer[];
 }
+
+interface UploadImageResponse {
+  success: boolean;
+  fileUrl: string;
+  message: string;
+}

@@ -1,7 +1,11 @@
 import CustomHeader from "@/components/shared/CustomHeader";
 import { getStepName } from "@/constants/Steps";
-import { useCreateProblemMutation } from "@/store/slices/employeeApiSlice";
+import {
+  useCreateProblemMutation,
+  useUploadImageMutation,
+} from "@/store/slices/employeeApiSlice";
 import { StepFormData } from "@/types";
+import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert, StatusBar, Text, View } from "react-native";
@@ -32,8 +36,8 @@ export default function ProgressFlow() {
   });
 
   const [createProblem, { isLoading }] = useCreateProblemMutation();
-
-  // console.log("Step data", stepData);
+  const [uploadImage, { isLoading: isUploadingImage }] =
+    useUploadImageMutation();
 
   const handleNext = async (data: StepFormData) => {
     if (data?.imageUri) {
@@ -50,10 +54,20 @@ export default function ProgressFlow() {
     } else {
       // After Step 4 → Go to Overview Screen
       try {
+        let uploadedImageUrl = stepData.imageUri;
+
+        // Upload image if we have one
+        if (stepData.imageUri) {
+          uploadedImageUrl = await uploadImageToServer(
+            stepData.imageUri,
+            uploadImage
+          );
+        }
+
         const result = await createProblem({
           title: stepData.problemTitle,
           additionalNotes: stepData.additionalNotes,
-          imageUrl: stepData.imageUri,
+          imageUrl: uploadedImageUrl,
           locationName: stepData.location,
           customerId: stepData.customerId,
           reportedDate: stepData.reportedDate,
@@ -155,7 +169,7 @@ export default function ProgressFlow() {
               onComplete={handleNext}
               entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
-              isLoading={isLoading}
+              isLoading={isLoading || isUploadingImage}
             />
           )}
         </View>

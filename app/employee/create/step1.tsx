@@ -15,7 +15,10 @@ export default function Step1({ onComplete }: CameraStepProps) {
 
   const handleCapture = async () => {
     if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync();
+      const photo = await cameraRef.current.takePictureAsync({
+        quality: 0.5,
+        base64: true,
+      });
       onComplete({ imageUri: photo.uri });
     }
   };

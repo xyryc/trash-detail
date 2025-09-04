@@ -14,10 +14,23 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
         body: payload,
       }),
     }),
+
+    // In your API slice (employeeApiSlice.ts or new uploadApiSlice.ts)
+    uploadImage: builder.mutation<UploadImageResponse, FormData>({
+      query: (formData) => ({
+        url: "/upload",
+        method: "POST",
+        body: formData,
+        formData: true,
+      }),
+    }),
   }),
 
   overrideExisting: true,
 });
 
-export const { useGetCustomerListQuery, useCreateProblemMutation } =
-  employeeApiSlice;
+export const {
+  useGetCustomerListQuery,
+  useCreateProblemMutation,
+  useUploadImageMutation,
+} = employeeApiSlice;
