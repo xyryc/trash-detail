@@ -1,9 +1,11 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import useUserData from "@/hooks/useUserData";
 import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StatusBar,
   Text,
@@ -14,7 +16,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfile = () => {
   const router = useRouter();
-  const employeeId = "E45";
+  const { userData, loading } = useUserData();
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -42,7 +48,7 @@ const EmployeeProfile = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {employeeId}
+                {userData.userId}
               </Text>
             </View>
 
@@ -61,7 +67,7 @@ const EmployeeProfile = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                Anik
+                {userData.name}
               </Text>
             </View>
 
@@ -80,7 +86,7 @@ const EmployeeProfile = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                mdtalathunnabi@gmail.com
+                {userData.email}
               </Text>
             </View>
 
@@ -95,12 +101,21 @@ const EmployeeProfile = () => {
               >
                 Number
               </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                +8801570233979
-              </Text>
+              {userData.phone ? (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  {userData.phone}
+                </Text>
+              ) : (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  - - -
+                </Text>
+              )}
             </View>
 
             {/* divider */}
@@ -114,12 +129,22 @@ const EmployeeProfile = () => {
               >
                 Address Line 1
               </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                5th Avenue
-              </Text>
+
+              {userData.addressLane1 ? (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  {userData.addressLane1}
+                </Text>
+              ) : (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  - - -
+                </Text>
+              )}
             </View>
 
             {/* divider */}
@@ -142,12 +167,21 @@ const EmployeeProfile = () => {
                   (optional)
                 </Text>
               </View>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                Bay City Avenue
-              </Text>
+              {userData.addressLine2 ? (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  {userData.addressLine2}
+                </Text>
+              ) : (
+                <Text
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
+                >
+                  - - -
+                </Text>
+              )}
             </View>
 
             {/* divider */}
@@ -163,12 +197,21 @@ const EmployeeProfile = () => {
                 >
                   City
                 </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  New York
-                </Text>
+                {userData.city ? (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    {userData.city}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    - - -
+                  </Text>
+                )}
               </View>
 
               {/* state */}
@@ -179,12 +222,21 @@ const EmployeeProfile = () => {
                 >
                   State
                 </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  NY
-                </Text>
+                {userData.state ? (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    {userData.state}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    - - -
+                  </Text>
+                )}
               </View>
 
               {/* zip code */}
@@ -195,19 +247,28 @@ const EmployeeProfile = () => {
                 >
                   ZIP Code
                 </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  34356
-                </Text>
+                {userData.zipCode ? (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    {userData.zipCode}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    - - -
+                  </Text>
+                )}
               </View>
             </View>
 
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee/profile/edit/${employeeId}`);
+                router.push(`/employee/profile/edit/${userData._id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
