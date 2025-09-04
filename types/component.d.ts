@@ -22,14 +22,17 @@ type HeaderProps = {
 };
 
 type ProblemItem = {
-  id?: number;
-  image: string;
-  problemCode: string;
-  problemStatus: string;
-  customerCode: string;
-  location: string;
-  date: string;
+  _id: string;
+  additionalNotes: string;
+  createdAt: string;
+  customerId: string;
+  employeeId: string;
+  imageUrl: string;
+  locationName: string;
+  problemId: string;
+  reportedDate: string;
   status: string;
+  title: string;
 };
 
 type StepFormData = {

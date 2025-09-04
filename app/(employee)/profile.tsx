@@ -3,7 +3,7 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import useUserData from "@/hooks/useUserData";
 import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,6 +17,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const EmployeeProfile = () => {
   const router = useRouter();
   const { userData, loading } = useUserData();
+
+  useEffect(() => {
+    console.log("User data fetched:", userData);
+  }, [userData]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;

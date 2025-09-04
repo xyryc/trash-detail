@@ -1,7 +1,7 @@
-import problems from "@/assets/data/problems.json";
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
 import ProblemCard from "@/components/employee/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
+import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -10,6 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Problem = () => {
   const router = useRouter();
+  const { data: problemList, isLoading } = useGetProblemListQuery();
+  const problems = problemList?.data || [];
+  console.log(problems);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -62,11 +65,11 @@ const Problem = () => {
           {/* problem cards */}
           <FlatList
             data={problems}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) => (
               <Pressable
                 onPress={() =>
-                  router.push(`/employee/problem/details/${item.id}`)
+                  router.push(`/employee/problem/details/${item._id}`)
                 }
               >
                 <ProblemCard data={item} />

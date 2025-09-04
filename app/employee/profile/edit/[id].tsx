@@ -1,8 +1,12 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import useUserData from "@/hooks/useUserData";
+import { useUpdateProfileMutation } from "@/store/slices/employeeApiSlice";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -14,10 +18,17 @@ import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfileEditScreen = () => {
-  const [value, setValue] = useState<string | null>(null);
-  const [isFocus, setIsFocus] = useState(false);
-
   const router = useRouter();
+  const { userData, loading } = useUserData();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
+  const [value, setValue] = useState(null);
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [addressLane1, setAddressLane1] = useState("");
+  const [addressLane2, setAddressLane2] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
 
   const states = [
     { label: "AL", value: "AL" },
@@ -31,6 +42,46 @@ const EmployeeProfileEditScreen = () => {
     { label: "TX", value: "TX" },
     { label: "WA", value: "WA" },
   ];
+
+  useEffect(() => {
+    if (userData) {
+      setName(userData.name);
+      setNumber(userData.number);
+      setAddressLane1(userData.addressLane1);
+      setAddressLane2(userData.addressLane2);
+      setCity(userData.city);
+      setZipCode(userData.zipCode);
+      setValue(userData.state);
+    }
+  }, [userData]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  const handleUpdateProfile = async () => {
+    try {
+      const response = await updateProfile({
+        userId: userData._id,
+        name,
+        number,
+        addressLane1,
+        addressLane2,
+        city,
+
+        zipCode,
+      }).unwrap();
+
+      if (response.success) {
+        Alert.alert("Success", "Profile updated successfully");
+        router.back();
+      }
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
+      Alert.alert("Error", error.data.message);
+    }
+  };
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -60,7 +111,7 @@ const EmployeeProfileEditScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                E45
+                {userData.userId}
               </Text>
             </View>
 
@@ -73,13 +124,15 @@ const EmployeeProfileEditScreen = () => {
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-neutral-normal mb-2"
               >
-                Name
+                Email
               </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Anik"}
-              />
+
+              <Text
+                style={{ fontFamily: "SourceSans3-SemiBold" }}
+                className="text-neutral-dark-active"
+              >
+                {userData.email}
+              </Text>
             </View>
 
             {/* divider */}
@@ -91,12 +144,14 @@ const EmployeeProfileEditScreen = () => {
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-neutral-normal mb-2"
               >
-                Email
+                Name
               </Text>
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"amdanikzz@gmail.com"}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
               />
             </View>
 
@@ -114,7 +169,9 @@ const EmployeeProfileEditScreen = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"+8801570233979"}
+                placeholder="Phone Number"
+                value={number}
+                onChangeText={setNumber}
               />
             </View>
 
@@ -132,7 +189,9 @@ const EmployeeProfileEditScreen = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"5th Avenue"}
+                placeholder="Address Line 1"
+                value={addressLane1}
+                onChangeText={setAddressLane1}
               />
             </View>
 
@@ -159,7 +218,9 @@ const EmployeeProfileEditScreen = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Bay City Avenue"}
+                placeholder="Address Line 2"
+                value={addressLane2}
+                onChangeText={setAddressLane2}
               />
             </View>
 
@@ -179,7 +240,9 @@ const EmployeeProfileEditScreen = () => {
                 <TextInput
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                  defaultValue={"New York"}
+                  placeholder="City"
+                  value={city}
+                  onChangeText={setCity}
                 />
               </View>
 
@@ -219,16 +282,17 @@ const EmployeeProfileEditScreen = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"343431"}
+                placeholder="Zip Code"
+                value={zipCode}
+                onChangeText={setZipCode}
               />
             </View>
 
             {/* edit */}
             <ButtonPrimary
-              onPress={() => {
-                router.back();
-              }}
+              onPress={handleUpdateProfile}
               title="Save Change"
+              isLoading={isLoading}
             />
           </View>
         </ScrollView>

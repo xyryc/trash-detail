@@ -1,17 +1,16 @@
 import { ProblemItem } from "@/types";
 import { Image } from "expo-image";
-import React from "react";
 import { Text, View } from "react-native";
 
 const ProblemCard = ({ data }: { data: ProblemItem }) => {
   const {
-    image,
-    problemCode,
-    problemStatus,
-    customerCode,
-    location,
-    date,
+    customerId,
+    imageUrl,
+    locationName,
+    problemId,
+    reportedDate,
     status,
+    title,
   } = data;
 
   return (
@@ -20,7 +19,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
         {/* first - problem */}
         <View className="w-[38%] flex-row items-center gap-3.5">
           <Image
-            source={image}
+            source={imageUrl}
             style={{ width: 40, height: 40, borderRadius: 6 }}
             contentFit="fill"
           />
@@ -31,7 +30,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              {problemCode}
+              {problemId}
             </Text>
 
             <Text
@@ -39,7 +38,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-dark-active text-[10px]"
               numberOfLines={1}
             >
-              {problemStatus}
+              {title}
             </Text>
           </View>
         </View>
@@ -56,7 +55,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              {customerCode}
+              {customerId}
             </Text>
 
             <Text
@@ -64,7 +63,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-dark-active text-[10px]"
               numberOfLines={1}
             >
-              {location}
+              {locationName}
             </Text>
           </View>
         </View>
@@ -81,7 +80,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              {date}
+              {reportedDate}
             </Text>
 
             <Text
