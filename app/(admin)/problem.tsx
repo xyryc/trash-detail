@@ -19,7 +19,6 @@ const Problem = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
   const { data } = useGetProblemListQuery();
-  console.log("from admin", data);
   const problems = data?.data || [];
 
   // Filter problems (not chatListData) based on search and tab

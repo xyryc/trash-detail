@@ -1,13 +1,19 @@
-import problems from "@/assets/data/problems.json";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { useGetProblemByIdQuery } from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, StatusBar, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProblemDetailsScreen = () => {
@@ -17,9 +23,17 @@ const ProblemDetailsScreen = () => {
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [showForwardAgainModal, setShowForwardAgainModal] = useState(false);
 
-  const problem = problems.find(
-    (item) => item.id?.toString() === id?.toString()
-  );
+  const { data, isLoading } = useGetProblemByIdQuery(id);
+  const problem = data?.data;
+  console.log(problem);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#E2F2E5" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -40,7 +54,7 @@ const ProblemDetailsScreen = () => {
         >
           <Image
             className="rounded-md"
-            source={problem?.image}
+            source={problem?.imageUrl}
             style={{ width: "100%", height: 326, borderRadius: 6 }}
             contentFit="fill"
           />
@@ -71,7 +85,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.problemCode}
+                  {problem?.problemId}
                 </Text>
               </View>
 
@@ -86,7 +100,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.customerCode}
+                  {problem?.customerId}
                 </Text>
               </View>
             </View>
@@ -107,7 +121,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.problemStatus}
+                  {problem?.title}
                 </Text>
               </View>
 
@@ -122,7 +136,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.date}
+                  {problem?.reportedDate}
                 </Text>
               </View>
             </View>
@@ -142,7 +156,7 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {problem?.location}
+                {problem?.locationName}
               </Text>
             </View>
 
@@ -161,14 +175,14 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {problem?.additionalNote}
+                {problem?.additionalNotes}
               </Text>
             </View>
 
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/admin/problem/details/edit/${id}`);
+                router.push(`/admin/problem/details/edit/${problem._id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
