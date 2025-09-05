@@ -84,3 +84,34 @@ interface GetLoggedInUserDataResponse {
   data: UserData;
   success: boolean;
 }
+
+interface UpdateProfileRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+  addressLane1?: string;
+  addressLane2?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  profileImage?: string;
+}
+
+interface UpdateProfileResponse {
+  success: boolean;
+  data: {
+    _id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    addressLane1?: string;
+    addressLane2?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    profileImage?: string;
+    role: string;
+    updatedAt: string;
+  };
+  message: string;
+}

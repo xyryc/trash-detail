@@ -18,15 +18,12 @@ const EmployeeProfile = () => {
   const router = useRouter();
   const { data, isLoading } = useGetLoggedInUserDataQuery();
 
-  // If data is undefined or still loading, show loading indicator or error message
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  // Check if data is undefined before accessing its properties
   const userData = data?.data;
 
-  // If userData is not available, show an error message or fallback UI
   if (!userData) {
     return <Text>Error: User data not found.</Text>;
   }
