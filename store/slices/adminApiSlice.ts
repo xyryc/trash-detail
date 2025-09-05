@@ -21,6 +21,15 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, { problemId }) => [{ type: "Problem" }],
     }),
+
+    updateProblem: builder.mutation({
+      query: ({ problemId, payload }) => ({
+        url: `/problems/update/${problemId}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { problemId }) => [{ type: "Problem" }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -29,4 +38,5 @@ export const {
   useGetProblemListQuery,
   useGetProblemByIdQuery,
   useUpdateProblemStatusMutation,
+  useUpdateProblemMutation,
 } = adminApiSlice;

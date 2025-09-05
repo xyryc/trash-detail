@@ -102,7 +102,7 @@ const ProblemDetailsScreen = () => {
 
             {/* first row */}
             <View className="flex-row">
-              <View className="w-[60vw]">
+              <View className="w-[50vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
@@ -138,7 +138,7 @@ const ProblemDetailsScreen = () => {
 
             {/* second row */}
             <View className="flex-row ">
-              <View className="w-[60vw]">
+              <View className="w-[50vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
