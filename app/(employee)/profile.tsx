@@ -19,7 +19,11 @@ const EmployeeProfile = () => {
   const { data, isLoading } = useGetLoggedInUserDataQuery();
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#E2F2E5" />
+      </SafeAreaView>
+    );
   }
 
   const userData = data?.data;
