@@ -1,21 +1,35 @@
-import problems from "@/assets/data/problems.json";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { useGetProblemByIdQuery } from "@/store/slices/employeeApiSlice";
 import { Octicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, StatusBar, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProblemDetailsScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { data, isLoading } = useGetProblemByIdQuery(id);
+  const problem = data?.data;
 
-  const problem = problems.find(
-    (item) => item.id?.toString() === id?.toString()
-  );
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#E2F2E5" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -35,7 +49,7 @@ const ProblemDetailsScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <Image
-            source={problem?.image}
+            source={problem?.imageUrl}
             style={{ width: "100%", height: 326, borderRadius: 6 }}
             contentFit="fill"
           />
@@ -50,7 +64,7 @@ const ProblemDetailsScreen = () => {
 
             {/* first row */}
             <View className="flex-row ">
-              <View className="w-[60vw]">
+              <View className="w-[50vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
@@ -61,7 +75,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.problemCode}
+                  {problem?.problemId}
                 </Text>
               </View>
 
@@ -76,7 +90,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.customerCode}
+                  {problem?.customerId}
                 </Text>
               </View>
             </View>
@@ -86,7 +100,7 @@ const ProblemDetailsScreen = () => {
 
             {/* second row */}
             <View className="flex-row ">
-              <View className="w-[60vw]">
+              <View className="w-[50vw]">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
@@ -97,7 +111,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.problemStatus}
+                  {problem?.title}
                 </Text>
               </View>
 
@@ -112,7 +126,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.date}
+                  {format(new Date(problem.createdAt), "MMMM d, yyyy")}
                 </Text>
               </View>
             </View>
@@ -132,7 +146,7 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {problem?.location}
+                {problem?.locationName}
               </Text>
             </View>
 
@@ -151,32 +165,41 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {problem?.additionalNote}
+                {problem?.additionalNotes}
               </Text>
             </View>
 
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee/problem/details/edit/${id}`);
+                router.push(`/employee/problem/details/edit/${problem._id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
+              className="mb-5"
             />
 
             {/* warning */}
-            <Text
-              style={{ fontFamily: "SourceSans3-Regular" }}
-              className="text-info-normal-active bg-info-light p-2 rounded-lg my-5"
-            >
-              To resolve the matter, please contact{" "}
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-info-normal-active"
-              >
-                support.
-              </Text>
-            </Text>
+            {problem.status === "cancelled" && (
+              <View className="flex-row gap-1 bg-info-light p-2 mb-5">
+                <Text
+                  style={{ fontFamily: "SourceSans3-Regular" }}
+                  className="text-info-normal-active rounded-lg"
+                >
+                  To resolve the matter, please contact
+                </Text>
+                <TouchableOpacity
+                  onPress={() => router.push("/employee/profile/support/start")}
+                >
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Bold" }}
+                    className="text-info-normal-active"
+                  >
+                    support.
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
             {/* contact */}
             <ButtonPrimary title="Contact with Support" />

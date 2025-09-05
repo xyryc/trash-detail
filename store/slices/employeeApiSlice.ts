@@ -14,6 +14,11 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       providesTags: [{ type: "Problem", id: "LIST" }],
     }),
 
+    getProblemById: builder.query({
+      query: (problemId) => `/problems/${problemId}`,
+      providesTags: (problemId) => [{ type: "Problem", id: problemId }],
+    }),
+
     getCustomerList: builder.query<GetCustomerListResponse, void>({
       query: () => "/users?role=customer",
       providesTags: [{ type: "Customer", id: "LIST" }],
@@ -75,6 +80,7 @@ export const {
   useCreateProblemMutation,
   useUploadImageMutation,
   useGetProblemListQuery,
+  useGetProblemByIdQuery,
   useGetLoggedInUserDataQuery,
   useUpdateProfileMutation,
 } = employeeApiSlice;
