@@ -1,4 +1,6 @@
+import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { ProblemItem } from "@/types";
+import { format } from "date-fns";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -15,6 +17,8 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
   } = data;
 
   const router = useRouter();
+
+  const { data: userData } = useGetLoggedInUserDataQuery();
 
   return (
     <View className="bg-neutral-light p-2 rounded-lg">
@@ -84,7 +88,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
               className="text-neutral-normal-active text-[10px] mb-1"
               numberOfLines={1}
             >
-              {reportedDate}
+              {format(new Date(reportedDate), "MMMM d")}
             </Text>
 
             <Text
@@ -104,7 +108,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
       </View>
 
       {/* bottom row */}
-      {status === "cancelled" && (
+      {status === "cancelled" && userData?.data?.role !== "admin" && (
         <View className="px-2 py-0.5 bg-info-light border border-info-light-active rounded-[2px] mt-2 flex-row gap-1">
           <Text
             style={{ fontFamily: "SourceSans3-Regular" }}

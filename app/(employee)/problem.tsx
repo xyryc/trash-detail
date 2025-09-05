@@ -1,5 +1,5 @@
 import EmployeeHeader from "@/components/employee/EmployeeHeader";
-import ProblemCard from "@/components/employee/ProblemCard";
+import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
@@ -74,7 +74,7 @@ const Problem = () => {
                 <ProblemCard data={item} />
               </Pressable>
             )}
-            contentContainerStyle={{ gap: 12 }}
+            contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
           />
         </View>

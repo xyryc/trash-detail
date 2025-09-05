@@ -1,6 +1,5 @@
 import {
   GetCustomerListResponse,
-  GetLoggedInUserDataResponse,
   GetProblemListResponse,
   UploadImageResponse,
 } from "@/types";
@@ -11,7 +10,7 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProblemList: builder.query<GetProblemListResponse, void>({
       query: () => "/problems/my-created-problems",
-      providesTags: [{ type: "Problem", id: "LIST" }],
+      providesTags: [{ type: "Problem", id: "EMPLOYEE" }],
     }),
 
     getProblemById: builder.query({
@@ -50,11 +49,6 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    getLoggedInUserData: builder.query<GetLoggedInUserDataResponse, void>({
-      query: () => "/users/me",
-      providesTags: [{ type: "User" }],
-    }),
-
     updateProfile: builder.mutation({
       query: ({ currentUserDBId, payload }) => ({
         url: `/users/${currentUserDBId}`,
@@ -91,6 +85,5 @@ export const {
   useGetProblemListQuery,
   useGetProblemByIdQuery,
   useUpdateProblemMutation,
-  useGetLoggedInUserDataQuery,
   useUpdateProfileMutation,
 } = employeeApiSlice;

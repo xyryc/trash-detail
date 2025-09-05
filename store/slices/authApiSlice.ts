@@ -1,6 +1,7 @@
 import {
   ForgotPasswordRequest,
   ForgotPasswordResponse,
+  GetLoggedInUserDataResponse,
   LoginRequest,
   LoginResponse,
   SetNewPasswordRequest,
@@ -60,6 +61,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: credential,
       }),
     }),
+
+    getLoggedInUserData: builder.query<GetLoggedInUserDataResponse, void>({
+      query: () => "/users/me",
+      providesTags: [{ type: "User" }],
+    }),
   }),
 
   overrideExisting: true,
@@ -70,4 +76,5 @@ export const {
   useForgotPasswordMutation,
   useVerifyCodeMutation,
   useSetNewPasswordMutation,
+  useGetLoggedInUserDataQuery,
 } = authApiSlice;

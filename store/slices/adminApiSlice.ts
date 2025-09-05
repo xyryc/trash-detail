@@ -5,15 +5,28 @@ export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProblemList: builder.query<GetProblemListResponse, void>({
       query: () => "/problems/admin",
-      providesTags: [{ type: "Problem", id: "LIST" }],
+      providesTags: [{ type: "Problem", id: "ADMIN" }],
     }),
 
     getProblemById: builder.query({
       query: (problemId) => `/problems/${problemId}`,
       providesTags: (problemId) => [{ type: "Problem" }],
     }),
+
+    updateProblemStatus: builder.mutation({
+      query: ({ problemId, payload }) => ({
+        url: `/problems/status/${problemId}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { problemId }) => [{ type: "Problem" }],
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetProblemListQuery, useGetProblemByIdQuery } = adminApiSlice;
+export const {
+  useGetProblemListQuery,
+  useGetProblemByIdQuery,
+  useUpdateProblemStatusMutation,
+} = adminApiSlice;

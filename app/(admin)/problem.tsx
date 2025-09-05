@@ -1,11 +1,12 @@
-import ProblemCard from "@/components/employee/ProblemCard";
 import Header from "@/components/shared/Header";
+import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useGetProblemListQuery } from "@/store/slices/adminApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   StatusBar,
   Text,
@@ -18,7 +19,7 @@ const Problem = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
-  const { data } = useGetProblemListQuery();
+  const { data, isLoading } = useGetProblemListQuery();
   const problems = data?.data || [];
 
   // Filter problems (not chatListData) based on search and tab
@@ -50,6 +51,14 @@ const Problem = () => {
     (p) => p.status === "forwarded"
   ).length;
 
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#E2F2E5" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -74,7 +83,7 @@ const Problem = () => {
           {/* All */}
           <TouchableOpacity
             onPress={() => setSelectedTab("all")}
-            className={`px-3.5 py-3 relative ${selectedTab === "all" ? "border-b-2 border-green-normal" : ""}`}
+            className={`px-3.5 py-3 ${selectedTab === "all" ? "border-b-2 border-green-normal" : ""}`}
           >
             <Text
               className={`text-sm ${
@@ -86,10 +95,6 @@ const Problem = () => {
             >
               All ({allCount})
             </Text>
-            {/* Red dot indicator - only show if there are items */}
-            {allCount > 0 && (
-              <View className="absolute top-2.5 right-1 w-2 h-2 bg-secondary-orange-500 rounded-full" />
-            )}
           </TouchableOpacity>
 
           {/* Pending */}
@@ -117,7 +122,7 @@ const Problem = () => {
           {/* Forwarded */}
           <TouchableOpacity
             onPress={() => setSelectedTab("forwarded")}
-            className={`px-3.5 py-3 relative ${selectedTab === "forwarded" ? "border-b-2 border-green-normal" : ""}`}
+            className={`px-3.5 py-3 ${selectedTab === "forwarded" ? "border-b-2 border-green-normal" : ""}`}
           >
             <Text
               className={`text-sm ${
@@ -129,11 +134,6 @@ const Problem = () => {
             >
               Forwarded ({forwardedCount})
             </Text>
-
-            {/* Red dot indicator - only show if there are forwarded items */}
-            {forwardedCount > 0 && (
-              <View className="absolute top-2.5 right-1 w-2 h-2 bg-secondary-orange-500 rounded-full" />
-            )}
           </TouchableOpacity>
         </View>
 
@@ -175,7 +175,7 @@ const Problem = () => {
                 <ProblemCard data={item} />
               </TouchableOpacity>
             )}
-            contentContainerStyle={{ gap: 12 }}
+            contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
               <View className="flex-1 items-center justify-center py-20">

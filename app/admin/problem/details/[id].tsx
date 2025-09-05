@@ -2,13 +2,18 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useGetProblemByIdQuery } from "@/store/slices/adminApiSlice";
+import {
+  useGetProblemByIdQuery,
+  useUpdateProblemStatusMutation,
+} from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StatusBar,
   Text,
@@ -25,9 +30,32 @@ const ProblemDetailsScreen = () => {
 
   const { data, isLoading } = useGetProblemByIdQuery(id);
   const problem = data?.data;
-  console.log(problem);
 
-  if (isLoading) {
+  const [updateProblemStatus, { isLoading: isUpdating }] =
+    useUpdateProblemStatusMutation();
+
+  const handleUpdateProblemStatus = async (status: any) => {
+    const payload = { status };
+
+    try {
+      const result = await updateProblemStatus({
+        problemId: id,
+        payload,
+      }).unwrap();
+
+      if (result.success) {
+        Alert.alert("Success", "Problem status updated successfully");
+        router.back();
+      }
+    } catch (error: any) {
+      Alert.alert(
+        "Status update Failed",
+        error.data?.message || "Something went wrong"
+      );
+    }
+  };
+
+  if (isLoading || isUpdating) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#E2F2E5" />
@@ -136,7 +164,7 @@ const ProblemDetailsScreen = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {problem?.reportedDate}
+                  {format(new Date(problem?.reportedDate), "MMMM d, yyyy")}
                 </Text>
               </View>
             </View>
@@ -238,7 +266,7 @@ const ProblemDetailsScreen = () => {
           type="cancel"
           onConfirm={() => {
             // Your action here
-            console.log("Cancelled!");
+            handleUpdateProblemStatus("cancelled");
             setShowCancelModal(false);
           }}
           onCancel={() => setShowCancelModal(false)}
@@ -252,7 +280,7 @@ const ProblemDetailsScreen = () => {
           type="warning"
           onConfirm={() => {
             // Your action here
-            console.log("Forwarded!");
+            handleUpdateProblemStatus("forwarded");
             setShowForwardModal(false);
           }}
           onCancel={() => setShowForwardModal(false)}
@@ -266,7 +294,7 @@ const ProblemDetailsScreen = () => {
           type="warning"
           onConfirm={() => {
             // Your action here
-            console.log("Forwarded again!");
+            handleUpdateProblemStatus("forwarded");
             setShowForwardAgainModal(false);
           }}
           onCancel={() => setShowForwardAgainModal(false)}
