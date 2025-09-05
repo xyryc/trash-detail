@@ -1,6 +1,7 @@
 import { ProblemItem } from "@/types";
 import { Image } from "expo-image";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const ProblemCard = ({ data }: { data: ProblemItem }) => {
   const {
@@ -13,8 +14,11 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
     title,
   } = data;
 
+  const router = useRouter();
+
   return (
     <View className="bg-neutral-light p-2 rounded-lg">
+      {/* top row */}
       <View className="flex-row">
         {/* first - problem */}
         <View className="w-[38%] flex-row items-center gap-3.5">
@@ -98,6 +102,29 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
           </View>
         </View>
       </View>
+
+      {/* bottom row */}
+      {status === "cancelled" && (
+        <View className="px-2 py-0.5 bg-info-light border border-info-light-active rounded-[2px] mt-2 flex-row gap-1">
+          <Text
+            style={{ fontFamily: "SourceSans3-Regular" }}
+            className="text-xs text-info-normal"
+          >
+            To resolve the matter, please contact
+          </Text>
+
+          <TouchableOpacity
+            onPress={() => router.push("/employee/profile/support/start")}
+          >
+            <Text
+              style={{ fontFamily: "SourceSans3-Bold" }}
+              className="text-info-normal-active text-xs"
+            >
+              support.
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
