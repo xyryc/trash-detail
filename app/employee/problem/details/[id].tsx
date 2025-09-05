@@ -202,7 +202,10 @@ const ProblemDetailsScreen = () => {
             )}
 
             {/* contact */}
-            <ButtonPrimary title="Contact with Support" />
+            <ButtonPrimary
+              onPress={() => router.push("/employee/profile/support/start")}
+              title="Contact with Support"
+            />
           </View>
         </ScrollView>
       </View>

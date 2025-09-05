@@ -214,7 +214,11 @@ const EditProblemScreen = () => {
               </View>
 
               {/* save */}
-              <ButtonPrimary title="Save" onPress={handleUpdateProblem} />
+              <ButtonPrimary
+                title="Save"
+                onPress={handleUpdateProblem}
+                isLoading={isUpdating}
+              />
             </View>
           </ScrollView>
         </View>

@@ -1,7 +1,7 @@
-import problems from "@/assets/data/problems.json";
 import ProblemCard from "@/components/employee/ProblemCard";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
+import { useGetProblemListQuery } from "@/store/slices/adminApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -18,15 +18,18 @@ const Problem = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
+  const { data } = useGetProblemListQuery();
+  console.log("from admin", data);
+  const problems = data?.data || [];
 
   // Filter problems (not chatListData) based on search and tab
   const filteredProblems = problems.filter((problem) => {
     const matchesSearch =
-      problem.problemStatus.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.customerCode.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.problemCode.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.location.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.additionalNote.toLowerCase().includes(searchText.toLowerCase());
+      problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      problem.customerId.toLowerCase().includes(searchText.toLowerCase()) ||
+      problem.problemId.toLowerCase().includes(searchText.toLowerCase()) ||
+      problem.locationName.toLowerCase().includes(searchText.toLowerCase()) ||
+      problem.additionalNotes.toLowerCase().includes(searchText.toLowerCase());
 
     // Filter by problem status, not category
     const matchesTab =
@@ -163,10 +166,12 @@ const Problem = () => {
           {/* problem cards */}
           <FlatList
             data={filteredProblems}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => router.push(`/admin/problem/details/${item.id}`)}
+                onPress={() =>
+                  router.push(`/admin/problem/details/${item._id}`)
+                }
               >
                 <ProblemCard data={item} />
               </TouchableOpacity>
