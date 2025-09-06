@@ -3,9 +3,8 @@ import { ScrollView, Text, View } from "react-native";
 import AdminCard from "./AdminCard";
 
 export const AdminScreen = ({ activeScreen, adminData }: any) => {
-  console.log(activeScreen);
   const superAdmins = useMemo(() => {
-    return adminData.filter((admin: any) => admin.role === "super");
+    return adminData.filter((admin: any) => admin.role === "superadmin");
   }, [adminData]);
 
   const regularAdmins = useMemo(() => {

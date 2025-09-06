@@ -1,6 +1,3 @@
-import adminData from "@/assets/data/adminList.json";
-import customerData from "@/assets/data/customerList.json";
-import employeeData from "@/assets/data/employeeList.json";
 import { AdminScreen } from "@/components/admin/AdminScreen";
 import { CustomerScreen } from "@/components/admin/CustomerScreen";
 import { EmployeeScreen } from "@/components/admin/EmployeeScreen";
@@ -9,6 +6,7 @@ import Header from "@/components/shared/Header";
 import { useGetUserListQuery } from "@/store/slices/adminApiSlice";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
@@ -23,24 +21,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const navigationItems = [
-  {
-    id: "customer",
-    title: "Customer",
-    icon: "person",
-  },
-  {
-    id: "employee",
-    title: "Employee",
-    icon: "people",
-  },
-  {
-    id: "admin",
-    title: "Admin",
-    icon: "shield",
-  },
-];
-
 const SIDEBAR_WIDTH = 280;
 
 const Settings = () => {
@@ -50,10 +30,8 @@ const Settings = () => {
   const overlayOpacity = useRef(new Animated.Value(0)).current;
   const router = useRouter();
 
-  const { data: loggedInUser, isLoading } = useGetLoggedInUserDataQuery();
-  console.log("Logged in user: ", loggedInUser?.data.role);
+  const { data: loggedInUser } = useGetLoggedInUserDataQuery();
   const { data: userList } = useGetUserListQuery(activeScreen);
-  console.log("From admin settings", userList);
 
   const openSidebar = () => {
     Animated.parallel([
@@ -125,23 +103,23 @@ const Settings = () => {
         return (
           <CustomerScreen
             activeScreen={activeScreen}
-            customerData={customerData}
+            customerData={userList?.data}
           />
         );
       case "employee":
         return (
           <EmployeeScreen
             activeScreen={activeScreen}
-            employeeData={employeeData}
+            employeeData={userList?.data}
           />
         );
       case "admin":
         return (
-          <AdminScreen activeScreen={activeScreen} adminData={adminData} />
+          <AdminScreen activeScreen={activeScreen} adminData={userList?.data} />
         );
       default:
         return (
-          <CustomerScreen activeScreen={activeScreen} data={customerData} />
+          <CustomerScreen activeScreen={activeScreen} data={userList?.data} />
         );
     }
   };
@@ -242,35 +220,94 @@ const Settings = () => {
 
             {/* Navigation Items */}
             <View className="flex-1">
-              {navigationItems.map((item) => {
-                const isActive = activeScreen === item.id;
+              {/* Customer */}
+              <TouchableOpacity
+                onPress={() => handleSidebarNavigation("customer")}
+                className="flex-row items-center gap-6 px-6 py-4 mx-6"
+              >
+                <Image
+                  source={require("@/assets/images/customer.svg")}
+                  style={{
+                    width: 24,
+                    height: 24,
+                  }}
+                />
+                <Text
+                  className={`${
+                    activeScreen === "customer"
+                      ? "text-green-normal"
+                      : "text-neutral-normal"
+                  }`}
+                  style={{
+                    fontFamily:
+                      activeScreen === "customer"
+                        ? "SourceSans3-SemiBold"
+                        : "SourceSans3-Regular",
+                  }}
+                >
+                  Customer
+                </Text>
+              </TouchableOpacity>
 
-                return (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => handleSidebarNavigation(item.id)}
-                    className="flex-row items-center gap-6 px-6 py-4 mx-6"
-                  >
-                    <Ionicons
-                      name={item.icon}
-                      size={24}
-                      color={isActive ? "#386b45" : "#667085"}
-                    />
-                    <Text
-                      className={`${
-                        isActive ? "text-green-normal" : "text-neutral-normal"
-                      }`}
-                      style={{
-                        fontFamily: isActive
+              {/* Employee */}
+              <TouchableOpacity
+                onPress={() => handleSidebarNavigation("employee")}
+                className="flex-row items-center gap-6 px-6 py-4 mx-6"
+              >
+                <Image
+                  source={require("@/assets/images/employee.svg")}
+                  style={{
+                    width: 24,
+                    height: 24,
+                  }}
+                />
+                <Text
+                  className={`${
+                    activeScreen === "employee"
+                      ? "text-green-normal"
+                      : "text-neutral-normal"
+                  }`}
+                  style={{
+                    fontFamily:
+                      activeScreen === "employee"
+                        ? "SourceSans3-SemiBold"
+                        : "SourceSans3-Regular",
+                  }}
+                >
+                  Employee
+                </Text>
+              </TouchableOpacity>
+
+              {/* Admin - Only show if user is superadmin */}
+              {loggedInUser?.data.role !== "admin" && (
+                <TouchableOpacity
+                  onPress={() => handleSidebarNavigation("admin")}
+                  className="flex-row items-center gap-6 px-6 py-4 mx-6"
+                >
+                  <Image
+                    source={require("@/assets/images/admin.svg")}
+                    style={{
+                      width: 24,
+                      height: 24,
+                    }}
+                  />
+                  <Text
+                    className={`${
+                      activeScreen === "admin"
+                        ? "text-green-normal"
+                        : "text-neutral-normal"
+                    }`}
+                    style={{
+                      fontFamily:
+                        activeScreen === "admin"
                           ? "SourceSans3-SemiBold"
                           : "SourceSans3-Regular",
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+                    }}
+                  >
+                    Admin
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </SafeAreaView>
         </Animated.View>

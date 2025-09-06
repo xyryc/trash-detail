@@ -25,33 +25,34 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
       {/* top row */}
       <View className="flex-row">
         {/* first - problem */}
-        <View className="w-[38%] flex-row items-center gap-3.5">
+        <View className="w-[18%]">
           <Image
             source={imageUrl}
             style={{ width: 40, height: 40, borderRadius: 6 }}
             contentFit="fill"
           />
-
-          <View>
-            <Text
-              style={{ fontFamily: "SourceSans3-Regular" }}
-              className="text-neutral-normal-active text-[10px] mb-1"
-              numberOfLines={1}
-            >
-              {problemId}
-            </Text>
-
-            <Text
-              style={{ fontFamily: "SourceSans3-SemiBold" }}
-              className="text-neutral-dark-active text-[10px]"
-              numberOfLines={1}
-            >
-              {title}
-            </Text>
-          </View>
         </View>
 
-        {/* second - customer */}
+        {/* second - title */}
+        <View className="w-[20%] pr-2.5 justify-center">
+          <Text
+            style={{ fontFamily: "SourceSans3-Regular" }}
+            className="text-neutral-normal-active text-[10px] mb-1"
+            numberOfLines={1}
+          >
+            {problemId}
+          </Text>
+
+          <Text
+            style={{ fontFamily: "SourceSans3-SemiBold" }}
+            className="text-neutral-dark-active text-[10px]"
+            numberOfLines={1}
+          >
+            {title}
+          </Text>
+        </View>
+
+        {/* third - customer */}
         <View className="w-[41%] flex-row items-center">
           {/* Left Border */}
           <View className="h-[7px] w-[1px] bg-neutral-light-active" />
@@ -76,7 +77,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
           </View>
         </View>
 
-        {/* third - status */}
+        {/* fourth - status */}
         <View className="w-[21%] flex-row items-center">
           {/* Left Border */}
           <View className="h-[7px] w-[1px] bg-neutral-light-active" />
@@ -100,6 +101,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
                     (status === "forwarded" && "text-[#237B10]")
                   }
                 `}
+              numberOfLines={1}
             >
               {status}
             </Text>

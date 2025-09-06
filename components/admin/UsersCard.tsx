@@ -10,17 +10,16 @@ const UsersCard = ({
   item: any;
 }) => {
   const router = useRouter();
-  console.log(activeScreen);
 
   return (
     <TouchableOpacity
       onPress={() => {
         if (activeScreen === "customer") {
           //@ts-ignore
-          router.push(`/admin/settings/${activeScreen}/details/${item.id}`);
+          router.push(`/admin/settings/${activeScreen}/details/${item.userId}`);
         } else if (activeScreen === "employee") {
           //@ts-ignore
-          router.push(`/admin/settings/${activeScreen}/details/${item.id}`);
+          router.push(`/admin/settings/${activeScreen}/details/${item.userId}`);
         }
       }}
       className="flex-row items-center gap-4 px-6 py-4 border-b border-neutral-light-active"
@@ -39,7 +38,7 @@ const UsersCard = ({
           style={{ fontFamily: "SourceSans3-Medium" }}
           className="text-green-normal"
         >
-          {item.id}
+          {item.userId}
         </Text>
         <Text
           style={{ fontFamily: "SourceSans3-Medium" }}
