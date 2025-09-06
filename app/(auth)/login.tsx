@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       const result = await login({ email, password }).unwrap();
-      // console.log(result.user);
+      console.log(result.user);
       // console.log("Auth token", await AsyncStorage.getItem("auth_token"));
       // console.log("User data", await AsyncStorage.getItem("user_data"));
 
@@ -36,7 +36,7 @@ const Login = () => {
         router.replace("/(customer)/chatlist");
       } else if (result.user.role === "employee") {
         router.replace("/(employee)/problem");
-      } else if (result.user.role === "admin") {
+      } else if (result.user.role === "admin" || "superadmin") {
         router.replace("/(admin)/problem");
       }
     } catch (error: any) {

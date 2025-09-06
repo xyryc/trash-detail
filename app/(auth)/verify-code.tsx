@@ -21,11 +21,11 @@ const VerifyCode = () => {
 
   const handleNext = async () => {
     const numericOTP = parseInt(otp, 10);
-    console.log(numericOTP);
+    // console.log(numericOTP);
 
     try {
       const result = await verifyCode({ code: numericOTP }).unwrap();
-      console.log(result);
+      // console.log(result);
       Alert.alert("Success", result.message);
       if (result.success) {
         router.push({
@@ -34,7 +34,7 @@ const VerifyCode = () => {
         });
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Error", error.data?.message || "Failed to verify code");
     }
   };

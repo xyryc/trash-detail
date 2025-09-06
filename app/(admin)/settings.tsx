@@ -6,6 +6,8 @@ import { CustomerScreen } from "@/components/admin/CustomerScreen";
 import { EmployeeScreen } from "@/components/admin/EmployeeScreen";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import Header from "@/components/shared/Header";
+import { useGetUserListQuery } from "@/store/slices/adminApiSlice";
+import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -47,6 +49,11 @@ const Settings = () => {
   const sidebarTranslateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
   const router = useRouter();
+
+  const { data: loggedInUser, isLoading } = useGetLoggedInUserDataQuery();
+  console.log("Logged in user: ", loggedInUser?.data.role);
+  const { data: userList } = useGetUserListQuery(activeScreen);
+  console.log("From admin settings", userList);
 
   const openSidebar = () => {
     Animated.parallel([

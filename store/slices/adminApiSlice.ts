@@ -30,6 +30,11 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, { problemId }) => [{ type: "Problem" }],
     }),
+
+    getUserList: builder.query({
+      query: (role) => `/users?role=${role}`,
+      providesTags: [{ type: "User", id: "LIST" }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -39,4 +44,5 @@ export const {
   useGetProblemByIdQuery,
   useUpdateProblemStatusMutation,
   useUpdateProblemMutation,
+  useGetUserListQuery,
 } = adminApiSlice;
