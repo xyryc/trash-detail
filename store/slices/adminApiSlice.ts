@@ -35,6 +35,15 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       query: (role) => `/users?role=${role}`,
       providesTags: [{ type: "User", id: "LIST" }],
     }),
+
+    inviteUser: builder.mutation({
+      query: (payload) => ({
+        url: "/users/",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: () => [{ type: "User" }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -45,4 +54,5 @@ export const {
   useUpdateProblemStatusMutation,
   useUpdateProblemMutation,
   useGetUserListQuery,
+  useInviteUserMutation,
 } = adminApiSlice;
