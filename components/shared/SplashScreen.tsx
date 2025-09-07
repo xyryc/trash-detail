@@ -1,13 +1,14 @@
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Animated, Dimensions, View } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-const Onboarding = () => {
-  const router = useRouter();
+interface SplashScreenProps {
+  onAnimationComplete?: () => void;
+}
 
+const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
   // Animation values
   const leftImageAnim = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
   const rightImageAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
@@ -25,14 +26,13 @@ const Onboarding = () => {
         duration: 800,
         useNativeDriver: true,
       }),
-    ]).start();
-
-    // Navigate to login after delay
-    const timer = setTimeout(() => {
-      router.replace("/(auth)/login");
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    ]).start(() => {
+      // Call callback when animations complete
+      if (onAnimationComplete) {
+        // Add a small delay after animation completes
+        setTimeout(onAnimationComplete, 500);
+      }
+    });
   }, []);
 
   return (
@@ -79,4 +79,4 @@ const Onboarding = () => {
   );
 };
 
-export default Onboarding;
+export default SplashScreen;

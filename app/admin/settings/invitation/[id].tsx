@@ -21,7 +21,7 @@ const SendInvitation = () => {
   const router = useRouter();
   const [inviteUser, { isLoading }] = useInviteUserMutation();
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState(id);
   const [password, setPassword] = useState("123456");
 
   const roles = [
@@ -34,7 +34,6 @@ const SendInvitation = () => {
 
     try {
       const response = await inviteUser(payload).unwrap();
-      console.log(response);
 
       if (response.success) {
         Alert.alert("Invitation sent!", response.message);
@@ -49,7 +48,10 @@ const SendInvitation = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">

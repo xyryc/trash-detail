@@ -1,17 +1,24 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CustomerDetails = () => {
+const EmployeeDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { data: userData, isLoading } = useGetUserByIdQuery(id);
+
+  console.log("From details", userData);
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top", "left", "right", "bottom"]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
@@ -36,7 +43,7 @@ const CustomerDetails = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {id}
+                {userData.data.id}
               </Text>
             </View>
 
@@ -213,4 +220,4 @@ const CustomerDetails = () => {
   );
 };
 
-export default CustomerDetails;
+export default EmployeeDetails;

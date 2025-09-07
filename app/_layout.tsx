@@ -1,3 +1,4 @@
+import AppRouter from "@/components/shared/AppRouter";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { store } from "@/store/store";
 import {
@@ -38,16 +39,18 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="onboarding" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(admin)" />
-          <Stack.Screen name="(employee)" />
-          <Stack.Screen name="(customer)" />
-        </Stack>
+        <AppRouter>
+          <Stack screenOptions={{ headerShown: false }}>
+            {/* <Stack.Screen name="index" /> */}
+            {/* <Stack.Screen name="onboarding" /> */}
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(admin)" />
+            <Stack.Screen name="(employee)" />
+            <Stack.Screen name="(customer)" />
+          </Stack>
 
-        <StatusBar style="auto" />
+          <StatusBar style="auto" />
+        </AppRouter>
       </ThemeProvider>
     </Provider>
   );

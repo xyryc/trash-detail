@@ -2,9 +2,13 @@ import { AdminScreen } from "@/components/admin/AdminScreen";
 import { CustomerScreen } from "@/components/admin/CustomerScreen";
 import { EmployeeScreen } from "@/components/admin/EmployeeScreen";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import Header from "@/components/shared/Header";
 import { useGetUserListQuery } from "@/store/slices/adminApiSlice";
-import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
+import {
+  useGetLoggedInUserDataQuery,
+  useLogoutMutation,
+} from "@/store/slices/authApiSlice";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -138,6 +142,15 @@ const Settings = () => {
     }
   };
 
+  const [logout] = useLogoutMutation();
+  // const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  // console.log(user, isAuthenticated);
+
+  const handleLogout = async () => {
+    await logout().unwrap();
+    // Navigation will be handled automatically by AppRouter
+  };
+
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
       <SafeAreaView
@@ -166,7 +179,7 @@ const Settings = () => {
             onPress={() =>
               router.push(`/admin/settings/invitation/${activeScreen}`)
             }
-            className="absolute bottom-6 right-6 px-3 z-10"
+            className="absolute bottom-6 right-6 px-3"
             title="Add New"
             icon={<FontAwesome6 name="add" size={24} color="white" />}
           />
@@ -184,6 +197,7 @@ const Settings = () => {
             opacity: overlayOpacity,
             zIndex: 1,
           }}
+          // @ts-ignore
           pointerEvents={overlayOpacity._value > 0 ? "auto" : "none"}
         >
           <Pressable style={{ flex: 1 }} onPress={closeSidebar} />
@@ -308,6 +322,11 @@ const Settings = () => {
                   </Text>
                 </TouchableOpacity>
               )}
+            </View>
+
+            {/* logout button */}
+            <View className="px-10">
+              <ButtonSecondary title="Logout" onPress={handleLogout} />
             </View>
           </SafeAreaView>
         </Animated.View>

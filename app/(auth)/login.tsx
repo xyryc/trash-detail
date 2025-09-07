@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       const result = await login({ email, password }).unwrap();
-      console.log(result.user);
+      // console.log(result.user);
       // console.log("Auth token", await AsyncStorage.getItem("auth_token"));
       // console.log("User data", await AsyncStorage.getItem("user_data"));
 

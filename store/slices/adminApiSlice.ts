@@ -36,6 +36,11 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       providesTags: [{ type: "User", id: "LIST" }],
     }),
 
+    getUserById: builder.query({
+      query: (userId) => `/users/${userId}`,
+      providesTags: (userId) => [{ type: "User", id: userId }],
+    }),
+
     inviteUser: builder.mutation({
       query: (payload) => ({
         url: "/users/",
@@ -54,5 +59,6 @@ export const {
   useUpdateProblemStatusMutation,
   useUpdateProblemMutation,
   useGetUserListQuery,
+  useGetUserByIdQuery,
   useInviteUserMutation,
 } = adminApiSlice;
