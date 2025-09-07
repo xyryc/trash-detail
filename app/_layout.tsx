@@ -41,8 +41,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
         <AppRouter>
           <Stack screenOptions={{ headerShown: false }}>
-            {/* <Stack.Screen name="index" /> */}
-            {/* <Stack.Screen name="onboarding" /> */}
+            <Stack.Screen name="splash" />
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(admin)" />
             <Stack.Screen name="(employee)" />

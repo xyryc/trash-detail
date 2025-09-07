@@ -1,14 +1,13 @@
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Animated, Dimensions, View } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-interface SplashScreenProps {
-  onAnimationComplete?: () => void;
-}
+const SplashScreen = () => {
+  const router = useRouter();
 
-const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
   // Animation values
   const leftImageAnim = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
   const rightImageAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
@@ -26,13 +25,7 @@ const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
         duration: 800,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      // Call callback when animations complete
-      if (onAnimationComplete) {
-        // Add a small delay after animation completes
-        setTimeout(onAnimationComplete, 500);
-      }
-    });
+    ]).start();
   }, []);
 
   return (
