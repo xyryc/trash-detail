@@ -1,6 +1,6 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useGetLoggedInUserDataQuery } from "@/store/slices/employeeApiSlice";
+import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";

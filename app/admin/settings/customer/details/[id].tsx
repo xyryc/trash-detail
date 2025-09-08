@@ -17,7 +17,7 @@ const CustomerDetails = () => {
   const { id } = useLocalSearchParams();
   const { data, isLoading } = useGetUserByIdQuery(id);
   const userData = data?.data;
-  console.log("From details", userData);
+  // console.log("From details", userData);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
