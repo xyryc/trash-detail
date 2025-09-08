@@ -1,14 +1,17 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const AdminDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { data } = useGetUserByIdQuery(id);
+  const adminData = data.data;
+  console.log("from admin dettails", adminData);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -34,9 +37,9 @@ const AdminDetails = () => {
               </Text>
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
+                className="text-neutral-dark-active capitalize"
               >
-                Admin
+                {adminData.role}
               </Text>
             </View>
 
@@ -55,7 +58,7 @@ const AdminDetails = () => {
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                mdtalathunnabi@gmail.com
+                {adminData.email}
               </Text>
             </View>
 
@@ -81,7 +84,9 @@ const AdminDetails = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/admin/settings/admin/details/edit/${id}`);
+                router.push(
+                  `/admin/settings/admin/details/edit/${adminData._id}`
+                );
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}

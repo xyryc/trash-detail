@@ -19,7 +19,7 @@ type HeaderProps = {
   title?: string;
   name?: string;
   email?: string;
-  openSidebar: () => void;
+  openSidebar?: () => void;
 };
 
 type ProblemItem = {

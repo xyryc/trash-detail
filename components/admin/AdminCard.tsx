@@ -10,11 +10,12 @@ const AdminCard = ({
   item: any;
 }) => {
   const router = useRouter();
+  // console.log(item);
 
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push(`/admin/settings/admin/details/${item.id}`);
+        router.push(`/admin/settings/admin/details/${item._id}`);
       }}
       className="flex-row items-center gap-4 px-6 py-4 border-b border-neutral-light-active"
     >
@@ -35,7 +36,7 @@ const AdminCard = ({
           style={{ fontFamily: "SourceSans3-Medium" }}
           className="text-sm text-green-normal capitalize"
         >
-          {item.role === "super" ? "Super Admin" : item.role}
+          {item.role === "superadmin" ? "Super Admin" : item.role}
         </Text>
       </View>
     </TouchableOpacity>

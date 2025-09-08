@@ -11,7 +11,7 @@ export const AdminScreen = ({ activeScreen, adminData }: any) => {
     return adminData.data.filter((admin: any) => admin.role === "admin");
   }, [adminData]);
 
-  console.log("from admin list", superAdmins, regularAdmins);
+  // console.log("from admin list", superAdmins, regularAdmins);
 
   return (
     <ScrollView

@@ -4,7 +4,7 @@ import SearchBar from "../shared/SearchBar";
 import UsersCard from "./UsersCard";
 
 export const CustomerScreen = ({ activeScreen, customerData }: any) => {
-  console.log("customer data", customerData);
+  // console.log("customer data", customerData);
   return (
     <View className="flex-1">
       <FlatList
