@@ -71,7 +71,7 @@ const Problem = () => {
             paddingBottom: 12,
           }}
         >
-          <Header title={"Previous List"} />
+          <Header title={"Problem List"} />
 
           <SearchBar />
         </LinearGradient>

@@ -15,7 +15,7 @@ const Header = ({ title, openSidebar }: HeaderProps) => {
         onPress={openSidebar}
         className="flex-row items-center gap-2"
       >
-        <EvilIcons name="navicon" size={24} color="black" />
+        {openSidebar && <EvilIcons name="navicon" size={24} color="black" />}
         <Text style={{ fontFamily: "SourceSans3-Medium" }} className="text-lg">
           {title}
         </Text>
