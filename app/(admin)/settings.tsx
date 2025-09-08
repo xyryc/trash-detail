@@ -37,7 +37,9 @@ const Settings = () => {
 
   const { data: loggedInUser, isLoading: isUserLoading } =
     useGetLoggedInUserDataQuery();
+  // console.log(loggedInUser?.data.role);
   const { data: userList, isLoading } = useGetUserListQuery(activeScreen);
+  // console.log("User list", userList);
 
   const openSidebar = () => {
     Animated.parallel([
@@ -107,25 +109,17 @@ const Settings = () => {
     switch (activeScreen) {
       case "customer":
         return (
-          <CustomerScreen
-            activeScreen={activeScreen}
-            customerData={userList?.data}
-          />
+          <CustomerScreen activeScreen={activeScreen} customerData={userList} />
         );
       case "employee":
         return (
-          <EmployeeScreen
-            activeScreen={activeScreen}
-            employeeData={userList?.data}
-          />
+          <EmployeeScreen activeScreen={activeScreen} employeeData={userList} />
         );
-      case "admin":
-        return (
-          <AdminScreen activeScreen={activeScreen} adminData={userList?.data} />
-        );
+      case "superadmin":
+        return <AdminScreen activeScreen={activeScreen} adminData={userList} />;
       default:
         return (
-          <CustomerScreen activeScreen={activeScreen} data={userList?.data} />
+          <CustomerScreen activeScreen={activeScreen} customerData={userList} />
         );
     }
   };
@@ -137,7 +131,7 @@ const Settings = () => {
         return "Customer List";
       case "employee":
         return "Employee List";
-      case "admin":
+      case "superadmin":
         return "Admin List";
       default:
         return "Customer List";
@@ -145,8 +139,6 @@ const Settings = () => {
   };
 
   const [logout] = useLogoutMutation();
-  // const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  // console.log(user, isAuthenticated);
 
   const handleLogout = async () => {
     await logout().unwrap();
@@ -171,7 +163,7 @@ const Settings = () => {
               paddingBottom: 12,
             }}
           >
-            <Header title={getScreenTitle()} />
+            <Header title={getScreenTitle()} openSidebar={openSidebar} />
           </LinearGradient>
 
           {isLoading || isUserLoading ? (
@@ -301,9 +293,9 @@ const Settings = () => {
               </TouchableOpacity>
 
               {/* Admin - Only show if user is superadmin */}
-              {loggedInUser?.data.role !== "admin" && (
+              {loggedInUser?.data.role === "superadmin" && (
                 <TouchableOpacity
-                  onPress={() => handleSidebarNavigation("admin")}
+                  onPress={() => handleSidebarNavigation("superadmin")}
                   className="flex-row items-center gap-6 px-6 py-4 mx-6"
                 >
                   <Image
@@ -315,13 +307,13 @@ const Settings = () => {
                   />
                   <Text
                     className={`${
-                      activeScreen === "admin"
+                      activeScreen === "superadmin"
                         ? "text-green-normal"
                         : "text-neutral-normal"
                     }`}
                     style={{
                       fontFamily:
-                        activeScreen === "admin"
+                        activeScreen === "superadmin"
                           ? "SourceSans3-SemiBold"
                           : "SourceSans3-Regular",
                     }}

@@ -4,12 +4,14 @@ import AdminCard from "./AdminCard";
 
 export const AdminScreen = ({ activeScreen, adminData }: any) => {
   const superAdmins = useMemo(() => {
-    return adminData.filter((admin: any) => admin.role === "superadmin");
+    return adminData.data.filter((admin: any) => admin.role === "superadmin");
   }, [adminData]);
 
   const regularAdmins = useMemo(() => {
-    return adminData.filter((admin: any) => admin.role === "admin");
+    return adminData.data.filter((admin: any) => admin.role === "admin");
   }, [adminData]);
+
+  console.log("from admin list", superAdmins, regularAdmins);
 
   return (
     <ScrollView

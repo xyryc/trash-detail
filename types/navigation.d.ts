@@ -4,4 +4,4 @@ interface NavItem {
   icon: keyof typeof Ionicons.glyphMap;
 }
 
-type ScreenType = "customer" | "employee" | "admin";
+type ScreenType = "customer" | "employee" | "superadmin";

@@ -1,18 +1,25 @@
 import { HeaderProps } from "@/types";
+import { EvilIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const Header = ({ title }: HeaderProps) => {
+const Header = ({ title, openSidebar }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
   const router = useRouter();
 
   return (
     <View className="flex-row items-center justify-between py-3">
-      <Text style={{ fontFamily: "SourceSans3-Medium" }} className="text-lg">
-        {title}
-      </Text>
+      <TouchableOpacity
+        onPress={openSidebar}
+        className="flex-row items-center gap-2"
+      >
+        <EvilIcons name="navicon" size={24} color="black" />
+        <Text style={{ fontFamily: "SourceSans3-Medium" }} className="text-lg">
+          {title}
+        </Text>
+      </TouchableOpacity>
 
       {notification ? (
         <TouchableOpacity onPress={() => router.push("/shared/notification")}>

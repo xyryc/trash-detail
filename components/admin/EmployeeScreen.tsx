@@ -6,7 +6,7 @@ export const EmployeeScreen = ({ activeScreen, employeeData }: any) => {
   return (
     <View className="flex-1">
       <FlatList
-        data={employeeData}
+        data={employeeData.data}
         ListHeaderComponent={
           <View className="px-6 py-3">
             <SearchBar />
