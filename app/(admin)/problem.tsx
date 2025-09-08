@@ -1,7 +1,8 @@
 import Header from "@/components/shared/Header";
 import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
-import { useGetProblemListQuery } from "@/store/slices/adminApiSlice";
+import { useAppSelector } from "@/store/hooks";
+import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -19,8 +20,14 @@ const Problem = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
-  const { data, isLoading } = useGetProblemListQuery();
+
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { data, isLoading } = useGetProblemListQuery(undefined, {
+    skip: !isAuthenticated || !user,
+    refetchOnMountOrArgChange: true,
+  });
   const problems = data?.data || [];
+  console.log(problems);
 
   // Filter problems (not chatListData) based on search and tab
   const filteredProblems = problems.filter((problem) => {
@@ -50,14 +57,6 @@ const Problem = () => {
   const forwardedCount = problems.filter(
     (p) => p.status === "forwarded"
   ).length;
-
-  if (isLoading) {
-    return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#E2F2E5" />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -163,33 +162,39 @@ const Problem = () => {
           </View>
 
           {/* problem cards */}
-          <FlatList
-            data={filteredProblems}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  router.push(`/admin/problem/details/${item._id}`)
-                }
-              >
-                <ProblemCard data={item} />
-              </TouchableOpacity>
-            )}
-            contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <View className="flex-1 items-center justify-center py-20">
-                <Text
-                  className="text-gray-500 text-base"
-                  style={{ fontFamily: "SourceSans3-Regular" }}
+          {isLoading ? (
+            <View className="flex-1 justify-center">
+              <ActivityIndicator size="large" color="#386B45" />
+            </View>
+          ) : (
+            <FlatList
+              data={filteredProblems}
+              keyExtractor={(item) => item._id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push(`/admin/problem/details/${item._id}`)
+                  }
                 >
-                  {searchText
-                    ? `No problems found for "${searchText}"`
-                    : `No ${selectedTab === "all" ? "" : selectedTab} problems found`}
-                </Text>
-              </View>
-            }
-          />
+                  <ProblemCard data={item} />
+                </TouchableOpacity>
+              )}
+              contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <View className="flex-1 items-center justify-center py-20">
+                  <Text
+                    className="text-gray-500 text-base"
+                    style={{ fontFamily: "SourceSans3-Regular" }}
+                  >
+                    {searchText
+                      ? `No problems found for "${searchText}"`
+                      : `No ${selectedTab === "all" ? "" : selectedTab} problems found`}
+                  </Text>
+                </View>
+              }
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

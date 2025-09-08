@@ -15,6 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
   PanResponder,
   Pressable,
@@ -34,8 +35,9 @@ const Settings = () => {
   const overlayOpacity = useRef(new Animated.Value(0)).current;
   const router = useRouter();
 
-  const { data: loggedInUser } = useGetLoggedInUserDataQuery();
-  const { data: userList } = useGetUserListQuery(activeScreen);
+  const { data: loggedInUser, isLoading: isUserLoading } =
+    useGetLoggedInUserDataQuery();
+  const { data: userList, isLoading } = useGetUserListQuery(activeScreen);
 
   const openSidebar = () => {
     Animated.parallel([
@@ -172,7 +174,13 @@ const Settings = () => {
             <Header title={getScreenTitle()} />
           </LinearGradient>
 
-          {renderActiveScreen()}
+          {isLoading || isUserLoading ? (
+            <View className="flex-1 justify-center">
+              <ActivityIndicator size="large" color="#386B45" />
+            </View>
+          ) : (
+            renderActiveScreen()
+          )}
 
           {/* Add New Button */}
           <ButtonPrimary
