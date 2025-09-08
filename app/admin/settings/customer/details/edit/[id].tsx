@@ -88,16 +88,16 @@ const EditCustomer = () => {
         {/* header */}
         <CustomHeader text="Edit Customer" />
 
-        <ScrollView
-          contentContainerClassName="pb-10"
-          showsVerticalScrollIndicator={false}
-        >
-          {/* main content */}
-          {isLoading || isUpdating ? (
-            <View className="flex-1 justify-center">
-              <ActivityIndicator size="large" color="#386B45" />
-            </View>
-          ) : (
+        {/* main content */}
+        {isLoading || isUpdating ? (
+          <View className="flex-1 justify-center">
+            <ActivityIndicator size="large" color="#386B45" />
+          </View>
+        ) : (
+          <ScrollView
+            contentContainerClassName="pb-10"
+            showsVerticalScrollIndicator={false}
+          >
             <View className="border border-neutral-light-hover p-4 rounded-lg">
               {/* first row */}
               <View>
@@ -287,8 +287,8 @@ const EditCustomer = () => {
                 title="Save Change"
               />
             </View>
-          )}
-        </ScrollView>
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

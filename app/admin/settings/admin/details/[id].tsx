@@ -11,7 +11,7 @@ const AdminDetails = () => {
   const { id } = useLocalSearchParams();
   const { data } = useGetUserByIdQuery(id);
   const adminData = data.data;
-  console.log("from admin dettails", adminData);
+  // console.log("from admin dettails", adminData);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>

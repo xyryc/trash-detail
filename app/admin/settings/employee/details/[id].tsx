@@ -16,9 +16,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const EmployeeDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { data: userData, isLoading } = useGetUserByIdQuery(id);
+  const { data, isLoading } = useGetUserByIdQuery(id);
+  const userData = data?.data;
 
-  console.log("From details", userData);
+  console.log("From employee details", userData);
 
   return (
     <SafeAreaView
@@ -54,7 +55,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  {userData.data.id}
+                  {userData.userId}
                 </Text>
               </View>
 
@@ -73,7 +74,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  Anik
+                  {userData.name}
                 </Text>
               </View>
 
@@ -92,7 +93,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  mdtalathunnabi@gmail.com
+                  {userData.email}
                 </Text>
               </View>
 
@@ -111,7 +112,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  +8801570233979
+                  {userData.number}
                 </Text>
               </View>
 
@@ -130,7 +131,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  5th Avenue
+                  {userData.addressLane1}
                 </Text>
               </View>
 
@@ -158,7 +159,7 @@ const EmployeeDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  Bay City Avenue
+                  {userData.addressLane2}
                 </Text>
               </View>
 
@@ -179,7 +180,7 @@ const EmployeeDetails = () => {
                     style={{ fontFamily: "SourceSans3-SemiBold" }}
                     className="text-neutral-dark-active"
                   >
-                    New York
+                    {userData.city}
                   </Text>
                 </View>
 
@@ -195,7 +196,7 @@ const EmployeeDetails = () => {
                     style={{ fontFamily: "SourceSans3-SemiBold" }}
                     className="text-neutral-dark-active"
                   >
-                    NY
+                    {userData.state}
                   </Text>
                 </View>
 
@@ -211,7 +212,7 @@ const EmployeeDetails = () => {
                     style={{ fontFamily: "SourceSans3-SemiBold" }}
                     className="text-neutral-dark-active"
                   >
-                    34356
+                    {userData.zipCode}
                   </Text>
                 </View>
               </View>
@@ -219,7 +220,9 @@ const EmployeeDetails = () => {
               {/* edit */}
               <ButtonSecondary
                 onPress={() => {
-                  router.push(`/admin/settings/employee/details/edit/${id}`);
+                  router.push(
+                    `/admin/settings/employee/details/edit/${userData._id}`
+                  );
                 }}
                 title="Edit"
                 icon={<Octicons name="pencil" size={24} color="#2E323C" />}
