@@ -11,7 +11,7 @@ const ButtonSecondary = ({
 }: ButtonProps) => {
   return (
     <TouchableOpacity
-      className={`bg-neutral-light-hover rounded-lg py-3 flex-row justify-center gap-2.5 ${className}`}
+      className={`${className} bg-neutral-light-hover rounded-lg py-3 flex-row justify-center gap-2.5`}
       onPress={onPress}
       activeOpacity={0.8}
     >

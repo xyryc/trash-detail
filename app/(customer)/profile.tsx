@@ -1,7 +1,10 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
-import { Octicons } from "@expo/vector-icons";
+import {
+  useGetLoggedInUserDataQuery,
+  useLogoutMutation,
+} from "@/store/slices/authApiSlice";
+import { MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -18,11 +21,14 @@ const CustomerProfile = () => {
   const { data, isLoading } = useGetLoggedInUserDataQuery();
   const userData = data?.data;
 
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logout().unwrap();
+  };
+
   return (
-    <SafeAreaView
-      className="flex-1 bg-white"
-      edges={["top", "left", "right", "bottom"]}
-    >
+    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
@@ -277,6 +283,15 @@ const CustomerProfile = () => {
                 }}
                 title="Edit"
                 icon={<Octicons name="pencil" size={24} color="#2E323C" />}
+              />
+            </View>
+
+            {/* logout */}
+            <View className="mt-3">
+              <ButtonSecondary
+                title="Logout"
+                onPress={handleLogout}
+                icon={<MaterialIcons name="logout" size={24} color="black" />}
               />
             </View>
           </ScrollView>
