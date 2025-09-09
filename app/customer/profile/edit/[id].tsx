@@ -1,8 +1,13 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useRouter } from "expo-router";
+import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
+import { useUpdateProfileMutation } from "@/store/slices/customerApiSlice";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -13,11 +18,23 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const EmployeeProfileEditScreen = () => {
-  const [value, setValue] = useState<string | null>(null);
-  const [isFocus, setIsFocus] = useState(false);
-
+const CustomerProfileEditScreen = () => {
   const router = useRouter();
+
+  const { id } = useLocalSearchParams();
+  const { data, isLoading } = useGetLoggedInUserDataQuery();
+  const userData = data?.data;
+  const [updateUserProfile, { isLoading: isUpdating }] =
+    useUpdateProfileMutation();
+
+  const [email, setEmail] = useState(userData?.email);
+  const [value, setValue] = useState(userData?.state);
+  const [name, setName] = useState(userData?.name);
+  const [number, setNumber] = useState(userData?.number);
+  const [addressLane1, setAddressLane1] = useState(userData?.addressLane1);
+  const [addressLane2, setAddressLane2] = useState(userData?.addressLane2);
+  const [city, setCity] = useState(userData?.city);
+  const [zipCode, setZipCode] = useState(userData?.zipCode);
 
   const states = [
     { label: "AL", value: "AL" },
@@ -31,6 +48,37 @@ const EmployeeProfileEditScreen = () => {
     { label: "TX", value: "TX" },
     { label: "WA", value: "WA" },
   ];
+
+  const handleUpdateProfile = async () => {
+    const payload = {
+      name,
+      email,
+      number,
+      addressLane1,
+      addressLane2,
+      city,
+      zipCode,
+      state: value,
+    };
+
+    try {
+      const response = await updateUserProfile({
+        userId: userData?._id,
+        payload,
+      }).unwrap();
+
+      if (response.success) {
+        Alert.alert("Success", "Profile updated successfully");
+        router.back();
+      }
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
+      Alert.alert("Error", error.data.message);
+    }
+  };
+
+  console.log("customer profile", userData, id);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -40,198 +88,209 @@ const EmployeeProfileEditScreen = () => {
 
       <View className="flex-1 px-6">
         {/* header */}
-        <CustomHeader text="Edit Profile" />
+        <CustomHeader text="Edit Profiledadadw" />
 
-        {/* main content */}
-        <ScrollView
-          contentContainerClassName="pb-10"
-          showsVerticalScrollIndicator={false}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <View className="border border-neutral-light-hover p-4 rounded-lg">
-            {/* first row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                ID:
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                C34
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* second row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Name
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Anik"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* third row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Email
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"amdanikzz@gmail.com"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* fourth row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Number
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"+8801570233979"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* fifth row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                Address Line 1
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"5th Avenue"}
-              />
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* sixth row */}
-            <View>
-              <View className="flex-row gap-1">
+          {/* main content */}
+          <ScrollView
+            contentContainerClassName="pb-10"
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="border border-neutral-light-hover p-4 rounded-lg">
+              {/* first row */}
+              <View>
                 <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  style={{ fontFamily: "SourceSans3-Regular" }}
                   className="text-neutral-normal mb-2"
                 >
-                  Address Line 2
+                  ID:
                 </Text>
-
                 <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
+                  style={{ fontFamily: "SourceSans3-SemiBold" }}
+                  className="text-neutral-dark-active"
                 >
-                  (optional)
+                  {userData?.userId}
                 </Text>
               </View>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"Bay City Avenue"}
-              />
-            </View>
 
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
 
-            {/* seventh row */}
-            <View className="mb-5 flex-row gap-5">
-              {/* city */}
-              <View className="flex-1">
+              {/* second row */}
+              <View>
                 <Text
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="text-neutral-normal mb-2"
                 >
-                  City
+                  Name
                 </Text>
                 <TextInput
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                  defaultValue={"New York"}
+                  value={name}
+                  onChangeText={setName}
                 />
               </View>
 
-              {/* state */}
-              <View className="flex-1">
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
+
+              {/* third row */}
+              <View>
                 <Text
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="text-neutral-normal mb-2"
                 >
-                  State
+                  Email
                 </Text>
-
-                <Dropdown
-                  data={states}
-                  labelField="label"
-                  valueField="value"
-                  placeholder="Select state"
-                  value={value}
-                  onChange={(item) => setValue(item.value)}
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  containerStyle={styles.containerStyle}
-                  itemTextStyle={styles.itemTextStyle}
+                <TextInput
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                  value={email}
+                  onChangeText={setEmail}
                 />
               </View>
-            </View>
 
-            {/* zip code */}
-            <View className="mb-5">
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-neutral-normal mb-2"
-              >
-                ZIP Code
-              </Text>
-              <TextInput
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"343431"}
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
+
+              {/* fourth row */}
+              <View>
+                <Text
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="text-neutral-normal mb-2"
+                >
+                  Number
+                </Text>
+                <TextInput
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                  value={number}
+                  onChangeText={setNumber}
+                />
+              </View>
+
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
+
+              {/* fifth row */}
+              <View>
+                <Text
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="text-neutral-normal mb-2"
+                >
+                  Address Line 1
+                </Text>
+                <TextInput
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                  value={addressLane1}
+                  onChangeText={setAddressLane1}
+                />
+              </View>
+
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
+
+              {/* sixth row */}
+              <View>
+                <View className="flex-row gap-1">
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    Address Line 2
+                  </Text>
+
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    (optional)
+                  </Text>
+                </View>
+                <TextInput
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                  value={addressLane2}
+                  onChangeText={setAddressLane2}
+                />
+              </View>
+
+              {/* divider */}
+              <View className="h-px bg-neutral-light-hover my-5" />
+
+              {/* seventh row */}
+              <View className="mb-5 flex-row gap-5">
+                {/* city */}
+                <View className="flex-1">
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    City
+                  </Text>
+                  <TextInput
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                    value={city}
+                    onChangeText={setCity}
+                  />
+                </View>
+
+                {/* state */}
+                <View className="flex-1">
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    State
+                  </Text>
+
+                  <Dropdown
+                    data={states}
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Select state"
+                    value={value}
+                    onChange={(item) => setValue(item.value)}
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    containerStyle={styles.containerStyle}
+                    itemTextStyle={styles.itemTextStyle}
+                  />
+                </View>
+              </View>
+
+              {/* zip code */}
+              <View className="mb-5">
+                <Text
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="text-neutral-normal mb-2"
+                >
+                  ZIP Code
+                </Text>
+                <TextInput
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                  className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                  value={zipCode}
+                  onChangeText={setZipCode}
+                />
+              </View>
+
+              {/* edit */}
+              <ButtonPrimary
+                onPress={handleUpdateProfile}
+                title="Save Changes"
+                isLoading={isLoading || isUpdating}
               />
             </View>
-
-            {/* edit */}
-            <ButtonPrimary
-              onPress={() => {
-                router.back();
-              }}
-              title="Save Change"
-            />
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </SafeAreaView>
   );
@@ -264,4 +323,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmployeeProfileEditScreen;
+export default CustomerProfileEditScreen;
