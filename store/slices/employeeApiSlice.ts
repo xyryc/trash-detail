@@ -83,6 +83,14 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       query: (type) => `/messages/conversations?type=${type}`,
       providesTags: [{ type: "Chat", id: "SUPPORT" }],
     }),
+
+    createSupportChat: builder.mutation({
+      query: (payload) => ({
+        url: "/supports",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 
   overrideExisting: true,
@@ -97,4 +105,5 @@ export const {
   useUpdateProblemMutation,
   useUpdateProfileMutation,
   useGetSupportChatListQuery,
+  useCreateSupportChatMutation,
 } = employeeApiSlice;

@@ -4,7 +4,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const ChatItem = ({ item, onPress }: any) => {
-  console.log("supprt chat item", item);
+  // console.log("supprt chat item", item);
 
   return (
     <TouchableOpacity
