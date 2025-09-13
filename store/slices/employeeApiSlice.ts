@@ -50,28 +50,33 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateProfile: builder.mutation({
-      query: ({ currentUserDBId, payload }) => ({
-        url: `/users/${currentUserDBId}`,
+      query: ({ userId, payload }) => ({
+        url: `/users/${userId}`,
         method: "PATCH",
         body: payload,
       }),
-      async onQueryStarted({ currentUserDBId, payload }, { queryFulfilled }) {
+      async onQueryStarted({ userId, payload }, { dispatch, queryFulfilled }) {
         try {
           const { data: response } = await queryFulfilled;
           if (response.success) {
-            // Update stored user data
+            // Update AsyncStorage
             await AsyncStorage.setItem(
               "user_data",
               JSON.stringify(response.data)
             );
+
+            // Invalidate specific profile cache
+            dispatch(
+              apiSlice.util.invalidateTags([
+                { type: "Profile", id: "CURRENT_USER" },
+              ])
+            );
           }
         } catch (error) {
-          console.error("Profile update storage error:", error);
+          console.error("Profile update error:", error);
         }
       },
-      invalidatesTags: (result, error, { currentUserDBId }) => [
-        { type: "User" },
-      ],
+      invalidatesTags: [{ type: "Profile", id: "CURRENT_USER" }],
     }),
   }),
 

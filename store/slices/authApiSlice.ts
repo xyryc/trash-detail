@@ -92,7 +92,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
     getLoggedInUserData: builder.query<GetLoggedInUserDataResponse, void>({
       query: () => "/users/me",
-      providesTags: [{ type: "User" }],
+      providesTags: [{ type: "Profile", id: "CURRENT_USER" }],
     }),
   }),
 

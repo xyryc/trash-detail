@@ -5,8 +5,8 @@ import {
   useLogoutMutation,
 } from "@/store/slices/authApiSlice";
 import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -19,9 +19,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfile = () => {
   const router = useRouter();
-  const { data, isLoading } = useGetLoggedInUserDataQuery();
+  const { data, isLoading, refetch } = useGetLoggedInUserDataQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+    skip: false,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const userData = data?.data;
+  // console.log("fetched user data", userData);
 
   const [logout] = useLogoutMutation();
 
