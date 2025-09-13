@@ -5,13 +5,22 @@ import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Problem = () => {
   const router = useRouter();
+
   const { data: problemList, isLoading } = useGetProblemListQuery();
   const problems = problemList?.data || [];
+  console.log(problems);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -65,15 +74,19 @@ const Problem = () => {
           <FlatList
             data={problems}
             keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() =>
-                  router.push(`/employee/problem/details/${item._id}`)
-                }
-              >
-                <ProblemCard data={item} />
-              </Pressable>
-            )}
+            renderItem={({ item }) =>
+              isLoading ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <Pressable
+                  onPress={() =>
+                    router.push(`/employee/problem/details/${item._id}`)
+                  }
+                >
+                  <ProblemCard data={item} />
+                </Pressable>
+              )
+            }
             contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
           />

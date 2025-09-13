@@ -1,7 +1,10 @@
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
-import { AntDesign, Octicons } from "@expo/vector-icons";
+import {
+  useGetLoggedInUserDataQuery,
+  useLogoutMutation,
+} from "@/store/slices/authApiSlice";
+import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -19,6 +22,12 @@ const EmployeeProfile = () => {
   const { data, isLoading } = useGetLoggedInUserDataQuery();
 
   const userData = data?.data;
+
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logout().unwrap();
+  };
 
   return (
     <SafeAreaView
@@ -294,6 +303,15 @@ const EmployeeProfile = () => {
                 Support
               </Text>
             </TouchableOpacity>
+
+            {/* logout */}
+            <View className="mt-3">
+              <ButtonSecondary
+                title="Logout"
+                onPress={handleLogout}
+                icon={<MaterialIcons name="logout" size={24} color="black" />}
+              />
+            </View>
           </ScrollView>
         )}
       </View>

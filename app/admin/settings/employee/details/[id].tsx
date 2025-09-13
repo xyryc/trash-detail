@@ -19,7 +19,7 @@ const EmployeeDetails = () => {
   const { data, isLoading } = useGetUserByIdQuery(id);
   const userData = data?.data;
 
-  console.log("From employee details", userData);
+  // console.log("From employee details", userData);
 
   return (
     <SafeAreaView

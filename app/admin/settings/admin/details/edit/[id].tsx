@@ -1,6 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -15,16 +16,20 @@ import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditCustomer = () => {
-  const [value, setValue] = useState<string | null>(null);
-  const [isFocus, setIsFocus] = useState(false);
-  const { id } = useLocalSearchParams();
-
   const router = useRouter();
+  const [value, setValue] = useState<string | null>(null);
+  const { id } = useLocalSearchParams();
+  const { data, isLoading } = useGetUserByIdQuery(id);
+  const adminData = data?.data;
 
-  const states = [
+  const roles = [
     { label: "Super Admin", value: "super" },
     { label: "Admin", value: "admin" },
   ];
+
+  const [role, setRole] = useState(adminData?.role);
+  const [email, setEmail] = useState(adminData?.email);
+  const [password, setPassword] = useState(adminData?.password);
 
   return (
     <SafeAreaView
@@ -53,11 +58,11 @@ const EditCustomer = () => {
               </Text>
 
               <Dropdown
-                data={states}
+                data={roles}
                 labelField="label"
                 valueField="value"
                 placeholder="Admin"
-                value={value}
+                value={role}
                 onChange={(item) => setValue(item.value)}
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
@@ -81,7 +86,7 @@ const EditCustomer = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"amdanikzz@gmail.com"}
+                value={email}
               />
             </View>
 
@@ -99,7 +104,7 @@ const EditCustomer = () => {
               <TextInput
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                defaultValue={"123456"}
+                value={password}
               />
             </View>
 

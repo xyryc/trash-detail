@@ -5,6 +5,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: "https://anik3001.sakibahmad.com/api/v1",
   prepareHeaders: async (headers, { getState }) => {
     const token = await AsyncStorage.getItem("auth_token");
+
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
@@ -13,6 +14,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// @ts-ignore
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 

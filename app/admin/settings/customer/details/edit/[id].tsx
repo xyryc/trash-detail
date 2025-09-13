@@ -59,7 +59,7 @@ const EditCustomer = () => {
       addressLane2,
       city,
       zipCode,
-      state: value,
+      state,
     };
 
     try {
@@ -94,7 +94,6 @@ const EditCustomer = () => {
           <CustomHeader text="Edit Customer" />
 
           {/* main content */}
-
           <ScrollView
             contentContainerClassName="pb-10"
             showsVerticalScrollIndicator={false}
