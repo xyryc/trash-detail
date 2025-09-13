@@ -1,15 +1,28 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
+import { useGetSupportChatListQuery } from "@/store/slices/employeeApiSlice";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, StatusBar, Text, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportChatList = () => {
   const router = useRouter();
+  const { data, isLoading, refetch, isFetching } =
+    useGetSupportChatListQuery("support");
+  const supportChatList = data?.data;
+  // console.log("support list", supportChatList);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -29,7 +42,7 @@ const SupportChatList = () => {
         </LinearGradient>
 
         {/* support chatlist */}
-        <ScrollView>
+        <ScrollView className="hidden">
           {/* item-1 */}
           <View className="bg-neutral-light py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">
             {/* message content */}
@@ -266,6 +279,20 @@ const SupportChatList = () => {
             </View>
           </View>
         </ScrollView>
+
+        <FlatList
+          data={supportChatList}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <ChatItem item={item} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={refetch}
+              colors={["#22C55E"]}
+              tintColor="#22C55E"
+            />
+          }
+        />
 
         {/* open new button */}
         <ButtonPrimary

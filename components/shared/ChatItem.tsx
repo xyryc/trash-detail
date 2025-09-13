@@ -4,6 +4,8 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const ChatItem = ({ item, onPress }: any) => {
+  console.log("supprt chat item", item);
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -39,7 +41,7 @@ const ChatItem = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-green-normal"
             >
-              {item.problemId}
+              {item.problemId || item.supportId}
             </Text>
 
             <Entypo name="dot-single" size={16} color="#667085" />
@@ -74,7 +76,7 @@ const ChatItem = ({ item, onPress }: any) => {
               className="mt-1 text-xs text-neutral-normal-active"
               numberOfLines={1}
             >
-              {item.description}
+              {item.lastMessage}
             </Text>
           )}
         </View>

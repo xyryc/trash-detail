@@ -78,6 +78,11 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: [{ type: "Profile", id: "CURRENT_USER" }],
     }),
+
+    getSupportChatList: builder.query({
+      query: (type) => `/messages/conversations?type=${type}`,
+      providesTags: [{ type: "Chat", id: "SUPPORT" }],
+    }),
   }),
 
   overrideExisting: true,
@@ -91,4 +96,5 @@ export const {
   useGetProblemByIdQuery,
   useUpdateProblemMutation,
   useUpdateProfileMutation,
+  useGetSupportChatListQuery,
 } = employeeApiSlice;
