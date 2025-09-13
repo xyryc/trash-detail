@@ -64,6 +64,7 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetProblemListQuery,
   useGetProblemByIdQuery,
   useUpdateProblemStatusMutation,
   useUpdateProblemMutation,

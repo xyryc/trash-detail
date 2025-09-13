@@ -2,7 +2,8 @@ import Header from "@/components/shared/Header";
 import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useAppSelector } from "@/store/hooks";
-import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
+import { useGetProblemListQuery } from "@/store/slices/adminApiSlice";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
