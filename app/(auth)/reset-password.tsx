@@ -2,14 +2,8 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useSetNewPasswordMutation } from "@/store/slices/authApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Alert,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, StatusBar, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ResetPassword = () => {
   const router = useRouter();

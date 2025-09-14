@@ -14,7 +14,7 @@ import "react-native-reanimated";
 import { Provider } from "react-redux";
 import "./global.css";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -41,6 +41,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
         <AppRouter>
           <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
             <Stack.Screen name="splash" />
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(admin)" />

@@ -2,14 +2,8 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useForgotPasswordMutation } from "@/store/slices/authApiSlice";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Alert,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, StatusBar, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");

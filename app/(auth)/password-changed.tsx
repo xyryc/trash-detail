@@ -2,7 +2,8 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const PasswordChanged = () => {
   const router = useRouter();

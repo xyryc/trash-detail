@@ -6,12 +6,12 @@ import React, { useState } from "react";
 import {
   Alert,
   Pressable,
-  SafeAreaView,
   StatusBar,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Login = () => {
   const [email, setEmail] = useState("");
