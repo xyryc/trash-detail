@@ -16,7 +16,7 @@ const ChatItem = ({ item, onPress }: any) => {
     >
       {/* message content */}
       <View className="flex-row gap-4">
-        {item.category === "problem" ? (
+        {item.imageUrl ? (
           <View className="size-[42px] bg-white rounded-lg border border-neutral-light-hover">
             <Image
               source={require("@/assets/images/left-guy.svg")}
@@ -28,7 +28,7 @@ const ChatItem = ({ item, onPress }: any) => {
           <View>
             <AntDesign
               className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-              name="questioncircleo"
+              name="question-circle"
               size={24}
               color="black"
             />
@@ -50,7 +50,7 @@ const ChatItem = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal text-xs"
             >
-              {item.timestamp}
+              {item.lastMessageTime}
             </Text>
           </View>
 
@@ -83,16 +83,16 @@ const ChatItem = ({ item, onPress }: any) => {
       </View>
 
       {/* notification  */}
-      {item.unreadCount > 0 && (
-        <View className="size-6 rounded-full overflow-hidden">
-          <Text
-            style={{ fontFamily: "SourceSans3-Bold" }}
-            className="text-xs p-1 bg-error-normal text-white text-center"
-          >
-            {item.unreadCount}
-          </Text>
-        </View>
-      )}
+      {/* {item.incomingMessages > 0 && ( */}
+      <View className="size-6 rounded-full overflow-hidden">
+        <Text
+          style={{ fontFamily: "SourceSans3-Bold" }}
+          className="text-xs p-1 bg-error-normal text-white text-center"
+        >
+          {item.incomingMessages}
+        </Text>
+      </View>
+      {/* )} */}
     </TouchableOpacity>
   );
 };

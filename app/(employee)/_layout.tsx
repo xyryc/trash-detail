@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -99,7 +99,7 @@ export default function EmployeeTabLayout() {
             <View
               className={`w-20 h-16 mt-10 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
-              <AntDesign
+              <Feather
                 name="user"
                 size={24}
                 color={focused ? "#386B45" : color}

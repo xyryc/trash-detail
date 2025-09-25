@@ -79,17 +79,17 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Profile", id: "CURRENT_USER" }],
     }),
 
-    getSupportChatList: builder.query({
-      query: (type) => `/messages/conversations?type=${type}`,
-      providesTags: [{ type: "Chat", id: "SUPPORT" }],
-    }),
-
     createSupportChat: builder.mutation({
       query: (payload) => ({
         url: "/supports",
         method: "POST",
         body: payload,
       }),
+    }),
+
+    getSupportChatList: builder.query({
+      query: (type) => `/messages/conversations?type=${type}`,
+      providesTags: [{ type: "Chat", id: "SUPPORT" }],
     }),
   }),
 

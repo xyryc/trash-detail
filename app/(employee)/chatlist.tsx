@@ -2,11 +2,13 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
+import { useSocket } from "@/hooks/useSocket";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useGetSupportChatListQuery } from "@/store/slices/employeeApiSlice";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -19,10 +21,43 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportChatList = () => {
   const router = useRouter();
-  const { data, isLoading, refetch, isFetching } =
-    useGetSupportChatListQuery("support");
-  const supportChatList = data?.data;
-  // console.log("support list", supportChatList);
+  const chatType = "support";
+  const dispatch = useAppDispatch();
+  const {
+    data: chatlist,
+    refetch,
+    isFetching,
+  } = useGetSupportChatListQuery(chatType);
+  const authToken = useAppSelector((state) => state.auth.token);
+  const { socket, isConnected } = useSocket(authToken);
+  console.log(isConnected);
+
+  useEffect(() => {
+    if (!socket || !isConnected) {
+      console.log("Socket not ready:", { socket: !!socket, isConnected });
+      return;
+    }
+
+    const handleChatUpdate = (data: any) => {
+      console.log("Received updateChatList:", data);
+      if (data.type === chatType) {
+        console.log("Refetching chat list for type:", chatType);
+        refetch();
+      }
+    };
+
+    // Listen for the exact event your backend sends
+    socket.on("updateChatList", handleChatUpdate);
+
+    // Test if socket is working
+    socket.emit("test", { message: "Hello from client" });
+
+    return () => {
+      socket.off("updateChatList", handleChatUpdate);
+    };
+  }, [socket, isConnected, chatType, refetch]);
+
+  // console.log(chatlist);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -50,7 +85,7 @@ const SupportChatList = () => {
               <View>
                 <AntDesign
                   className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="questioncircleo"
+                  name="question-circle"
                   size={24}
                   color="black"
                 />
@@ -109,7 +144,7 @@ const SupportChatList = () => {
               <View>
                 <AntDesign
                   className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="questioncircleo"
+                  name="question-circle"
                   size={24}
                   color="black"
                 />
@@ -168,7 +203,7 @@ const SupportChatList = () => {
               <View>
                 <AntDesign
                   className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="questioncircleo"
+                  name="question-circle"
                   size={24}
                   color="black"
                 />
@@ -227,7 +262,7 @@ const SupportChatList = () => {
               <View>
                 <AntDesign
                   className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="questioncircleo"
+                  name="question-circle"
                   size={24}
                   color="black"
                 />
@@ -281,7 +316,7 @@ const SupportChatList = () => {
         </ScrollView>
 
         <FlatList
-          data={supportChatList}
+          data={chatlist?.data}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <ChatItem item={item} />}
           refreshControl={
