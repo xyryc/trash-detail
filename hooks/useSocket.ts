@@ -1,42 +1,50 @@
 // hooks/useSocket.ts
-import { useAppDispatch } from "@/store/hooks";
-import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-let socket: Socket;
-
-export const useSocket = (authToken: string) => {
-  const dispatch = useAppDispatch();
+export const useSocket = () => {
+  const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (authToken && !socket) {
-      socket = io("https://anik3001.sakibahmad.com/", {
+    const initSocket = async () => {
+      const authToken = await AsyncStorage.getItem("auth_token");
+
+      if (!authToken || socketRef.current?.connected) return;
+
+      const socket = io("https://anik3001.sakibahmad.com/", {
         auth: { token: authToken },
+        transports: ["websocket", "polling"],
       });
-    }
 
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-      setIsConnected(true);
-    });
+      socket.on("connect", () => {
+        console.log("Socket connected:", socket.id);
+        setIsConnected(true);
+      });
 
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
-      setIsConnected(false);
-    });
+      socket.on("disconnect", () => {
+        console.log("Socket disconnected");
+        setIsConnected(false);
+      });
 
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-    });
+      socket.on("connect_error", (error) => {
+        console.error("Socket connection error:", error);
+      });
+
+      socketRef.current = socket;
+    };
+
+    initSocket();
 
     return () => {
-      if (socket) {
-        socket.disconnect();
-        socket = null;
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+        setIsConnected(false);
       }
     };
-  }, [authToken]);
+  }, []);
 
-  return { socket, isConnected };
+  return { socket: socketRef.current, isConnected };
 };

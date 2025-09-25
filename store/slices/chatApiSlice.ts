@@ -1,57 +1,44 @@
 // store/slices/chatApiSlice.ts
 import { apiSlice } from "../apiSlice";
 
-export interface ChatConversation {
-  _id: string;
-  chatType: string;
-  supportId: string;
-  participants: string[];
-  lastMessage?: {
-    content: string;
-    timestamp: string;
-    senderId: string;
-  };
-  unreadCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface ChatMessage {
   _id: string;
-  chatType: string;
   supportId: string;
-  senderId: string;
-  senderName: string;
-  message?: string;
-  imageUrl?: string;
-  timestamp: string;
-  status: "sent" | "delivered" | "read";
+  chatType: string;
+  senderId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  message: string;
+  readBy: string[];
+  createdAt: string;
 }
 
-export interface GetChatListResponse {
+export interface ChatHistory {
   success: boolean;
-  data: ChatConversation[];
-  message: string;
-}
-
-export interface GetMessagesResponse {
-  success: boolean;
-  data: ChatMessage[];
-  message: string;
+  data: {
+    supportInfo: {
+      id: string;
+      title: string;
+    };
+    createdByInfo: {
+      createdById: string;
+      name: string;
+      email: string;
+    };
+    messages: ChatMessage[];
+  };
 }
 
 export const chatApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getChatList: builder.query<GetChatListResponse, string>({
-      query: (type) => `/messages/conversations?type=${type}`,
-      providesTags: ["Chat"],
-    }),
-
-    getMessages: builder.query<
-      GetMessagesResponse,
-      { supportId: string; page?: number }
+    getChatHistory: builder.query<
+      ChatHistory,
+      { supportId: string; chatType: string }
     >({
-      query: ({ supportId, page = 1 }) => `/messages/${supportId}?page=${page}`,
+      query: ({ supportId, chatType }) =>
+        `/messages/${supportId}?chatType=${chatType}`,
       providesTags: (result, error, { supportId }) => [
         { type: "Message", id: supportId },
       ],
@@ -71,14 +58,12 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: messageData,
       }),
-      invalidatesTags: ["Chat"],
+      invalidatesTags: (result, error, { supportId }) => [
+        { type: "Message", id: supportId },
+        "Chat",
+      ],
     }),
   }),
-  overrideExisting: true,
 });
 
-export const {
-  useGetChatListQuery,
-  useGetMessagesQuery,
-  useSendMessageMutation,
-} = chatApiSlice;
+export const { useGetChatHistoryQuery, useSendMessageMutation } = chatApiSlice;

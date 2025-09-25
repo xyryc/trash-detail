@@ -30,7 +30,6 @@ const SupportChatList = () => {
   } = useGetSupportChatListQuery(chatType);
   const authToken = useAppSelector((state) => state.auth.token);
   const { socket, isConnected } = useSocket(authToken);
-  console.log(isConnected);
 
   useEffect(() => {
     if (!socket || !isConnected) {
@@ -318,7 +317,16 @@ const SupportChatList = () => {
         <FlatList
           data={chatlist?.data}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => <ChatItem item={item} />}
+          renderItem={({ item }) => (
+            <ChatItem
+              onPress={() =>
+                router.push(
+                  `/employee/profile/support/chat/${chatlist?.data[0]._id}`
+                )
+              }
+              item={item}
+            />
+          )}
           refreshControl={
             <RefreshControl
               refreshing={isFetching}
