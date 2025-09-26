@@ -4,6 +4,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const RenderMessage = ({ item, currentUserId }: any) => {
+  console.log("item", item);
   // Determine if message is own based on senderId or isOwn field
   const isOwnMessage = item.isOwn || item.senderId === currentUserId;
 

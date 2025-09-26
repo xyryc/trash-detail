@@ -5,9 +5,12 @@ import RenderMessage from "@/components/shared/RenderMessage";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
+import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
+import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -26,21 +29,38 @@ const ChatScreen = () => {
     chatType: "support",
   });
 
+  const [uploadImage, { isLoading: isUploadingImage }] =
+    useUploadImageMutation();
+
   const [inputText, setInputText] = useState("");
+  const [isUploadingState, setIsUploadingState] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
+  console.log("Raw API data:", chatData?.data?.messages);
+
   // Transform API messages to match your RenderMessage component format
+
   const messages =
-    chatData?.data.messages.map((msg) => ({
-      id: msg._id,
-      senderId: msg.senderId._id,
-      senderName: msg.senderId.name,
-      type: "text",
-      content: msg.message,
-      timestamp: msg.createdAt,
-      status: "sent",
-      isOwn: msg.senderId._id === currentUserId,
-    })) || [];
+    chatData?.data.messages.map((msg) => {
+      const transformed = {
+        id: msg._id,
+        senderId: msg.senderId._id,
+        senderName: msg.senderId.name,
+        type: msg.imageUrl ? "image" : "text", // Check if imageUrl exists
+        content: msg.message,
+        imageUrl: msg.imageUrl, // Include imageUrl
+        timestamp: msg.createdAt,
+        status: "sent",
+        isOwn: msg.senderId._id === currentUserId,
+      };
+
+      // Debug each message
+      if (msg.imageUrl) {
+        console.log("Found image message:", transformed);
+      }
+
+      return transformed;
+    }) || [];
 
   // Socket setup for real-time messages
   useEffect(() => {
@@ -87,21 +107,41 @@ const ChatScreen = () => {
     }, 100);
   };
 
-  // Handle image send
-  const handleSendImage = (imageUri: string, caption?: string) => {
+  // Handle image send with upload
+  const handleSendImage = async (imageUri: string, caption?: string) => {
     if (!socket?.connected) return;
 
-    // Send image via socket
-    socket.emit("sendMessage", {
-      chatType: "support",
-      supportId,
-      imageUrl: imageUri,
-      message: caption || "",
-    });
+    try {
+      // Set loading state
+      setIsUploadingState(true);
 
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd({ animated: true });
-    }, 100);
+      // Upload image to server first
+      const uploadedImageUrl = await uploadImageToServer(imageUri, uploadImage);
+
+      // Send image via socket with uploaded URL
+      socket.emit("sendMessage", {
+        chatType: "support",
+        supportId,
+        imageUrl: uploadedImageUrl,
+        message: caption || "",
+      });
+
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    } catch (error) {
+      console.error("Failed to upload and send image:", error);
+
+      // Show error alert
+      Alert.alert(
+        "Upload Failed",
+        "Failed to upload image. Please try again.",
+        [{ text: "OK", style: "default" }]
+      );
+    } finally {
+      // Reset loading state
+      setIsUploadingState(false);
+    }
   };
 
   // Auto-scroll when messages change
@@ -112,6 +152,8 @@ const ChatScreen = () => {
       }, 100);
     }
   }, [messages.length]);
+
+  const isLoading = isUploadingImage || isUploadingState;
 
   return (
     <SafeAreaView
@@ -158,6 +200,8 @@ const ChatScreen = () => {
             setInputText={setInputText}
             onSendMessage={handleSendMessage}
             onSendImage={handleSendImage}
+            isUploading={isLoading}
+            disabled={isLoading}
           />
         </View>
       </KeyboardAvoidingView>
