@@ -36,10 +36,9 @@ const ChatScreen = () => {
   const [isUploadingState, setIsUploadingState] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
-  console.log("Raw API data:", chatData?.data?.messages);
+  // console.log("Raw API data:", chatData?.data?.messages);
 
   // Transform API messages to match your RenderMessage component format
-
   const messages =
     chatData?.data.messages.map((msg) => {
       const transformed = {

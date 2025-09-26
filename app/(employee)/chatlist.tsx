@@ -3,7 +3,7 @@ import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import { useGetSupportChatListQuery } from "@/store/slices/employeeApiSlice";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,7 +22,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const SupportChatList = () => {
   const router = useRouter();
   const chatType = "support";
-  const dispatch = useAppDispatch();
   const {
     data: chatlist,
     refetch,
@@ -56,7 +55,7 @@ const SupportChatList = () => {
     };
   }, [socket, isConnected, chatType, refetch]);
 
-  // console.log(chatlist);
+  // console.log(chatlist?.data[0].supportId);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -320,9 +319,7 @@ const SupportChatList = () => {
           renderItem={({ item }) => (
             <ChatItem
               onPress={() =>
-                router.push(
-                  `/employee/profile/support/chat/${chatlist?.data[0]._id}`
-                )
+                router.push(`/employee/profile/support/chat/${item._id}`)
               }
               item={item}
             />
