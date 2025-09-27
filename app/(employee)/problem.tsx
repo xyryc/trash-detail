@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  RefreshControl,
   StatusBar,
   Text,
   View,
@@ -17,7 +18,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Problem = () => {
   const router = useRouter();
-  const { data: problemList, isLoading } = useGetProblemListQuery();
+  const {
+    data: problemList,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetProblemListQuery();
   const problems = problemList?.data;
 
   return (
@@ -74,7 +80,9 @@ const Problem = () => {
             keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) =>
               isLoading ? (
-                <ActivityIndicator size="large" />
+                <SafeAreaView className="flex-1 justify-center items-center bg-white">
+                  <ActivityIndicator size="large" color="#E2F2E5" />
+                </SafeAreaView>
               ) : (
                 <Pressable
                   onPress={() =>
@@ -84,6 +92,14 @@ const Problem = () => {
                   <ProblemCard data={item} />
                 </Pressable>
               )
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={isFetching}
+                onRefresh={refetch}
+                colors={["#22C55E"]}
+                tintColor="#22C55E"
+              />
             }
             contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}

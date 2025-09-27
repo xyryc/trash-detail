@@ -41,10 +41,7 @@ const EmployeeProfile = () => {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-white"
-      edges={["top", "left", "right", "bottom"]}
-    >
+    <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
@@ -58,7 +55,7 @@ const EmployeeProfile = () => {
           </View>
         ) : (
           <ScrollView
-            contentContainerStyle={{ paddingBottom: 10 }}
+            contentContainerStyle={{ paddingBottom: 80 }}
             showsVerticalScrollIndicator={false}
           >
             <View className="border border-neutral-light-hover p-4 rounded-lg">

@@ -17,14 +17,6 @@ const RenderMessage = ({ item, currentUserId }: any) => {
     });
   };
 
-  const formatFileSize = (bytes: any) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
-
   const handleDownloadImage = (imageUrl: any) => {
     console.log("Download image:", imageUrl);
     // Implement image download logic
@@ -51,7 +43,7 @@ const RenderMessage = ({ item, currentUserId }: any) => {
               className={`text-sm ${isOwnMessage ? "text-white" : "text-[#595959]"}`}
               style={{ fontFamily: "SourceSans3-Regular" }}
             >
-              {item.content}
+              {item.message}
             </Text>
           </View>
 

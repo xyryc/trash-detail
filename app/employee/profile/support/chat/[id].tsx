@@ -8,151 +8,309 @@ import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const ChatScreen = () => {
-  const { id: supportId } = useLocalSearchParams();
-  const currentUserId = useAppSelector((state) => state.auth.user?._id);
-  const { socket, isConnected } = useSocket();
+interface Message {
+  id: string;
+  message: string;
+  senderId: string;
+  senderRole: string;
+  createdAt: string;
+  imageUrl?: string;
+}
 
-  const { data: chatData, refetch } = useGetChatHistoryQuery({
-    supportId: supportId as string,
-    chatType: "support",
+interface TypingUser {
+  userId: string;
+  name?: string;
+}
+
+const ChatScreen = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const { socket, connectionStatus, joinRoom, sendTyping, stopTyping, emit } =
+    useSocket();
+  const flatListRef = useRef<FlatList>(null);
+  const { id: supportId } = useLocalSearchParams();
+  const chatType = "support";
+
+  // Get chat data
+  const { data: chatData, refetch: refetchChat } = useGetChatHistoryQuery({
+    supportId,
+    chatType,
   });
+
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isUserActive, setIsUserActive] = useState(true);
+  const [isUploadingState, setIsUploadingState] = useState(false);
+
+  const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  const inactivityTimeoutRef = useRef<NodeJS.Timeout>();
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
+  const isLoading = isUploadingImage || isUploadingState;
 
-  const [inputText, setInputText] = useState("");
-  const [isUploadingState, setIsUploadingState] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-
-  // console.log("Raw API data:", chatData?.data?.messages);
-
-  // Transform API messages to match your RenderMessage component format
-  const messages =
-    chatData?.data.messages.map((msg) => {
-      const transformed = {
-        id: msg._id,
-        senderId: msg.senderId._id,
-        senderName: msg.senderId.name,
-        type: msg.imageUrl ? "image" : "text", // Check if imageUrl exists
-        content: msg.message,
-        imageUrl: msg.imageUrl, // Include imageUrl
+  // Load initial messages
+  useEffect(() => {
+    if (chatData?.data?.messages) {
+      const formattedMessages = chatData.data.messages.map((msg: any) => ({
+        id: msg._id || msg.id,
+        message: msg.message || msg.content,
+        senderId: msg.senderId,
+        senderRole: msg.senderRole,
+        createdAt: msg.createdAt,
+        imageUrl: msg.imageUrl,
+        type: msg.imageUrl ? "image" : "text",
+        content: msg.message || msg.content,
         timestamp: msg.createdAt,
-        status: "sent",
-        isOwn: msg.senderId._id === currentUserId,
+        isOwn: msg.senderId === user?.id,
+      }));
+      setMessages(formattedMessages.reverse());
+    }
+  }, [chatData, user?.id]);
+
+  // Join chat room and mark as read
+  useEffect(() => {
+    if (!socket || !supportId || connectionStatus !== "connected") {
+      console.log("Cannot join room:", {
+        hasSocket: !!socket,
+        supportId,
+        connectionStatus,
+      });
+      return;
+    }
+
+    const roomData = {
+      chatType,
+      supportId: supportId as string,
+    };
+
+    // Use the joinRoom function from useSocket hook
+    joinRoom(roomData);
+
+    // Mark chat as read when entering
+    emit("markChatAsRead", { chatType, chatId: supportId });
+
+    return () => {
+      // Stop typing when leaving
+      if (isTyping && user?.id) {
+        stopTyping({
+          chatType,
+          supportId: supportId as string,
+          userId: user.id,
+        });
+      }
+    };
+  }, [
+    socket,
+    supportId,
+    chatType,
+    connectionStatus,
+    joinRoom,
+    emit,
+    isTyping,
+    user?.id,
+    stopTyping,
+  ]);
+
+  // Handle real-time messages
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = (message: any) => {
+      const formattedMessage: Message = {
+        id: message._id || message.id || Date.now().toString(),
+        message: message.message || message.content,
+        senderId: message.senderId,
+        senderRole: message.senderRole,
+        createdAt: message.createdAt,
+        imageUrl: message.imageUrl,
+        type: message.imageUrl ? "image" : "text",
+        content: message.message || message.content,
+        timestamp: message.createdAt,
+        isOwn: message.senderId === user?.id,
       };
 
-      // Debug each message
-      if (msg.imageUrl) {
-        console.log("Found image message:", transformed);
-      }
+      setMessages((prev) => [formattedMessage, ...prev]);
 
-      return transformed;
-    }) || [];
-
-  // Socket setup for real-time messages
-  useEffect(() => {
-    if (!socket || !isConnected || !supportId) return;
-
-    // Join the chat room
-    socket.emit("joinRoom", { chatType: "support", supportId });
-    console.log("Joined room:", supportId);
-
-    // Listen for new messages
-    const handleNewMessage = (messageData: any) => {
-      console.log("New message received:", messageData);
-      refetch(); // Refetch to get updated messages
-
-      // Auto-scroll to bottom when new message arrives
       setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }, 100);
+    };
+
+    const handleTyping = ({ userId }: { userId: string }) => {
+      if (userId !== user?.id) {
+        setTypingUsers((prev) => {
+          if (!prev.find((u) => u.userId === userId)) {
+            return [...prev, { userId }];
+          }
+          return prev;
+        });
+      }
+    };
+
+    const handleStopTyping = ({ userId }: { userId: string }) => {
+      setTypingUsers((prev) => prev.filter((u) => u.userId !== userId));
     };
 
     socket.on("newMessage", handleNewMessage);
+    socket.on("typing", handleTyping);
+    socket.on("stop_typing", handleStopTyping);
 
     return () => {
       socket.off("newMessage", handleNewMessage);
+      socket.off("typing", handleTyping);
+      socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, isConnected, supportId, refetch]);
+  }, [socket, user?.id]);
 
-  // Send message function
-  const handleSendMessage = () => {
-    if (!inputText.trim() || !socket?.connected) return;
+  // Handle user activity status
+  useEffect(() => {
+    const resetInactivityTimer = () => {
+      setIsUserActive(true);
 
-    // Send via socket for real-time delivery
-    socket.emit("sendMessage", {
-      chatType: "support",
-      supportId,
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current);
+      }
+
+      inactivityTimeoutRef.current = setTimeout(() => {
+        setIsUserActive(false);
+      }, 60000);
+    };
+
+    resetInactivityTimer();
+
+    return () => {
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Send text message
+  const handleSendMessage = useCallback(() => {
+    if (!inputText.trim() || !socket) return;
+
+    if (connectionStatus !== "connected") {
+      Alert.alert(
+        "Connection Error",
+        "Unable to send message. Please check your connection and try again.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    const messageData = {
+      chatType,
+      supportId: supportId as string,
       message: inputText.trim(),
-    });
+    };
 
+    emit("sendMessage", messageData);
     setInputText("");
 
-    // Scroll to bottom after sending
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd({ animated: true });
-    }, 100);
-  };
-
-  // Handle image send with upload
-  const handleSendImage = async (imageUri: string, caption?: string) => {
-    if (!socket?.connected) return;
-
-    try {
-      // Set loading state
-      setIsUploadingState(true);
-
-      // Upload image to server first
-      const uploadedImageUrl = await uploadImageToServer(imageUri, uploadImage);
-
-      // Send image via socket with uploaded URL
-      socket.emit("sendMessage", {
-        chatType: "support",
-        supportId,
-        imageUrl: uploadedImageUrl,
-        message: caption || "",
+    if (isTyping) {
+      setIsTyping(false);
+      stopTyping({
+        chatType,
+        supportId: supportId as string,
+        userId: user?.id || "",
       });
-
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-    } catch (error) {
-      console.error("Failed to upload and send image:", error);
-
-      // Show error alert
-      Alert.alert(
-        "Upload Failed",
-        "Failed to upload image. Please try again.",
-        [{ text: "OK", style: "default" }]
-      );
-    } finally {
-      // Reset loading state
-      setIsUploadingState(false);
     }
+  }, [
+    inputText,
+    socket,
+    connectionStatus,
+    chatType,
+    supportId,
+    isTyping,
+    user?.id,
+    emit,
+    stopTyping,
+  ]);
+
+  // Send image message
+  const handleSendImage = useCallback(
+    async (imageUri: string, caption?: string) => {
+      if (!socket || !imageUri) return;
+
+      if (connectionStatus !== "connected") {
+        Alert.alert(
+          "Connection Error",
+          "Unable to send image. Please check your connection and try again.",
+          [{ text: "OK" }]
+        );
+        return;
+      }
+
+      try {
+        setIsUploadingState(true);
+
+        const imageUrl = await uploadImageToServer(imageUri, uploadImage);
+
+        if (!imageUrl) {
+          throw new Error("Failed to upload image");
+        }
+
+        const messageData = {
+          chatType,
+          supportId: supportId as string,
+          message: caption || "",
+          imageUrl: imageUrl,
+        };
+
+        emit("sendMessage", messageData);
+      } catch (error) {
+        console.error("Error sending image:", error);
+        Alert.alert(
+          "Upload Failed",
+          "Failed to send image. Please try again.",
+          [{ text: "OK" }]
+        );
+      } finally {
+        setIsUploadingState(false);
+      }
+    },
+    [socket, connectionStatus, chatType, supportId, uploadImage, emit]
+  );
+
+  const TypingIndicator = () => {
+    if (typingUsers.length === 0) return null;
+
+    return (
+      <View className="px-6 py-2">
+        <Text className="text-gray-500 text-sm italic">
+          {`${user?.userId} is typing...`}
+        </Text>
+      </View>
+    );
   };
 
-  // Auto-scroll when messages change
-  useEffect(() => {
-    if (messages.length > 0) {
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: false });
-      }, 100);
-    }
-  }, [messages.length]);
+  const ConnectionStatus = () => {
+    if (connectionStatus === "connected") return null;
 
-  const isLoading = isUploadingImage || isUploadingState;
+    return (
+      <View className="bg-red-100 px-4 py-2">
+        <Text className="text-red-800 text-center text-sm">
+          {connectionStatus === "connecting"
+            ? "Connecting..."
+            : "Offline - Messages will be sent when reconnected"}
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView
@@ -172,10 +330,9 @@ const ChatScreen = () => {
           </View>
 
           {/* Chat Header with support info */}
-          <ChatHeader
-          // supportInfo={chatData?.data.supportInfo}
-          // createdByInfo={chatData?.data.createdByInfo}
-          />
+          <ChatHeader />
+
+          <ConnectionStatus />
 
           {/* Message List */}
           <FlatList
@@ -183,15 +340,14 @@ const ChatScreen = () => {
             ref={flatListRef}
             data={messages}
             renderItem={({ item }) => (
-              <RenderMessage item={item} currentUserId={currentUserId} />
+              <RenderMessage item={item} currentUserId={user?._id} />
             )}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
-            onContentSizeChange={() =>
-              flatListRef.current?.scrollToEnd({ animated: false })
-            }
+            inverted={true}
           />
+
+          <TypingIndicator />
 
           {/* Input Section */}
           <ChatInputSection
@@ -200,7 +356,7 @@ const ChatScreen = () => {
             onSendMessage={handleSendMessage}
             onSendImage={handleSendImage}
             isUploading={isLoading}
-            disabled={isLoading}
+            disabled={isLoading || connectionStatus !== "connected"}
           />
         </View>
       </KeyboardAvoidingView>

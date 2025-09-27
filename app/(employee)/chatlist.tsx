@@ -5,57 +5,169 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
 import { useGetSupportChatListQuery } from "@/store/slices/employeeApiSlice";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   RefreshControl,
-  ScrollView,
   StatusBar,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportChatList = () => {
   const router = useRouter();
-  const chatType = "support";
+  const { socket, connectionStatus, emit, markAsRead } = useSocket();
+  const { user } = useAppSelector((state) => state.auth);
+  const [chatList, setChatList] = useState<any[]>([]);
+
   const {
-    data: chatlist,
+    data: chatListData,
     refetch,
     isFetching,
-  } = useGetSupportChatListQuery(chatType);
-  const authToken = useAppSelector((state) => state.auth.token);
-  const { socket, isConnected } = useSocket(authToken);
+  } = useGetSupportChatListQuery("support", {
+    pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
+  });
 
+  // Handle real-time chat updates
   useEffect(() => {
-    if (!socket || !isConnected) {
-      console.log("Socket not ready:", { socket: !!socket, isConnected });
-      return;
-    }
+    if (!socket) return;
 
-    const handleChatUpdate = (data: any) => {
-      console.log("Received updateChatList:", data);
-      if (data.type === chatType) {
-        console.log("Refetching chat list for type:", chatType);
-        refetch();
+    const handleChatUpdated = (updatedChat: any) => {
+      setChatList((prevList) => {
+        const existingIndex = prevList.findIndex(
+          (chat) => chat.id === updatedChat.id
+        );
+
+        if (existingIndex >= 0) {
+          // Update existing chat
+          const newList = [...prevList];
+          newList[existingIndex] = {
+            ...newList[existingIndex],
+            ...updatedChat,
+          };
+          return newList.sort(
+            (a, b) =>
+              new Date(b.lastMessageTime).getTime() -
+              new Date(a.lastMessageTime).getTime()
+          );
+        } else {
+          // Add new chat
+          return [updatedChat, ...prevList].sort(
+            (a, b) =>
+              new Date(b.lastMessageTime).getTime() -
+              new Date(a.lastMessageTime).getTime()
+          );
+        }
+      });
+    };
+
+    socket.on("chatUpdated", handleChatUpdated);
+
+    return () => {
+      socket.off("chatUpdated", handleChatUpdated);
+    };
+  }, [socket]);
+
+  // Update local state when API data changes
+  useEffect(() => {
+    if (chatListData?.data) {
+      setChatList(chatListData.data);
+    }
+  }, [chatListData]);
+
+  // mark as read
+  const handleChatPress = useCallback(
+    (chatId: string) => {
+      // Mark as read when opening chat
+      markAsRead({
+        chatType: "support",
+        chatId: chatId,
+      });
+
+      // Navigate to chat
+      router.push(`/employee/profile/support/chat/${chatId}`);
+    },
+    [markAsRead, router]
+  );
+
+  const handleRetryConnection = useCallback(() => {
+    socket?.connect();
+  }, [socket]);
+
+  const ConnectionStatusBanner = () => {
+    if (connectionStatus === "connected") return null;
+
+    const getStatusConfig = () => {
+      switch (connectionStatus) {
+        case "connecting":
+          return {
+            bgColor: "bg-yellow-100",
+            textColor: "text-yellow-800",
+            icon: "wifi" as const,
+            message: "Connecting to server...",
+            showRetry: false,
+          };
+        case "error":
+          return {
+            bgColor: "bg-red-100",
+            textColor: "text-red-800",
+            icon: "error" as const,
+            message: "Connection failed. Real-time updates disabled.",
+            showRetry: true,
+          };
+        case "disconnected":
+          return {
+            bgColor: "bg-orange-100",
+            textColor: "text-orange-800",
+            icon: "wifi-off" as const,
+            message: "Disconnected. Real-time updates paused.",
+            showRetry: true,
+          };
+        default:
+          return null;
       }
     };
 
-    // Listen for the exact event your backend sends
-    socket.on("updateChatList", handleChatUpdate);
+    const config = getStatusConfig();
+    if (!config) return null;
 
-    // Test if socket is working
-    socket.emit("test", { message: "Hello from client" });
+    return (
+      <View
+        className={`${config.bgColor} px-4 py-3 mx-4 mb-2 rounded-lg flex-row items-center justify-between`}
+      >
+        <View className="flex-row items-center flex-1">
+          <MaterialIcons
+            name={config.icon}
+            size={16}
+            color={
+              config.textColor.includes("red")
+                ? "#991b1b"
+                : config.textColor.includes("yellow")
+                  ? "#92400e"
+                  : "#9a3412"
+            }
+          />
+          <Text className={`ml-2 text-sm ${config.textColor} flex-1`}>
+            {config.message}
+          </Text>
+        </View>
 
-    return () => {
-      socket.off("updateChatList", handleChatUpdate);
-    };
-  }, [socket, isConnected, chatType, refetch]);
-
-  // console.log(chatlist?.data[0].supportId);
+        {config.showRetry && (
+          <TouchableOpacity
+            onPress={handleRetryConnection}
+            className="ml-2 px-3 py-1 bg-white rounded-md border border-gray-300"
+          >
+            <Text className="text-xs text-gray-700">Retry</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -70,259 +182,17 @@ const SupportChatList = () => {
           style={{ paddingHorizontal: 24, paddingBottom: 12 }}
         >
           <Header title="Support" />
-
           <SearchBar />
         </LinearGradient>
 
-        {/* support chatlist */}
-        <ScrollView className="hidden">
-          {/* item-1 */}
-          <View className="bg-neutral-light py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">
-            {/* message content */}
-            <View className="flex-row gap-4">
-              <View>
-                <AntDesign
-                  className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="question-circle"
-                  size={24}
-                  color="black"
-                />
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-green-normal"
-                  >
-                    S45
-                  </Text>
-
-                  <Entypo name="dot-single" size={16} color="#667085" />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-normal text-xs"
-                  >
-                    Just now
-                  </Text>
-                </View>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-lg"
-                >
-                  Car Blocked
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mt-2 text-xs text-neutral-normal-active"
-                >
-                  hi this is your employ mr mahmud id ...
-                </Text>
-              </View>
-            </View>
-
-            {/* notification  */}
-            <View className="size-6 rounded-full overflow-hidden">
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-xs p-1 bg-error-normal text-white text-center"
-              >
-                2
-              </Text>
-            </View>
-          </View>
-
-          {/* item-2 */}
-          <View className="py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">
-            {/* message content */}
-            <View className="flex-row gap-4">
-              <View>
-                <AntDesign
-                  className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="question-circle"
-                  size={24}
-                  color="black"
-                />
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-green-normal"
-                  >
-                    S45
-                  </Text>
-
-                  <Entypo name="dot-single" size={16} color="#667085" />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-normal text-xs"
-                  >
-                    Just now
-                  </Text>
-                </View>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-lg"
-                >
-                  Car Blocked
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mt-2 text-xs text-neutral-normal-active"
-                >
-                  hi this is your employ mr mahmud id ...
-                </Text>
-              </View>
-            </View>
-
-            {/* notification  */}
-            <View className="size-6 rounded-full overflow-hidden hidden">
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-xs p-1 bg-error-normal text-white text-center"
-              >
-                2
-              </Text>
-            </View>
-          </View>
-
-          {/* item-3 */}
-          <View className="py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">
-            {/* message content */}
-            <View className="flex-row gap-4">
-              <View>
-                <AntDesign
-                  className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="question-circle"
-                  size={24}
-                  color="black"
-                />
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-green-normal"
-                  >
-                    S45
-                  </Text>
-
-                  <Entypo name="dot-single" size={16} color="#667085" />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-normal text-xs"
-                  >
-                    Just now
-                  </Text>
-                </View>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-lg"
-                >
-                  Car Blocked
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mt-2 text-xs text-neutral-normal-active"
-                >
-                  hi this is your employ mr mahmud id ...
-                </Text>
-              </View>
-            </View>
-
-            {/* notification  */}
-            <View className="size-6 rounded-full overflow-hidden hidden">
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-xs p-1 bg-error-normal text-white text-center"
-              >
-                2
-              </Text>
-            </View>
-          </View>
-
-          {/* item-4 */}
-          <View className="bg-neutral-light-active py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active">
-            {/* message content */}
-            <View className="flex-row gap-4">
-              <View>
-                <AntDesign
-                  className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-                  name="question-circle"
-                  size={24}
-                  color="black"
-                />
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-green-normal"
-                  >
-                    S45
-                  </Text>
-
-                  <Entypo name="dot-single" size={16} color="#667085" />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="text-neutral-normal text-xs"
-                  >
-                    Just now
-                  </Text>
-                </View>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-lg"
-                >
-                  Car Blocked
-                </Text>
-
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="mt-2 text-xs text-neutral-normal-active"
-                >
-                  hi this is your employ mr mahmud id ...
-                </Text>
-              </View>
-            </View>
-
-            {/* notification  */}
-            <View className="size-6 rounded-full overflow-hidden">
-              <Text
-                style={{ fontFamily: "SourceSans3-Bold" }}
-                className="text-xs p-1 bg-error-normal text-white text-center"
-              >
-                2
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
+        {/* Connection Status Banner */}
+        <ConnectionStatusBanner />
 
         <FlatList
-          data={chatlist?.data}
+          data={chatList}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <ChatItem
-              onPress={() =>
-                router.push(`/employee/profile/support/chat/${item._id}`)
-              }
-              item={item}
-            />
+            <ChatItem onPress={() => handleChatPress(item._id)} item={item} />
           )}
           refreshControl={
             <RefreshControl
@@ -332,6 +202,27 @@ const SupportChatList = () => {
               tintColor="#22C55E"
             />
           }
+          ListEmptyComponent={() => (
+            <View className="flex-1 items-center justify-center py-20">
+              <MaterialIcons
+                name="chat-bubble-outline"
+                size={48}
+                color="#9CA3AF"
+              />
+              <Text
+                className="text-gray-500 text-center mt-4"
+                style={{ fontFamily: "SourceSans3-Medium" }}
+              >
+                No support chats yet
+              </Text>
+              <Text
+                className="text-gray-400 text-center mt-1 text-sm"
+                style={{ fontFamily: "SourceSans3-Regular" }}
+              >
+                Start a new conversation to get help
+              </Text>
+            </View>
+          )}
         />
 
         {/* open new button */}

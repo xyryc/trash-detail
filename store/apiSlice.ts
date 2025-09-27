@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://anik3001.sakibahmad.com/api/v1",
+  baseUrl: process.env.EXPO_PUBLIC_API_URL,
   prepareHeaders: async (headers, { getState }) => {
     const token = await AsyncStorage.getItem("auth_token");
 
