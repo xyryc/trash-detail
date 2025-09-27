@@ -43,10 +43,11 @@ const ChatScreen = () => {
   const chatType = "support";
 
   // Get chat data
-  const { data: chatData, refetch: refetchChat } = useGetChatHistoryQuery({
+  const { data: chatData } = useGetChatHistoryQuery({
     supportId,
     chatType,
   });
+  console.log("chat data", chatData?.data?.messages[0]?.senderId);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -72,11 +73,11 @@ const ChatScreen = () => {
         type: msg.imageUrl ? "image" : "text",
         content: msg.message || msg.content,
         timestamp: msg.createdAt,
-        isOwn: msg.senderId === user?.id,
+        isOwn: msg.senderId._id === user?._id,
       }));
       setMessages(formattedMessages.reverse());
     }
-  }, [chatData, user?.id]);
+  }, [chatData, user?._id]);
 
   // Join chat room and mark as read
   useEffect(() => {
@@ -106,7 +107,7 @@ const ChatScreen = () => {
         stopTyping({
           chatType,
           supportId: supportId as string,
-          userId: user.id,
+          userId: user._id,
         });
       }
     };
@@ -118,7 +119,7 @@ const ChatScreen = () => {
     joinRoom,
     emit,
     isTyping,
-    user?.id,
+    user?._id,
     stopTyping,
   ]);
 
@@ -137,7 +138,7 @@ const ChatScreen = () => {
         type: message.imageUrl ? "image" : "text",
         content: message.message || message.content,
         timestamp: message.createdAt,
-        isOwn: message.senderId === user?.id,
+        isOwn: message.senderId._id === user?._id,
       };
 
       setMessages((prev) => [formattedMessage, ...prev]);
@@ -148,7 +149,7 @@ const ChatScreen = () => {
     };
 
     const handleTyping = ({ userId }: { userId: string }) => {
-      if (userId !== user?.id) {
+      if (userId !== user?._id) {
         setTypingUsers((prev) => {
           if (!prev.find((u) => u.userId === userId)) {
             return [...prev, { userId }];
@@ -171,7 +172,7 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?.id]);
+  }, [socket, user?._id]);
 
   // Send text message
   const handleSendMessage = useCallback(() => {
@@ -200,7 +201,7 @@ const ChatScreen = () => {
       stopTyping({
         chatType,
         supportId: supportId as string,
-        userId: user?.id || "",
+        userId: user?._id || "",
       });
     }
   }, [
@@ -210,7 +211,7 @@ const ChatScreen = () => {
     chatType,
     supportId,
     isTyping,
-    user?.id,
+    user?._id,
     emit,
     stopTyping,
   ]);
@@ -265,9 +266,7 @@ const ChatScreen = () => {
 
     return (
       <View className="px-6 py-2">
-        <Text className="text-gray-500 text-sm italic">
-          {`${user?.userId} is typing...`}
-        </Text>
+        <Text className="text-gray-500 text-sm italic">User is typing...</Text>
       </View>
     );
   };
