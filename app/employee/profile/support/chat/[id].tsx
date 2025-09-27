@@ -43,11 +43,17 @@ const ChatScreen = () => {
   const chatType = "support";
 
   // Get chat data
-  const { data: chatData } = useGetChatHistoryQuery({
-    supportId,
-    chatType,
-  });
-  console.log("chat data", chatData?.data?.messages[0]?.senderId);
+  const { data: chatData } = useGetChatHistoryQuery(
+    {
+      supportId,
+      chatType,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    }
+  );
+  // console.log("chat data", chatData?.data?.messages);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -66,7 +72,7 @@ const ChatScreen = () => {
       const formattedMessages = chatData.data.messages.map((msg: any) => ({
         id: msg._id || msg.id,
         message: msg.message || msg.content,
-        senderId: msg.senderId,
+        senderId: msg.senderId._id,
         senderRole: msg.senderRole,
         createdAt: msg.createdAt,
         imageUrl: msg.imageUrl,
@@ -112,6 +118,7 @@ const ChatScreen = () => {
       }
     };
   }, [
+    chatData,
     socket,
     supportId,
     chatType,
@@ -128,17 +135,22 @@ const ChatScreen = () => {
     if (!socket) return;
 
     const handleNewMessage = (message: any) => {
+      const actualSenderId =
+        typeof message.senderId === "object"
+          ? message.senderId._id
+          : message.senderId;
+
       const formattedMessage: Message = {
         id: message._id || message.id || Date.now().toString(),
         message: message.message || message.content,
-        senderId: message.senderId,
+        senderId: actualSenderId,
         senderRole: message.senderRole,
         createdAt: message.createdAt,
         imageUrl: message.imageUrl,
         type: message.imageUrl ? "image" : "text",
         content: message.message || message.content,
         timestamp: message.createdAt,
-        isOwn: message.senderId._id === user?._id,
+        isOwn: actualSenderId === user?._id,
       };
 
       setMessages((prev) => [formattedMessage, ...prev]);
@@ -172,7 +184,7 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?._id]);
+  }, [socket, user?._id, chatData]);
 
   // Send text message
   const handleSendMessage = useCallback(() => {

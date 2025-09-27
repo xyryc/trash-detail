@@ -134,10 +134,8 @@ const ChatInputSection: React.FC<ChatInputSectionProps> = ({
         <TouchableOpacity
           onPress={handleImagePicker}
           disabled={disabled || isUploading}
-          className={`items-center justify-center rounded-full p-4 ${
-            disabled || isUploading
-              ? "bg-gray-300 opacity-50"
-              : "bg-green-light"
+          className={`items-center justify-center rounded-full p-4 
+             bg-green-light
           }`}
         >
           <Image
