@@ -1,16 +1,15 @@
+import { formatRelativeTime } from "@/utils/timeFormat";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const ChatItem = ({ item, onPress }: any) => {
-  // console.log("supprt chat item", item);
-
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       className={` py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active
-            ${item.unreadCount > 0 && "bg-neutral-light"}
+            ${item.incomingMessages > 0 && "bg-neutral-light"}
             ${item.status === "closed" && "bg-neutral-light-active"}
         `}
     >
@@ -50,7 +49,7 @@ const ChatItem = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal text-xs"
             >
-              {item.lastMessageTime}
+              {formatRelativeTime(item.lastMessageTime)}
             </Text>
           </View>
 
@@ -83,17 +82,17 @@ const ChatItem = ({ item, onPress }: any) => {
       </View>
 
       {/* notification  */}
-      {/* {item.incomingMessages > 0 && ( */}
-      <View className="size-6 rounded-full overflow-hidden">
-        <Text
-          style={{ fontFamily: "SourceSans3-Bold" }}
-          className="text-xs p-1 bg-error-normal text-white text-center"
-        >
-          {item.incomingMessages}
-        </Text>
-      </View>
-      {/* )} */}
-    </TouchableOpacity>
+      {item.incomingMessages > 0 && (
+        <View className="size-6 rounded-full overflow-hidden">
+          <Text
+            style={{ fontFamily: "SourceSans3-Bold" }}
+            className="text-xs p-1 bg-error-normal text-white text-center"
+          >
+            {item.incomingMessages}
+          </Text>
+        </View>
+      )}
+    </Pressable>
   );
 };
 

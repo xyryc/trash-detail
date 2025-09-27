@@ -52,11 +52,8 @@ const ChatScreen = () => {
   const [inputText, setInputText] = useState("");
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [isUserActive, setIsUserActive] = useState(true);
-  const [isUploadingState, setIsUploadingState] = useState(false);
 
-  const typingTimeoutRef = useRef<NodeJS.Timeout>();
-  const inactivityTimeoutRef = useRef<NodeJS.Timeout>();
+  const [isUploadingState, setIsUploadingState] = useState(false);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
@@ -175,29 +172,6 @@ const ChatScreen = () => {
       socket.off("stop_typing", handleStopTyping);
     };
   }, [socket, user?.id]);
-
-  // Handle user activity status
-  useEffect(() => {
-    const resetInactivityTimer = () => {
-      setIsUserActive(true);
-
-      if (inactivityTimeoutRef.current) {
-        clearTimeout(inactivityTimeoutRef.current);
-      }
-
-      inactivityTimeoutRef.current = setTimeout(() => {
-        setIsUserActive(false);
-      }, 60000);
-    };
-
-    resetInactivityTimer();
-
-    return () => {
-      if (inactivityTimeoutRef.current) {
-        clearTimeout(inactivityTimeoutRef.current);
-      }
-    };
-  }, []);
 
   // Send text message
   const handleSendMessage = useCallback(() => {

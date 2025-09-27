@@ -83,7 +83,6 @@ const SupportChatList = () => {
   // mark as read
   const handleChatPress = useCallback(
     (chatId: string) => {
-      // Mark as read when opening chat
       markAsRead({
         chatType: "support",
         chatId: chatId,
