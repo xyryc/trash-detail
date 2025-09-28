@@ -6,6 +6,7 @@ import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
+import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -19,20 +20,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-interface Message {
-  id: string;
-  message: string;
-  senderId: string;
-  senderRole: string;
-  createdAt: string;
-  imageUrl?: string;
-}
-
-interface TypingUser {
-  userId: string;
-  name?: string;
-}
 
 const ChatScreen = () => {
   const { user } = useAppSelector((state) => state.auth);
