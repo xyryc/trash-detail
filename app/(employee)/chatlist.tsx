@@ -4,8 +4,9 @@ import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
-import { useGetSupportChatListQuery } from "@/store/slices/employeeApiSlice";
+import { useGetSupportChatListQuery } from "@/store/slices/chatApiSlice";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -32,6 +33,13 @@ const SupportChatList = () => {
   } = useGetSupportChatListQuery("support", {
     pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      // Refetch chat list when screen comes into focus
+      refetch();
+    }, [refetch])
+  );
 
   // Handle real-time chat updates
   useEffect(() => {

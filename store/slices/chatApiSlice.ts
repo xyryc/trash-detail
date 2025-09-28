@@ -41,18 +41,16 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         `/messages/${supportId}?chatType=${chatType}`,
       providesTags: (result, error, { supportId }) => [
         { type: "Message", id: supportId },
+        { type: "ChatHistory", id: supportId },
       ],
     }),
 
-    sendMessage: builder.mutation<
-      any,
-      {
-        chatType: string;
-        supportId: string;
-        message?: string;
-        imageUrl?: string;
-      }
-    >({
+    getSupportChatList: builder.query({
+      query: (type) => `/messages/conversations?type=${type}`,
+      providesTags: ["ChatList"],
+    }),
+
+    sendMessage: builder.mutation({
       query: (messageData) => ({
         url: "/messages/send",
         method: "POST",
@@ -60,10 +58,15 @@ export const chatApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, { supportId }) => [
         { type: "Message", id: supportId },
-        "Chat",
+        { type: "ChatHistory", id: supportId },
+        "ChatList",
       ],
     }),
   }),
 });
 
-export const { useGetChatHistoryQuery, useSendMessageMutation } = chatApiSlice;
+export const {
+  useGetChatHistoryQuery,
+  useSendMessageMutation,
+  useGetSupportChatListQuery,
+} = chatApiSlice;

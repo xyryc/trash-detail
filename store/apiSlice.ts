@@ -62,6 +62,8 @@ export const apiSlice = createApi({
     "Problem",
     "Profile",
     "Message",
+    "ChatHistory",
+    "ChatList",
   ],
   endpoints: () => ({}),
 });
