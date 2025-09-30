@@ -5,7 +5,7 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 
 const ChatItem = ({ item, onPress }: any) => {
-  console.log(item);
+  // console.log(item);
 
   return (
     <Pressable
