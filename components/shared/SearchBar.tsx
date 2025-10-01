@@ -3,26 +3,35 @@ import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-export default function SearchBar({ className }: SearchBarProps) {
+interface SearchBarWithCallbackProps extends SearchBarProps {
+  onSearch: (query: string) => void;
+}
+
+export default function SearchBar({
+  className,
+  onSearch,
+}: SearchBarWithCallbackProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleSearch = () => {
-    console.log("Searching for:", searchQuery);
-    // Add your search logic here
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
+
+    onSearch(text);
   };
 
   const handleClear = () => {
     setSearchQuery("");
+    onSearch("");
   };
 
   return (
     <View
-      className={`flex-row items-center rounded-lg px-3 py-2 ${className} border border-neutral-light-active ${
-        isFocused ? "border border-neutral-light-active " : ""
+      className={`flex-row items-center rounded-lg px-3 py-2 ${className} border ${
+        isFocused ? "border-green-normal" : "border-neutral-light-active"
       }`}
     >
-      <Feather name="search" size={24} color="" className="mr-2" />
+      <Feather name="search" size={24} color="#6B7280" className="mr-2" />
 
       <TextInput
         style={{ fontFamily: "SourceSans3-Medium" }}
@@ -30,12 +39,10 @@ export default function SearchBar({ className }: SearchBarProps) {
         placeholder="Search here..."
         placeholderTextColor="#9ca3af"
         value={searchQuery}
-        onChangeText={setSearchQuery}
+        onChangeText={handleSearchChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        onSubmitEditing={handleSearch}
         returnKeyType="search"
-        clearButtonMode="while-editing"
       />
 
       {searchQuery.length > 0 && (

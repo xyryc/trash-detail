@@ -1,18 +1,17 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ChatItem from "@/components/shared/ChatItem";
+import EmptySearchList from "@/components/shared/EmptySearchList";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
-import { useAppSelector } from "@/store/hooks";
 import { useGetSupportChatListQuery } from "@/store/slices/chatApiSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
-  RefreshControl,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -22,17 +21,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportChatList = () => {
   const router = useRouter();
-  const { socket, connectionStatus, emit, markAsRead } = useSocket();
-  const { user } = useAppSelector((state) => state.auth);
+  const { socket, connectionStatus, markAsRead } = useSocket();
   const [chatList, setChatList] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    data: chatListData,
-    refetch,
-    isFetching,
-  } = useGetSupportChatListQuery("support", {
-    pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
-  });
+  const { data: chatListData, refetch } = useGetSupportChatListQuery(
+    "support",
+    {
+      pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
+    }
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -87,6 +85,41 @@ const SupportChatList = () => {
       setChatList(chatListData.data);
     }
   }, [chatListData]);
+
+  // Filter chat list based on search query
+  const filteredChatList = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return chatList;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+
+    return chatList.filter((chat) => {
+      // Search in support title
+      const titleMatch = chat.supportInfo?.title?.toLowerCase().includes(query);
+
+      // Search in support ID (e.g., S45)
+      const idMatch = chat.supportId?.toLowerCase().includes(query);
+
+      // Search in last message
+      const messageMatch = chat.lastMessage?.toLowerCase().includes(query);
+
+      // Search in creator name
+      const creatorMatch = chat.createdByInfo?.name
+        ?.toLowerCase()
+        .includes(query);
+
+      // Search in support number/code if available
+      const codeMatch = chat.supportInfo?.code?.toLowerCase().includes(query);
+
+      return titleMatch || idMatch || messageMatch || creatorMatch || codeMatch;
+    });
+  }, [chatList, searchQuery]);
+
+  // Handle search input
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
 
   // mark as read
   const handleChatPress = useCallback(
@@ -189,47 +222,37 @@ const SupportChatList = () => {
           style={{ paddingHorizontal: 24, paddingBottom: 12 }}
         >
           <Header title="Support" />
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </LinearGradient>
 
         {/* Connection Status Banner */}
         <ConnectionStatusBanner />
 
+        {/* Search Results Info */}
+        {searchQuery.trim().length > 0 && (
+          <View className="px-6 py-2 bg-gray-50">
+            <Text
+              className="text-sm text-gray-600"
+              style={{ fontFamily: "SourceSans3-Regular" }}
+            >
+              Found {filteredChatList.length} result
+              {filteredChatList.length !== 1 ? "s" : ""} for "{searchQuery}"
+            </Text>
+          </View>
+        )}
+
         <FlatList
-          data={chatList}
+          data={filteredChatList}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <ChatItem onPress={() => handleChatPress(item._id)} item={item} />
           )}
-          refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={refetch}
-              colors={["#22C55E"]}
-              tintColor="#22C55E"
+          ListEmptyComponent={
+            <EmptySearchList
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
             />
           }
-          ListEmptyComponent={() => (
-            <View className="flex-1 items-center justify-center py-20">
-              <MaterialIcons
-                name="chat-bubble-outline"
-                size={48}
-                color="#9CA3AF"
-              />
-              <Text
-                className="text-gray-500 text-center mt-4"
-                style={{ fontFamily: "SourceSans3-Medium" }}
-              >
-                No support chats yet
-              </Text>
-              <Text
-                className="text-gray-400 text-center mt-1 text-sm"
-                style={{ fontFamily: "SourceSans3-Regular" }}
-              >
-                Start a new conversation to get help
-              </Text>
-            </View>
-          )}
         />
 
         {/* open new button */}
