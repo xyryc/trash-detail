@@ -8,6 +8,7 @@ import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -26,7 +27,8 @@ const ChatScreen = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { socket, connectionStatus, joinRoom, stopTyping, emit } = useSocket();
   const flatListRef = useRef<FlatList>(null);
-  const { id: supportId } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const supportId = params.id as string;
   const chatType = "support";
 
   // Get chat data
@@ -36,6 +38,7 @@ const ChatScreen = () => {
       chatType,
     },
     {
+      skip: !supportId,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
     }
@@ -319,6 +322,21 @@ const ChatScreen = () => {
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             inverted={true}
+            ListEmptyComponent={
+              <View className="items-center justify-center h-[60vh]">
+                <MaterialIcons
+                  name="chat-bubble-outline"
+                  size={48}
+                  color="#9CA3AF"
+                />
+                <Text
+                  className="text-gray-500 text-center mt-4"
+                  style={{ fontFamily: "SourceSans3-Medium" }}
+                >
+                  No messages yet
+                </Text>
+              </View>
+            }
           />
 
           <TypingIndicator />

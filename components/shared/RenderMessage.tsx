@@ -1,14 +1,40 @@
 import { Feather } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const RenderMessage = ({ item, currentUserId }: any) => {
+interface RenderMessageProps {
+  item: {
+    type: string;
+    message: string;
+    imageUrl?: string;
+    timestamp: string;
+    isOwn?: boolean;
+    senderId: string;
+  };
+  currentUserId?: string;
+}
+
+const RenderMessage: React.FC<RenderMessageProps> = ({
+  item,
+  currentUserId,
+}) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+
   // Determine if message is own based on senderId or isOwn field
   const isOwnMessage = item.isOwn || item.senderId === currentUserId;
 
   // Helper functions
-  const formatTime = (timestamp: any) => {
+  const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -17,14 +43,63 @@ const RenderMessage = ({ item, currentUserId }: any) => {
     });
   };
 
-  const handleDownloadImage = (imageUrl: any) => {
-    console.log("Download image:", imageUrl);
-    // Implement image download logic
-  };
+  const handleDownloadImage = async (imageUrl: string) => {
+    if (!imageUrl) {
+      Alert.alert("Error", "No image URL provided");
+      return;
+    }
 
-  const handleDownloadFile = (fileUrl: any) => {
-    console.log("Download file:", fileUrl);
-    // Implement file download logic
+    try {
+      setIsDownloading(true);
+
+      // Request permissions
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Please grant media library permissions to download images"
+        );
+        setIsDownloading(false);
+        return;
+      }
+
+      // Get file extension from URL
+      const fileExtension = imageUrl.split(".").pop()?.split("?")[0] || "jpg";
+      const fileName = `image_${Date.now()}.${fileExtension}`;
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+
+      // Download the image
+      const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
+
+      if (downloadResult.status !== 200) {
+        throw new Error("Download failed");
+      }
+
+      // Save to media library
+      const asset = await MediaLibrary.createAssetAsync(downloadResult.uri);
+
+      // Optionally create an album
+      if (Platform.OS === "android") {
+        const album = await MediaLibrary.getAlbumAsync("Downloads");
+        if (album == null) {
+          await MediaLibrary.createAlbumAsync("Downloads", asset, false);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        }
+      }
+
+      Alert.alert("Success", "Image saved to gallery", [{ text: "OK" }]);
+    } catch (error) {
+      console.error("Download error:", error);
+      Alert.alert(
+        "Download Failed",
+        "Failed to download image. Please try again.",
+        [{ text: "OK" }]
+      );
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -60,7 +135,7 @@ const RenderMessage = ({ item, currentUserId }: any) => {
       )}
 
       {/* Image Message */}
-      {item.type === "image" && (
+      {item.type === "image" && item.imageUrl && (
         <View
           className={`max-w-xs ${isOwnMessage ? "items-end" : "items-start"}`}
         >
@@ -79,10 +154,17 @@ const RenderMessage = ({ item, currentUserId }: any) => {
 
             {/* Download button overlay */}
             <TouchableOpacity
-              className="absolute top-2 right-2 bg-black/50 p-2 rounded-full"
-              onPress={() => handleDownloadImage(item.imageUrl)}
+              className={`absolute top-2 right-2 p-2 rounded-full ${
+                isDownloading ? "bg-black/70" : "bg-black/50"
+              }`}
+              onPress={() => handleDownloadImage(item.imageUrl!)}
+              disabled={isDownloading}
             >
-              <Feather name="download" size={16} color="white" />
+              {isDownloading ? (
+                <ActivityIndicator size={16} color="white" />
+              ) : (
+                <Feather name="download" size={16} color="white" />
+              )}
             </TouchableOpacity>
           </View>
 

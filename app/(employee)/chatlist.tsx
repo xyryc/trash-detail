@@ -25,12 +25,14 @@ const SupportChatList = () => {
   const [chatList, setChatList] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: chatListData, refetch } = useGetSupportChatListQuery(
-    "support",
-    {
-      pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
-    }
-  );
+  const {
+    data: chatListData,
+    refetch,
+    isFetching,
+    isLoading,
+  } = useGetSupportChatListQuery("support", {
+    pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
+  });
 
   useFocusEffect(
     useCallback(() => {

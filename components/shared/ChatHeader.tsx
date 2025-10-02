@@ -37,7 +37,7 @@ const ChatHeader = ({
 
       {/* Title Row */}
       {title && (
-        <View className="flex-row items-center mb-2">
+        <View className="flex-row items-center">
           <Text
             className="w-1/3 text-neutral-normal"
             style={{ fontFamily: "SourceSans3-Regular" }}
@@ -61,7 +61,7 @@ const ChatHeader = ({
 
       {/* Separator */}
       {(showProblemDetails || showCloseProblem || showCloseSupport) && (
-        <View className="h-px bg-neutral-light-hover" />
+        <View className="mt-2 h-px bg-neutral-light-hover" />
       )}
 
       {/* buttons */}
