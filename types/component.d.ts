@@ -107,3 +107,11 @@ interface UserData {
   zipCode: string;
   success: boolean;
 }
+
+interface ChatHeaderProps {
+  id?: string | undefined;
+  title?: string | undefined;
+  showProblemDetails?: boolean;
+  showCloseProblem?: boolean;
+  showCloseSupport?: boolean;
+}

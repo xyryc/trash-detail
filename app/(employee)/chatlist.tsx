@@ -96,7 +96,7 @@ const SupportChatList = () => {
 
     return chatList.filter((chat) => {
       // Search in support title
-      const titleMatch = chat.supportInfo?.title?.toLowerCase().includes(query);
+      const titleMatch = chat?.title?.toLowerCase().includes(query);
 
       // Search in support ID (e.g., S45)
       const idMatch = chat.supportId?.toLowerCase().includes(query);

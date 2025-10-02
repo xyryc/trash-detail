@@ -1,11 +1,7 @@
-import { SearchBarProps } from "@/types";
+import { SearchBarWithCallbackProps } from "@/types/chat";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
-
-interface SearchBarWithCallbackProps extends SearchBarProps {
-  onSearch: (query: string) => void;
-}
 
 export default function SearchBar({
   className,

@@ -1,9 +1,12 @@
+import { EmptySearchListProps } from "@/types/chat";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-// Empty state component
-const EmptySearchList = ({ searchQuery, setSearchQuery }) => {
+const EmptySearchList = ({
+  searchQuery,
+  setSearchQuery,
+}: EmptySearchListProps) => {
   const isSearching = searchQuery.trim().length > 0;
 
   return (

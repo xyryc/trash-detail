@@ -17,14 +17,14 @@ import {
   Platform,
   StatusBar,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatScreen = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const { socket, connectionStatus, joinRoom, sendTyping, stopTyping, emit } =
-    useSocket();
+  const { socket, connectionStatus, joinRoom, stopTyping, emit } = useSocket();
   const flatListRef = useRef<FlatList>(null);
   const { id: supportId } = useLocalSearchParams();
   const chatType = "support";
@@ -40,13 +40,12 @@ const ChatScreen = () => {
       refetchOnFocus: true,
     }
   );
-  // console.log("chat data", chatData?.data?.messages);
+  // console.log("chat data", chatData?.data?.supportInfo);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-
   const [isUploadingState, setIsUploadingState] = useState(false);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
@@ -302,7 +301,10 @@ const ChatScreen = () => {
           </View>
 
           {/* Chat Header with support info */}
-          <ChatHeader />
+          <ChatHeader
+            id={chatData?.data?.supportInfo?.id}
+            title={chatData?.data?.supportInfo?.title}
+          />
 
           <ConnectionStatus />
 
@@ -322,14 +324,27 @@ const ChatScreen = () => {
           <TypingIndicator />
 
           {/* Input Section */}
-          <ChatInputSection
-            inputText={inputText}
-            setInputText={setInputText}
-            onSendMessage={handleSendMessage}
-            onSendImage={handleSendImage}
-            isUploading={isLoading}
-            disabled={isLoading || connectionStatus !== "connected"}
-          />
+          {chatData?.data?.supportInfo?.status === "closed" ? (
+            <TouchableOpacity className="py-4 bg-neutral-light-active">
+              <Text
+                style={{
+                  fontFamily: "SourceSans3-Medium",
+                }}
+                className="text-error-normal text-center"
+              >
+                Closed
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <ChatInputSection
+              inputText={inputText}
+              setInputText={setInputText}
+              onSendMessage={handleSendMessage}
+              onSendImage={handleSendImage}
+              isUploading={isLoading}
+              disabled={isLoading || connectionStatus !== "connected"}
+            />
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

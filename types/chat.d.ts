@@ -28,3 +28,13 @@ export interface TypingUser {
   userId: string;
   userName: string;
 }
+
+export interface EmptySearchListProps {
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface SearchBarWithCallbackProps extends SearchBarProps {
+  className?: string;
+  onSearch: (query: string) => void;
+}
