@@ -9,22 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "This app needs access to save images to your photo library.",
-        "NSPhotoLibraryAddUsageDescription": "This app needs permission to save images to your photo library."
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.READ_MEDIA_IMAGES"
-      ],
       "edgeToEdgeEnabled": true,
       "package": "com.xyryc.trashdetail"
     },
@@ -44,14 +35,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow trash-detail to access your photos to save images.",
-          "savePhotosPermission": "Allow trash-detail to save images to your photo library.",
-          "isAccessMediaLocationEnabled": true
-        }
-      ]
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

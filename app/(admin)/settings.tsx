@@ -13,11 +13,10 @@ import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Animated,
-  PanResponder,
+  Modal,
   Pressable,
   StatusBar,
   Text,
@@ -30,81 +29,26 @@ const SIDEBAR_WIDTH = 280;
 
 const Settings = () => {
   const [activeScreen, setActiveScreen] = useState<ScreenType>("customer");
-
-  const sidebarTranslateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const router = useRouter();
 
   const { data: loggedInUser, isLoading: isUserLoading } =
     useGetLoggedInUserDataQuery();
-  // console.log(loggedInUser?.data.role);
   const { data: userList, isLoading } = useGetUserListQuery(activeScreen);
-  // console.log("User list", userList);
 
   const openSidebar = () => {
-    Animated.parallel([
-      Animated.timing(sidebarTranslateX, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(overlayOpacity, {
-        toValue: 0.5,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    setIsSidebarVisible(true);
   };
 
   const closeSidebar = () => {
-    Animated.parallel([
-      Animated.timing(sidebarTranslateX, {
-        toValue: -SIDEBAR_WIDTH,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(overlayOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    setIsSidebarVisible(false);
   };
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        const { dx, dy } = gestureState;
-        const { pageX } = evt.nativeEvent;
-
-        return pageX < 50 && Math.abs(dx) > Math.abs(dy) && dx > 0;
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        const { dx } = gestureState;
-
-        if (dx > 0 && dx < SIDEBAR_WIDTH) {
-          sidebarTranslateX.setValue(-SIDEBAR_WIDTH + dx);
-          overlayOpacity.setValue((dx / SIDEBAR_WIDTH) * 0.5);
-        }
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        const { dx, vx } = gestureState;
-
-        if (dx > SIDEBAR_WIDTH * 0.5 || vx > 0.5) {
-          openSidebar();
-        } else {
-          closeSidebar();
-        }
-      },
-    })
-  ).current;
 
   const handleSidebarNavigation = (screenType: ScreenType) => {
     setActiveScreen(screenType);
     closeSidebar();
   };
 
-  // render active screen
   const renderActiveScreen = () => {
     switch (activeScreen) {
       case "customer":
@@ -117,7 +61,6 @@ const Settings = () => {
         );
       case "superadmin":
         return <AdminScreen activeScreen={activeScreen} adminData={userList} />;
-
       default:
         return (
           <CustomerScreen activeScreen={activeScreen} customerData={userList} />
@@ -125,7 +68,6 @@ const Settings = () => {
     }
   };
 
-  // Get screen title based on active screen
   const getScreenTitle = () => {
     switch (activeScreen) {
       case "customer":
@@ -143,11 +85,10 @@ const Settings = () => {
 
   const handleLogout = async () => {
     await logout().unwrap();
-    // Navigation will be handled automatically by AppRouter
   };
 
   return (
-    <View style={{ flex: 1 }} {...panResponder.panHandlers}>
+    <>
       <SafeAreaView
         className="flex-1 bg-white"
         edges={["top", "left", "right"]}
@@ -185,154 +126,162 @@ const Settings = () => {
             icon={<FontAwesome6 name="add" size={24} color="white" />}
           />
         </View>
+      </SafeAreaView>
 
-        {/* Overlay */}
-        <Animated.View
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "black",
-            opacity: overlayOpacity,
-            zIndex: 1,
-          }}
-          // @ts-ignore
-          pointerEvents={overlayOpacity._value > 0 ? "auto" : "none"}
-        >
-          <Pressable style={{ flex: 1 }} onPress={closeSidebar} />
-        </Animated.View>
-
-        {/* Sidebar */}
-        <Animated.View
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: SIDEBAR_WIDTH,
-            backgroundColor: "white",
-            transform: [{ translateX: sidebarTranslateX }],
-            zIndex: 2,
-            shadowColor: "#000",
-            shadowOffset: { width: 2, height: 0 },
-            shadowOpacity: 0.25,
-            shadowRadius: 8,
-            elevation: 5,
-          }}
-        >
-          <SafeAreaView className="flex-1" edges={["top", "left", "bottom"]}>
-            {/* Sidebar Header */}
-            <View className="flex-row items-center justify-between px-6 py-4">
-              <Text className="" style={{ fontFamily: "SourceSans3-Medium" }}>
-                Settings
-              </Text>
-              <TouchableOpacity onPress={closeSidebar}>
-                <Ionicons name="close" size={24} color="#4F4F4F" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Navigation Items */}
-            <View className="flex-1">
-              {/* Customer */}
-              <TouchableOpacity
-                onPress={() => handleSidebarNavigation("customer")}
-                className="flex-row items-center gap-6 px-6 py-4 mx-6"
+      {/* Sidebar Modal */}
+      <Modal
+        visible={isSidebarVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeSidebar}
+      >
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          {/* Sidebar */}
+          <View
+            style={{
+              width: SIDEBAR_WIDTH,
+              backgroundColor: "white",
+              shadowColor: "#000",
+              shadowOffset: { width: 2, height: 0 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 5,
+            }}
+          >
+            <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "bottom"]}>
+              {/* Sidebar Header */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 24,
+                  paddingVertical: 16,
+                }}
               >
-                <Image
-                  source={require("@/assets/images/customer.svg")}
-                  style={{
-                    width: 24,
-                    height: 24,
-                  }}
-                />
                 <Text
-                  className={`${
-                    activeScreen === "customer"
-                      ? "text-green-normal"
-                      : "text-neutral-normal"
-                  }`}
-                  style={{
-                    fontFamily:
-                      activeScreen === "customer"
-                        ? "SourceSans3-SemiBold"
-                        : "SourceSans3-Regular",
-                  }}
+                  style={{ fontFamily: "SourceSans3-Medium", fontSize: 16 }}
                 >
-                  Customer
+                  Settings
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={closeSidebar}>
+                  <Ionicons name="close" size={24} color="#4F4F4F" />
+                </TouchableOpacity>
+              </View>
 
-              {/* Employee */}
-              <TouchableOpacity
-                onPress={() => handleSidebarNavigation("employee")}
-                className="flex-row items-center gap-6 px-6 py-4 mx-6"
-              >
-                <Image
-                  source={require("@/assets/images/employee.svg")}
-                  style={{
-                    width: 24,
-                    height: 24,
-                  }}
-                />
-                <Text
-                  className={`${
-                    activeScreen === "employee"
-                      ? "text-green-normal"
-                      : "text-neutral-normal"
-                  }`}
-                  style={{
-                    fontFamily:
-                      activeScreen === "employee"
-                        ? "SourceSans3-SemiBold"
-                        : "SourceSans3-Regular",
-                  }}
-                >
-                  Employee
-                </Text>
-              </TouchableOpacity>
-
-              {/* Admin - Only show if user is superadmin */}
-              {loggedInUser?.data.role === "superadmin" && (
+              {/* Navigation Items */}
+              <View style={{ flex: 1 }}>
+                {/* Customer */}
                 <TouchableOpacity
-                  onPress={() => handleSidebarNavigation("superadmin")}
-                  className="flex-row items-center gap-6 px-6 py-4 mx-6"
+                  onPress={() => handleSidebarNavigation("customer")}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 24,
+                    paddingHorizontal: 24,
+                    paddingVertical: 16,
+                    marginHorizontal: 24,
+                  }}
                 >
                   <Image
-                    source={require("@/assets/images/admin.svg")}
-                    style={{
-                      width: 24,
-                      height: 24,
-                    }}
+                    source={require("@/assets/images/customer.svg")}
+                    style={{ width: 24, height: 24 }}
                   />
                   <Text
-                    className={`${
-                      activeScreen === "superadmin"
-                        ? "text-green-normal"
-                        : "text-neutral-normal"
-                    }`}
                     style={{
                       fontFamily:
-                        activeScreen === "superadmin"
+                        activeScreen === "customer"
                           ? "SourceSans3-SemiBold"
                           : "SourceSans3-Regular",
+                      color:
+                        activeScreen === "customer" ? "#386B45" : "#667085",
+                      fontSize: 16,
                     }}
                   >
-                    Admin
+                    Customer
                   </Text>
                 </TouchableOpacity>
-              )}
-            </View>
 
-            {/* logout button */}
-            <View className="px-10">
-              <ButtonSecondary title="Logout" onPress={handleLogout} />
-            </View>
-          </SafeAreaView>
-        </Animated.View>
-      </SafeAreaView>
-    </View>
+                {/* Employee */}
+                <TouchableOpacity
+                  onPress={() => handleSidebarNavigation("employee")}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 24,
+                    paddingHorizontal: 24,
+                    paddingVertical: 16,
+                    marginHorizontal: 24,
+                  }}
+                >
+                  <Image
+                    source={require("@/assets/images/employee.svg")}
+                    style={{ width: 24, height: 24 }}
+                  />
+                  <Text
+                    style={{
+                      fontFamily:
+                        activeScreen === "employee"
+                          ? "SourceSans3-SemiBold"
+                          : "SourceSans3-Regular",
+                      color:
+                        activeScreen === "employee" ? "#386B45" : "#667085",
+                      fontSize: 16,
+                    }}
+                  >
+                    Employee
+                  </Text>
+                </TouchableOpacity>
+
+                {/* Admin */}
+                {loggedInUser?.data.role === "superadmin" && (
+                  <TouchableOpacity
+                    onPress={() => handleSidebarNavigation("superadmin")}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 24,
+                      paddingHorizontal: 24,
+                      paddingVertical: 16,
+                      marginHorizontal: 24,
+                    }}
+                  >
+                    <Image
+                      source={require("@/assets/images/admin.svg")}
+                      style={{ width: 24, height: 24 }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily:
+                          activeScreen === "superadmin"
+                            ? "SourceSans3-SemiBold"
+                            : "SourceSans3-Regular",
+                        color:
+                          activeScreen === "superadmin" ? "#386B45" : "#667085",
+                        fontSize: 16,
+                      }}
+                    >
+                      Admin
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {/* Logout button */}
+              <View style={{ paddingHorizontal: 40, paddingBottom: 16 }}>
+                <ButtonSecondary title="Logout" onPress={handleLogout} />
+              </View>
+            </SafeAreaView>
+          </View>
+
+          {/* Overlay - tap to close */}
+          <Pressable
+            style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}
+            onPress={closeSidebar}
+          />
+        </View>
+      </Modal>
+    </>
   );
 };
 

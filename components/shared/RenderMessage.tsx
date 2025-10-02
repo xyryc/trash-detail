@@ -43,6 +43,7 @@ const RenderMessage: React.FC<RenderMessageProps> = ({
     });
   };
 
+  // download image
   const handleDownloadImage = async (imageUrl: string) => {
     if (!imageUrl) {
       Alert.alert("Error", "No image URL provided");
