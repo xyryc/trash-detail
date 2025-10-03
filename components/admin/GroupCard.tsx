@@ -9,7 +9,6 @@ const GroupCard = ({ customerGroup }: GroupCardProps) => {
   const { customer, totalIncomingMessages, latestMessageTime, type, chats } =
     customerGroup;
   const router = useRouter();
-  //   console.log("customer group------", type, customerGroup);
 
   return (
     <TouchableOpacity

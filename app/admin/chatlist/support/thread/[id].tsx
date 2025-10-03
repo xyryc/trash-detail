@@ -1,20 +1,26 @@
-import chatListData from "@/assets/data/chatListData.json";
 import ThreadHeader from "@/components/admin/ThreadHeader";
 import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useMemo } from "react";
 import { FlatList, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SupportThread = () => {
-  const { id } = useLocalSearchParams();
+  const { id, customerData } = useLocalSearchParams();
   const router = useRouter();
 
-  const customerChats = chatListData.filter(
-    (chat) => chat.customerId === id && chat.category === "problem"
-  );
+  const parsedData = useMemo(() => {
+    if (customerData && typeof customerData === "string") {
+      return JSON.parse(customerData);
+    }
+    return null;
+  }, [customerData]);
+
+  const customerChats = parsedData?.chats || [];
+  const customer = parsedData?.customer;
+  // console.log(customer);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -22,9 +28,9 @@ const SupportThread = () => {
 
       {/* header */}
       <View className="px-6">
-        <Header title="Problem Thread" />
+        <Header title="Support - Thread" />
 
-        <ThreadHeader customerChats={customerChats} />
+        <ThreadHeader customer={customer} />
 
         <View className="mt-3">
           <SearchBar />

@@ -28,7 +28,7 @@ const ProblemThread = () => {
 
       {/* header */}
       <View className="px-6">
-        <Header title="Problem Thread" />
+        <Header title="Problem - Thread" />
 
         <ThreadHeader customer={customer} />
 

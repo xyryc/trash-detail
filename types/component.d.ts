@@ -155,7 +155,7 @@ interface EmployeeScreenProps {
 }
 
 interface CustomerType {
-  _id: string;
+  id: string;
   customerId: string;
   name: string;
   role: "customer" | "admin" | "employee";
