@@ -115,3 +115,24 @@ interface ChatHeaderProps {
   showCloseProblem?: boolean;
   showCloseSupport?: boolean;
 }
+
+interface CustomerScreenProps {
+  activeScreen: string;
+  customerData: {
+    data: Array<{
+      _id: string;
+      name: string;
+      email: string;
+      userId: string;
+      number: string;
+      city: string;
+      addressLane1: string;
+      addressLane2: string;
+      zipCode: string;
+      state: string | null;
+    }>;
+    success: boolean;
+  };
+  isLoading?: boolean;
+  isUserLoading?: boolean;
+}

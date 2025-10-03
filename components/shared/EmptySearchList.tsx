@@ -6,13 +6,18 @@ import { Text, TouchableOpacity, View } from "react-native";
 const EmptySearchList = ({
   searchQuery,
   setSearchQuery,
+  emptyTitle = "No items found",
+  emptyMessage = "Items will appear here",
+  searchIcon = "search-off",
+  emptyIcon = "inbox",
 }: EmptySearchListProps) => {
   const isSearching = searchQuery.trim().length > 0;
 
   return (
     <View className="flex-1 items-center justify-center py-20">
       <MaterialIcons
-        name={isSearching ? "search-off" : "chat-bubble-outline"}
+        //@ts-ignore
+        name={isSearching ? searchIcon : emptyIcon}
         size={48}
         color="#9CA3AF"
       />
@@ -20,15 +25,13 @@ const EmptySearchList = ({
         className="text-gray-500 text-center mt-4"
         style={{ fontFamily: "SourceSans3-Medium" }}
       >
-        {isSearching ? "No chats found" : "No support chats yet"}
+        {isSearching ? "No results found" : emptyTitle}
       </Text>
       <Text
         className="text-gray-400 text-center mt-1 text-sm px-8"
         style={{ fontFamily: "SourceSans3-Regular" }}
       >
-        {isSearching
-          ? `No results for "${searchQuery}"`
-          : "Start a new conversation to get help"}
+        {isSearching ? `No results for "${searchQuery}"` : emptyMessage}
       </Text>
       {isSearching && (
         <TouchableOpacity

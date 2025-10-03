@@ -1,29 +1,9 @@
+import { CustomerScreenProps } from "@/types";
 import React, { useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import EmptySearchList from "../shared/EmptySearchList";
 import SearchBar from "../shared/SearchBar";
 import UsersCard from "./UsersCard";
-
-interface CustomerScreenProps {
-  activeScreen: string;
-  customerData: {
-    data: Array<{
-      _id: string;
-      name: string;
-      email: string;
-      userId: string;
-      number: string;
-      city: string;
-      addressLane1: string;
-      addressLane2: string;
-      zipCode: string;
-      state: string | null;
-    }>;
-    success: boolean;
-  };
-  isLoading?: boolean;
-  isUserLoading?: boolean;
-}
 
 export const CustomerScreen: React.FC<CustomerScreenProps> = ({
   activeScreen,

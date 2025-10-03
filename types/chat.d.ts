@@ -31,7 +31,11 @@ export interface TypingUser {
 
 export interface EmptySearchListProps {
   searchQuery: string;
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  setSearchQuery: (query: string) => void;
+  emptyTitle?: string;
+  emptyMessage?: string;
+  searchIcon?: string;
+  emptyIcon?: string;
 }
 
 export interface SearchBarWithCallbackProps extends SearchBarProps {
