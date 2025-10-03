@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
   RefreshControl,
   StatusBar,
   Text,
@@ -83,7 +84,7 @@ const Problem = () => {
         {/* Tabs */}
         <View className="flex-row gap-3 px-6">
           {/* All */}
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSelectedTab("all")}
             className={`px-3.5 py-3 ${selectedTab === "all" ? "border-b-2 border-green-normal" : ""}`}
           >
@@ -97,10 +98,10 @@ const Problem = () => {
             >
               All ({allCount})
             </Text>
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Pending */}
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSelectedTab("pending")}
             className={`px-3.5 py-3 relative ${selectedTab === "pending" ? "border-b-2 border-green-normal" : ""}`}
           >
@@ -119,10 +120,10 @@ const Problem = () => {
             {pendingCount > 0 && (
               <View className="absolute top-2.5 right-1 w-2 h-2 bg-secondary-orange-500 rounded-full" />
             )}
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Forwarded */}
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSelectedTab("forwarded")}
             className={`px-3.5 py-3 ${selectedTab === "forwarded" ? "border-b-2 border-green-normal" : ""}`}
           >
@@ -136,7 +137,7 @@ const Problem = () => {
             >
               Forwarded ({forwardedCount})
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         <View className="flex-1 px-6">
@@ -167,7 +168,7 @@ const Problem = () => {
           {/* problem cards */}
           {isLoading || isFetching ? (
             <View className="flex-1 justify-center">
-              <ActivityIndicator size="large" color="#386B45" />
+              <ActivityIndicator size="small" color="#E2F2E5" />
             </View>
           ) : (
             <FlatList

@@ -59,12 +59,15 @@ const Settings = () => {
             isUserLoading={isUserLoading}
           />
         );
+
       case "employee":
         return (
           <EmployeeScreen activeScreen={activeScreen} employeeData={userList} />
         );
+
       case "superadmin":
         return <AdminScreen activeScreen={activeScreen} adminData={userList} />;
+
       default:
         return (
           <CustomerScreen activeScreen={activeScreen} customerData={userList} />

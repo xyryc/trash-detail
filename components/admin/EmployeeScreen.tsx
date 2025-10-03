@@ -1,25 +1,9 @@
+import { EmployeeScreenProps } from "@/types";
 import React, { useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import EmptySearchList from "../shared/EmptySearchList";
 import SearchBar from "../shared/SearchBar";
 import UsersCard from "./UsersCard";
-
-interface EmployeeScreenProps {
-  activeScreen: string;
-  employeeData: {
-    data: Array<{
-      _id: string;
-      name: string;
-      email: string;
-      userId: string;
-      number: string;
-      role: string;
-    }>;
-    success: boolean;
-  };
-  isLoading?: boolean;
-  isUserLoading?: boolean;
-}
 
 export const EmployeeScreen: React.FC<EmployeeScreenProps> = ({
   activeScreen,

@@ -1,7 +1,8 @@
+import { ThreadHeaderProps } from "@/types";
 import React from "react";
 import { Text, View } from "react-native";
 
-const ThreadHeader = ({ customerChats }: any) => {
+const ThreadHeader = ({ customer }: ThreadHeaderProps) => {
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
       {/* ID Row */}
@@ -22,17 +23,17 @@ const ThreadHeader = ({ customerChats }: any) => {
           className="flex-1 text-neutral-dark-active"
           style={{ fontFamily: "SourceSans3-SemiBold" }}
         >
-          {customerChats[0].customerId}
+          {customer?.customerId}
         </Text>
       </View>
 
-      {/* Title Row */}
+      {/* name Row */}
       <View className="flex-row items-center mb-2">
         <Text
           className="w-1/3 text-neutral-normal"
           style={{ fontFamily: "SourceSans3-Regular" }}
         >
-          Title
+          Name
         </Text>
         <Text
           className="text-neutral-normal mx-2"
@@ -44,7 +45,7 @@ const ThreadHeader = ({ customerChats }: any) => {
           className="flex-1 text-neutral-dark-active"
           style={{ fontFamily: "SourceSans3-SemiBold" }}
         >
-          {customerChats[0].customerName}
+          {customer?.name}
         </Text>
       </View>
 
@@ -66,7 +67,7 @@ const ThreadHeader = ({ customerChats }: any) => {
           className="flex-1 text-neutral-dark-active"
           style={{ fontFamily: "SourceSans3-SemiBold" }}
         >
-          {customerChats[0].customerNumber}
+          {customer?.customerNumber}
         </Text>
       </View>
     </View>

@@ -136,3 +136,47 @@ interface CustomerScreenProps {
   isLoading?: boolean;
   isUserLoading?: boolean;
 }
+
+interface EmployeeScreenProps {
+  activeScreen: string;
+  employeeData: {
+    data: Array<{
+      _id: string;
+      name: string;
+      email: string;
+      userId: string;
+      number: string;
+      role: string;
+    }>;
+    success: boolean;
+  };
+  isLoading?: boolean;
+  isUserLoading?: boolean;
+}
+
+interface CustomerType {
+  _id: string;
+  customerId: string;
+  name: string;
+  role: "customer" | "admin" | "employee";
+}
+
+interface CustomerGroup {
+  customer: CustomerType;
+  chats: ChatItem[];
+  totalIncomingMessages: number;
+  latestMessageTime: string;
+  type: "problem" | "support";
+}
+
+interface GroupCardProps {
+  customerGroup: CustomerGroup;
+}
+
+interface ThreadHeaderProps {
+  customer: {
+    customerId: string;
+    name: string;
+    customerNumber: string;
+  };
+}
