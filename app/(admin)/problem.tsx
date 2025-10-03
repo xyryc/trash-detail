@@ -30,7 +30,7 @@ const Problem = () => {
       refetchOnMountOrArgChange: true,
     });
   const problems = data?.data || [];
-  console.log(data);
+  // console.log(data);
 
   // Filter problems (not chatListData) based on search and tab
   const filteredProblems = problems.filter((problem) => {

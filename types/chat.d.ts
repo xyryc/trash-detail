@@ -37,4 +37,5 @@ export interface EmptySearchListProps {
 export interface SearchBarWithCallbackProps extends SearchBarProps {
   className?: string;
   onSearch: (query: string) => void;
+  value?: string;
 }

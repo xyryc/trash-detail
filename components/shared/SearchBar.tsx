@@ -12,7 +12,6 @@ export default function SearchBar({
 
   const handleSearchChange = (text: string) => {
     setSearchQuery(text);
-
     onSearch(text);
   };
 

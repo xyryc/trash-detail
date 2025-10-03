@@ -4,7 +4,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const ThreadCard = ({ item, onPress }: any) => {
-  // console.log("thread card------------", item);
+  console.log("thread card------------", item);
 
   return (
     <TouchableOpacity

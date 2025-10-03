@@ -15,7 +15,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   Modal,
   Pressable,
   StatusBar,
@@ -53,7 +52,12 @@ const Settings = () => {
     switch (activeScreen) {
       case "customer":
         return (
-          <CustomerScreen activeScreen={activeScreen} customerData={userList} />
+          <CustomerScreen
+            activeScreen={activeScreen}
+            customerData={userList}
+            isLoading={isLoading}
+            isUserLoading={isUserLoading}
+          />
         );
       case "employee":
         return (
@@ -108,13 +112,7 @@ const Settings = () => {
             <Header title={getScreenTitle()} openSidebar={openSidebar} />
           </LinearGradient>
 
-          {isLoading || isUserLoading ? (
-            <View className="flex-1 justify-center">
-              <ActivityIndicator size="large" color="#386B45" />
-            </View>
-          ) : (
-            renderActiveScreen()
-          )}
+          {renderActiveScreen()}
 
           {/* Add New Button */}
           <ButtonPrimary
