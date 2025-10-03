@@ -2,14 +2,14 @@ import Header from "@/components/shared/Header";
 import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useAppSelector } from "@/store/hooks";
-import { useGetProblemListQuery } from "@/store/slices/adminApiSlice";
-
+import { useGetAdminProblemListQuery } from "@/store/slices/adminApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -21,13 +21,16 @@ const Problem = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
+  const segement = useSegments();
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const { data, isLoading } = useGetProblemListQuery(undefined, {
-    skip: !isAuthenticated || !user,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetAdminProblemListQuery(undefined, {
+      skip: !isAuthenticated || !user,
+      refetchOnMountOrArgChange: true,
+    });
   const problems = data?.data || [];
+  console.log(data);
 
   // Filter problems (not chatListData) based on search and tab
   const filteredProblems = problems.filter((problem) => {
@@ -162,7 +165,7 @@ const Problem = () => {
           </View>
 
           {/* problem cards */}
-          {isLoading ? (
+          {isLoading || isFetching ? (
             <View className="flex-1 justify-center">
               <ActivityIndicator size="large" color="#386B45" />
             </View>
@@ -181,6 +184,14 @@ const Problem = () => {
               )}
               contentContainerStyle={{ gap: 12, paddingBottom: 40 }}
               showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isFetching}
+                  onRefresh={refetch}
+                  colors={["#22C55E"]}
+                  tintColor="#22C55E"
+                />
+              }
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
                   <Text

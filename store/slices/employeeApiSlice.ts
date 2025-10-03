@@ -99,6 +99,5 @@ export const {
   useGetProblemByIdQuery,
   useUpdateProblemMutation,
   useUpdateProfileMutation,
-
   useCreateSupportChatMutation,
 } = employeeApiSlice;

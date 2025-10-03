@@ -1,12 +1,15 @@
+import { formatRelativeTime } from "@/utils/timeFormat";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const ThreadCard = ({ item, onPress }: any) => {
+  // console.log("thread card------------", item);
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={` py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active
+      className={`py-4 px-6 flex-row justify-between items-center border-b border-b-neutral-light-active
             ${item.unreadCount > 0 && "bg-neutral-light"}
         `}
     >
@@ -20,7 +23,7 @@ const ThreadCard = ({ item, onPress }: any) => {
           <View>
             <AntDesign
               className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-              name="questioncircleo"
+              name="question-circle"
               size={24}
               color="black"
             />
@@ -33,7 +36,7 @@ const ThreadCard = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-green-normal"
             >
-              {item.customerId}
+              {item?.customer?.id}
             </Text>
 
             <Entypo name="dot-single" size={16} color="#667085" />
@@ -42,7 +45,7 @@ const ThreadCard = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-neutral-normal text-xs"
             >
-              {item.timestamp}
+              {formatRelativeTime(item.lastMessageTime)}
             </Text>
           </View>
 
@@ -51,15 +54,20 @@ const ThreadCard = ({ item, onPress }: any) => {
             className="text-lg"
             numberOfLines={1}
           >
-            {item.customerName}
+            {item?.customer?.name}
           </Text>
 
           <Text
             style={{ fontFamily: "SourceSans3-Medium" }}
-            className="mt-1 text-xs text-neutral-normal-active"
+            className={`mt-1 text-xs text-info-normal-hover capitalize 
+              ${
+                item?.customer?.role === "customer"
+                  ? "text-info-normal-hover"
+                  : "text-secondary-orange-700"
+              }`}
             numberOfLines={1}
           >
-            Customer
+            {item?.customer?.role}
           </Text>
         </View>
       </View>

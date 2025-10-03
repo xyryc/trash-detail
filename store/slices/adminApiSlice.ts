@@ -3,7 +3,7 @@ import { apiSlice } from "../apiSlice";
 
 export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProblemList: builder.query<GetProblemListResponse, void>({
+    getAdminProblemList: builder.query<GetProblemListResponse, void>({
       query: () => "/problems/admin",
       providesTags: [{ type: "Problem", id: "LIST" }],
     }),
@@ -64,7 +64,7 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetProblemListQuery,
+  useGetAdminProblemListQuery,
   useGetProblemByIdQuery,
   useUpdateProblemStatusMutation,
   useUpdateProblemMutation,

@@ -1,11 +1,12 @@
-import chatListData from "@/assets/data/chatListData.json";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import ThreadCard from "@/components/shared/ThreadCard";
+import { useSocket } from "@/hooks/useSocket";
+import { useGetChatListQuery } from "@/store/slices/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   StatusBar,
@@ -19,30 +20,32 @@ const ChatList = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("problem");
   const router = useRouter();
+  const { socket, connectionStatus, markAsRead } = useSocket();
+  const [chatList, setChatList] = useState<any[]>([]);
 
-  // Filter chats based on search and tab
-  const filteredChats = chatListData.filter((chat) => {
-    const matchesSearch =
-      chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      chat.description.toLowerCase().includes(searchText.toLowerCase()) ||
-      chat.problemId.toLowerCase().includes(searchText.toLowerCase());
-
-    const matchesTab =
-      selectedTab === "problem"
-        ? chat.category === "problem"
-        : chat.category === "support";
-
-    return matchesSearch && matchesTab;
+  const { data: chatListData, refetch } = useGetChatListQuery(selectedTab, {
+    pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
   });
+
+  // Update local state when API data changes
+  useEffect(() => {
+    if (chatListData?.data) {
+      setChatList(chatListData.data);
+    }
+  }, [chatListData]);
+
+  // console.log(chatList);
 
   // Handle navigation based on card type
   const handleCardPress = (item: any) => {
-    if (item.category === "problem") {
+    if (item.type === "problem") {
       // Navigate to problem thread
-      router.push(`/admin/chatlist/problem/thread/${item.customerId}`);
-    } else if (item.category === "support") {
+      router.push(`/admin/chatlist/problem/thread/${item?.customer?.id}`);
+      console.log("navigating to problem details");
+    } else if (item.type === "support") {
       // Navigate to support thread
-      router.push(`/admin/chatlist/support/thread/${item.customerId}`);
+      router.push(`/admin/chatlist/support/thread/${item?.customer?.id}`);
+      console.log("navigating to support details");
     }
   };
 
@@ -107,7 +110,7 @@ const ChatList = () => {
 
         {/* Chat List */}
         <FlatList
-          data={filteredChats}
+          data={chatList}
           renderItem={({ item }) => (
             <ThreadCard
               item={item}
@@ -119,7 +122,7 @@ const ChatList = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
           ListEmptyComponent={
-            <View className="flex-1 items-center justify-center py-20">
+            <View className="items-center justify-center h-[60vh]">
               <Ionicons name="chatbubbles-outline" size={64} color="#D1D5DB" />
               <Text
                 className="text-gray-500 text-lg mt-4"

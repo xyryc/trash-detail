@@ -4,7 +4,7 @@ import EmptySearchList from "@/components/shared/EmptySearchList";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
-import { useGetSupportChatListQuery } from "@/store/slices/chatApiSlice";
+import { useGetChatListQuery } from "@/store/slices/chatApiSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,12 +25,7 @@ const SupportChatList = () => {
   const [chatList, setChatList] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    data: chatListData,
-    refetch,
-    isFetching,
-    isLoading,
-  } = useGetSupportChatListQuery("support", {
+  const { data: chatListData, refetch } = useGetChatListQuery("support", {
     pollingInterval: connectionStatus !== "connected" ? 30000 : 0, // Poll when offline
   });
 

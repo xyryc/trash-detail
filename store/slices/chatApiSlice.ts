@@ -33,6 +33,11 @@ export interface ChatHistory {
 
 export const chatApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getChatList: builder.query({
+      query: (type) => `/messages/conversations?type=${type}`,
+      providesTags: ["ChatList"],
+    }),
+
     getChatHistory: builder.query<
       ChatHistory,
       { supportId: string; chatType: string }
@@ -43,11 +48,6 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         { type: "Message", id: supportId },
         { type: "ChatHistory", id: supportId },
       ],
-    }),
-
-    getSupportChatList: builder.query({
-      query: (type) => `/messages/conversations?type=${type}`,
-      providesTags: ["ChatList"],
     }),
 
     sendMessage: builder.mutation({
@@ -68,5 +68,5 @@ export const chatApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetChatHistoryQuery,
   useSendMessageMutation,
-  useGetSupportChatListQuery,
+  useGetChatListQuery,
 } = chatApiSlice;

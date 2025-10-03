@@ -148,7 +148,10 @@ const Settings = () => {
               elevation: 5,
             }}
           >
-            <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "bottom"]}>
+            <SafeAreaView
+              style={{ flex: 1 }}
+              edges={["top", "left", "bottom", "right"]}
+            >
               {/* Sidebar Header */}
               <View
                 style={{
