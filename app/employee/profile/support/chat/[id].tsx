@@ -1,7 +1,9 @@
 import ChatHeader from "@/components/shared/ChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
+import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";
 import RenderMessage from "@/components/shared/RenderMessage";
+import TypingIndicator from "@/components/shared/TypingIndicator";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
@@ -50,6 +52,8 @@ const ChatScreen = () => {
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isUploadingState, setIsUploadingState] = useState(false);
+
+  console.log("user 2 typing", typingUsers);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
@@ -175,6 +179,64 @@ const ChatScreen = () => {
     };
   }, [socket, user?._id, chatData]);
 
+  // typing emitter
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTypingEmitRef = useRef<number>(0);
+
+  // Fixed handleTextChange for User 2
+  const handleTextChange = useCallback(
+    (text: string) => {
+      setInputText(text);
+
+      if (!socket || !user?._id) return;
+
+      if (text.length > 0) {
+        const now = Date.now();
+
+        // Emit typing event every 2 seconds while typing to keep indicator alive
+        if (now - lastTypingEmitRef.current > 2000) {
+          socket.emit("typing", {
+            chatType,
+            supportId,
+            userId: user._id,
+          });
+          lastTypingEmitRef.current = now;
+
+          if (!isTyping) {
+            setIsTyping(true);
+          }
+        }
+
+        // Clear existing timeout
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+
+        // Set new timeout to stop typing after 3 seconds of inactivity
+        typingTimeoutRef.current = setTimeout(() => {
+          setIsTyping(false);
+          socket.emit("stop_typing", {
+            chatType,
+            supportId,
+            userId: user._id,
+          });
+        }, 3000);
+      } else if (text.length === 0 && isTyping) {
+        // Handle when text is cleared - immediately stop typing
+        setIsTyping(false);
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+        socket.emit("stop_typing", {
+          chatType,
+          supportId,
+          userId: user._id,
+        });
+      }
+    },
+    [socket, user?._id, isTyping, supportId]
+  );
+
   // Send text message
   const handleSendMessage = useCallback(() => {
     if (!inputText.trim() || !socket) return;
@@ -262,30 +324,6 @@ const ChatScreen = () => {
     [socket, connectionStatus, chatType, supportId, uploadImage, emit]
   );
 
-  const TypingIndicator = () => {
-    if (typingUsers.length === 0) return null;
-
-    return (
-      <View className="px-6 py-2">
-        <Text className="text-gray-500 text-sm italic">User is typing...</Text>
-      </View>
-    );
-  };
-
-  const ConnectionStatus = () => {
-    if (connectionStatus === "connected") return null;
-
-    return (
-      <View className="bg-red-100 px-4 py-2">
-        <Text className="text-red-800 text-center text-sm">
-          {connectionStatus === "connecting"
-            ? "Connecting..."
-            : "Offline - Messages will be sent when reconnected"}
-        </Text>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -300,7 +338,7 @@ const ChatScreen = () => {
         <View className="flex-1">
           {/* Header */}
           <View className="px-6">
-            <CustomHeader text={chatData?.data.supportInfo.title || "Chat"} />
+            <CustomHeader text="Chat" />
           </View>
 
           {/* Chat Header with support info */}
@@ -309,7 +347,7 @@ const ChatScreen = () => {
             title={chatData?.data?.supportInfo?.title}
           />
 
-          <ConnectionStatus />
+          <ConnectionStatus connectionStatus={connectionStatus} />
 
           {/* Message List */}
           <FlatList
@@ -339,7 +377,7 @@ const ChatScreen = () => {
             }
           />
 
-          <TypingIndicator />
+          <TypingIndicator typingUsers={typingUsers} />
 
           {/* Input Section */}
           {chatData?.data?.supportInfo?.status === "closed" ? (
@@ -356,7 +394,7 @@ const ChatScreen = () => {
           ) : (
             <ChatInputSection
               inputText={inputText}
-              setInputText={setInputText}
+              setInputText={handleTextChange}
               onSendMessage={handleSendMessage}
               onSendImage={handleSendImage}
               isUploading={isLoading}

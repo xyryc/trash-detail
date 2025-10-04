@@ -89,7 +89,7 @@ const ChatHeader = ({
         )}
 
         {showCloseSupport && (
-          <TouchableOpacity>
+          <TouchableOpacity className="flex-1 items-end">
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-sm text-error-normal"

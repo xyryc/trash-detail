@@ -180,3 +180,28 @@ interface ThreadHeaderProps {
     customerNumber: string;
   };
 }
+
+interface ConnectionStatusProps {
+  connectionStatus: string;
+}
+
+interface RenderMessageProps {
+  item: {
+    type: string;
+    message: string;
+    imageUrl?: string;
+    timestamp: string;
+    isOwn?: boolean;
+    senderId: string;
+  };
+  currentUserId?: string;
+}
+
+interface TypingUser {
+  userId: string;
+  userName?: string;
+}
+
+interface TypingIndicatorProps {
+  typingUsers: TypingUser[];
+}

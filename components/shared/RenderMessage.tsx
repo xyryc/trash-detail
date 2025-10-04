@@ -1,3 +1,4 @@
+import { RenderMessageProps } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
@@ -12,22 +13,7 @@ import {
   View,
 } from "react-native";
 
-interface RenderMessageProps {
-  item: {
-    type: string;
-    message: string;
-    imageUrl?: string;
-    timestamp: string;
-    isOwn?: boolean;
-    senderId: string;
-  };
-  currentUserId?: string;
-}
-
-const RenderMessage: React.FC<RenderMessageProps> = ({
-  item,
-  currentUserId,
-}) => {
+const RenderMessage = ({ item, currentUserId }: RenderMessageProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   // Determine if message is own based on senderId or isOwn field
