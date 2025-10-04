@@ -40,13 +40,13 @@ export const chatApiSlice = apiSlice.injectEndpoints({
 
     getChatHistory: builder.query<
       ChatHistory,
-      { supportId: string; chatType: string }
+      { chatId: string; chatType: string }
     >({
-      query: ({ supportId, chatType }) =>
-        `/messages/${supportId}?chatType=${chatType}`,
-      providesTags: (result, error, { supportId }) => [
-        { type: "Message", id: supportId },
-        { type: "ChatHistory", id: supportId },
+      query: ({ chatId, chatType }) =>
+        `/messages/${chatId}?chatType=${chatType}`,
+      providesTags: (result, error, { chatId }) => [
+        { type: "Message", id: chatId },
+        { type: "ChatHistory", id: chatId },
       ],
     }),
 
@@ -56,9 +56,9 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: messageData,
       }),
-      invalidatesTags: (result, error, { supportId }) => [
-        { type: "Message", id: supportId },
-        { type: "ChatHistory", id: supportId },
+      invalidatesTags: (result, error, { chatId }) => [
+        { type: "Message", id: chatId },
+        { type: "ChatHistory", id: chatId },
         "ChatList",
       ],
     }),

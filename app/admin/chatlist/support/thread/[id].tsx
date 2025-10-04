@@ -20,7 +20,7 @@ const SupportThread = () => {
 
   const customerChats = parsedData?.chats || [];
   const customer = parsedData?.customer;
-  // console.log(customer);
+  // console.log(customerChats[0]?.type);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -46,7 +46,9 @@ const SupportThread = () => {
             <ChatItem
               item={item}
               onPress={() =>
-                router.push(`/admin/chatlist/chat/${customerChats[0].id}`)
+                router.push(
+                  `/admin/chatlist/${customerChats[0]?.type}/${customerChats[0].id}` as any
+                )
               }
             />
           )}

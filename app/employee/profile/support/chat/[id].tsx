@@ -34,7 +34,7 @@ const ChatScreen = () => {
   // Get chat data
   const { data: chatData } = useGetChatHistoryQuery(
     {
-      supportId,
+      chatId: supportId,
       chatType,
     },
     {

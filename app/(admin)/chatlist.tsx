@@ -71,22 +71,6 @@ const ChatList = () => {
     );
   }, [chatList]);
 
-  // console.log("Grouped chats:", groupedChats);
-
-  // // Handle individual chat press
-  // const handleChatPress = (customerGroup: any) => {
-  //   const chat = customerGroup?.chats?.[0];
-  //   console.log(customerGroup);
-
-  //   if (customerGroup.type === "problem") {
-  //     router.push(`/admin/chatlist/problem/thread/${chat?.id}`);
-  //     console.log("-------admin navigating to problem");
-  //   } else if (customerGroup.type === "support") {
-  //     router.push(`/admin/chatlist/support/thread/${chat?.id}`);
-  //     console.log("-------admin navigating to support");
-  //   }
-  // };
-
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
