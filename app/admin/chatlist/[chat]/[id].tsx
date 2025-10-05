@@ -5,8 +5,9 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import RenderMessage from "@/components/shared/RenderMessage";
 import TypingIndicator from "@/components/shared/TypingIndicator";
 import { useSocket } from "@/hooks/useSocket";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
+import { setSupportId } from "@/store/slices/chatSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
@@ -51,7 +52,7 @@ const ChatScreen = () => {
   const [isUploadingState, setIsUploadingState] = useState(false);
   const flatListRef = useRef(null);
 
-  console.log("user 1 typing", typingUsers);
+  // console.log("user 1 typing", typingUsers);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
@@ -177,11 +178,9 @@ const ChatScreen = () => {
   }, [socket, user?._id, chatData]);
 
   // typing emitter
-  // Add these refs at the top with other refs (after flatListRef)
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastTypingEmitRef = useRef<number>(0);
 
-  // Fixed handleTextChange for User 1
   const handleTextChange = useCallback(
     (text: string) => {
       setInputText(text);
@@ -322,6 +321,13 @@ const ChatScreen = () => {
     [socket, connectionStatus, chatType, chatId, uploadImage, emit]
   );
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Update Redux or context here if needed
+    dispatch(setSupportId(chatId));
+  }, [chatId]);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -340,8 +346,9 @@ const ChatScreen = () => {
           </View>
 
           <ChatHeader
-            id={chatData?.data?.supportInfo?.id}
-            title={chatData?.data?.supportInfo?.title}
+            id={chatData?.data?.createdByInfo?.createdById}
+            name={chatData?.data?.createdByInfo?.name}
+            number={chatData?.data?.createdByInfo?.number}
             showCloseSupport={true}
           />
 
@@ -349,7 +356,7 @@ const ChatScreen = () => {
 
           {/* message list */}
           <FlatList
-            className="flex-1 p-6 bg-[#F8FAF8]"
+            className="flex-1 px-6 bg-[#F8FAF8]"
             ref={flatListRef}
             data={messages}
             renderItem={({ item }) => (

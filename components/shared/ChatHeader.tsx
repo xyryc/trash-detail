@@ -5,6 +5,8 @@ import { Text, TouchableOpacity, View } from "react-native";
 const ChatHeader = ({
   id,
   title,
+  name,
+  number,
   showProblemDetails = false,
   showCloseProblem = false,
   showCloseSupport = false,
@@ -37,7 +39,7 @@ const ChatHeader = ({
 
       {/* Title Row */}
       {title && (
-        <View className="flex-row items-center">
+        <View className="flex-row items-center mb-2">
           <Text
             className="w-1/3 text-neutral-normal"
             style={{ fontFamily: "SourceSans3-Regular" }}
@@ -55,6 +57,54 @@ const ChatHeader = ({
             style={{ fontFamily: "SourceSans3-SemiBold" }}
           >
             {title}
+          </Text>
+        </View>
+      )}
+
+      {/* name Row */}
+      {name && (
+        <View className="flex-row items-center mb-2">
+          <Text
+            className="w-1/3 text-neutral-normal"
+            style={{ fontFamily: "SourceSans3-Regular" }}
+          >
+            Name
+          </Text>
+          <Text
+            className="text-neutral-normal mx-2"
+            style={{ fontFamily: "SourceSans3-Regular" }}
+          >
+            :
+          </Text>
+          <Text
+            className="flex-1 text-neutral-dark-active"
+            style={{ fontFamily: "SourceSans3-SemiBold" }}
+          >
+            {name}
+          </Text>
+        </View>
+      )}
+
+      {/* name Row */}
+      {number && (
+        <View className="flex-row items-center mb-2">
+          <Text
+            className="w-1/3 text-neutral-normal"
+            style={{ fontFamily: "SourceSans3-Regular" }}
+          >
+            Number
+          </Text>
+          <Text
+            className="text-neutral-normal mx-2"
+            style={{ fontFamily: "SourceSans3-Regular" }}
+          >
+            :
+          </Text>
+          <Text
+            className="flex-1 text-neutral-dark-active"
+            style={{ fontFamily: "SourceSans3-SemiBold" }}
+          >
+            {number}
           </Text>
         </View>
       )}

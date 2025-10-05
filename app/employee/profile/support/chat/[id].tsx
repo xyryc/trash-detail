@@ -53,7 +53,7 @@ const ChatScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isUploadingState, setIsUploadingState] = useState(false);
 
-  console.log("user 2 typing", typingUsers);
+  // console.log("user 2 typing", typingUsers);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
@@ -183,7 +183,6 @@ const ChatScreen = () => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastTypingEmitRef = useRef<number>(0);
 
-  // Fixed handleTextChange for User 2
   const handleTextChange = useCallback(
     (text: string) => {
       setInputText(text);
@@ -193,7 +192,6 @@ const ChatScreen = () => {
       if (text.length > 0) {
         const now = Date.now();
 
-        // Emit typing event every 2 seconds while typing to keep indicator alive
         if (now - lastTypingEmitRef.current > 2000) {
           socket.emit("typing", {
             chatType,
@@ -351,7 +349,7 @@ const ChatScreen = () => {
 
           {/* Message List */}
           <FlatList
-            className="flex-1 p-6 bg-[#F8FAF8]"
+            className="flex-1 px-6 bg-[#F8FAF8]"
             ref={flatListRef}
             data={messages}
             renderItem={({ item }) => (

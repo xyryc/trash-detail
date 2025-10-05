@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const GroupCard = ({ customerGroup }: GroupCardProps) => {
+const GroupCard = ({ customerGroup, setSupportId }: GroupCardProps) => {
   const { customer, totalIncomingMessages, latestMessageTime, type, chats } =
     customerGroup;
   const router = useRouter();

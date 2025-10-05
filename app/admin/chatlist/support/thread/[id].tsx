@@ -1,5 +1,6 @@
 import ThreadHeader from "@/components/admin/ThreadHeader";
 import ChatItem from "@/components/shared/ChatItem";
+import ConnectionStatusBanner from "@/components/shared/ConnectionStatusBanner";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -20,7 +21,6 @@ const SupportThread = () => {
 
   const customerChats = parsedData?.chats || [];
   const customer = parsedData?.customer;
-  // console.log(customerChats[0]?.type);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -39,17 +39,21 @@ const SupportThread = () => {
 
       {/* problem list */}
       <View className="flex-1 mt-3">
+        {/* Connection Status Banner */}
+        <ConnectionStatusBanner />
+
         <FlatList
           data={customerChats}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ChatItem
               item={item}
-              onPress={() =>
+              onPress={() => {
+                console.log(item.id);
                 router.push(
-                  `/admin/chatlist/${customerChats[0]?.type}/${customerChats[0].id}` as any
-                )
-              }
+                  `/admin/chatlist/${customerChats[0]?.type}/${item.id}` as any
+                );
+              }}
             />
           )}
           showsVerticalScrollIndicator={false}

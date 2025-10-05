@@ -11,6 +11,7 @@ import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatList = () => {
+  const [supportId, setSupportId] = useState();
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("problem");
   const router = useRouter();
@@ -70,6 +71,13 @@ const ChatList = () => {
         new Date(a.latestMessageTime).getTime()
     );
   }, [chatList]);
+
+  // console.log(groupedChats);
+
+  // const selectedSupportId = useAppSelector(
+  //   (state) => state.chat.selectedSupportId
+  // );
+  // console.log(selectedSupportId);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -134,7 +142,10 @@ const ChatList = () => {
         <FlatList
           data={groupedChats}
           renderItem={({ item: customerGroup }) => (
-            <GroupCard customerGroup={customerGroup} />
+            <GroupCard
+              customerGroup={customerGroup}
+              setSupportId={setSupportId}
+            />
           )}
           keyExtractor={(item) => item.customer.customerId}
           showsVerticalScrollIndicator={false}

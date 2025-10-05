@@ -111,6 +111,8 @@ interface UserData {
 interface ChatHeaderProps {
   id?: string | undefined;
   title?: string | undefined;
+  name?: string | undefined;
+  number?: string | undefined;
   showProblemDetails?: boolean;
   showCloseProblem?: boolean;
   showCloseSupport?: boolean;

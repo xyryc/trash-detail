@@ -42,7 +42,8 @@ const ChatItem = ({ item, onPress }: any) => {
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-green-normal"
             >
-              {item.problemId || item.supportId}
+              {/* {item.problemId || item.supportId} */}
+              {item._id}
             </Text>
 
             <Entypo name="dot-single" size={16} color="#667085" />
