@@ -115,3 +115,33 @@ interface UpdateProfileResponse {
   };
   message: string;
 }
+
+interface ChatMessage {
+  _id: string;
+  supportId: string;
+  chatType: string;
+  senderId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  message: string;
+  readBy: string[];
+  createdAt: string;
+}
+
+interface ChatHistory {
+  success: boolean;
+  data: {
+    supportInfo: {
+      id: string;
+      title: string;
+    };
+    createdByInfo: {
+      createdById: string;
+      name: string;
+      email: string;
+    };
+    messages: ChatMessage[];
+  };
+}

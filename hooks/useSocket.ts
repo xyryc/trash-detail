@@ -1,32 +1,7 @@
 import { useAppSelector } from "@/store/hooks";
+import { UseSocketReturn } from "@/types/chat";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-
-interface UseSocketReturn {
-  socket: Socket | null;
-  connectionStatus: "connecting" | "connected" | "disconnected" | "error";
-  connect: () => void;
-  disconnect: () => void;
-  emit: (event: string, data: any) => void;
-  joinRoom: (roomData: {
-    chatType: string;
-    problemId?: string;
-    supportId?: string;
-  }) => void;
-  sendTyping: (data: {
-    chatType: string;
-    problemId?: string;
-    supportId?: string;
-    userId: string;
-  }) => void;
-  stopTyping: (data: {
-    chatType: string;
-    problemId?: string;
-    supportId?: string;
-    userId: string;
-  }) => void;
-  markAsRead: (data: { chatType: string; chatId: string }) => void;
-}
 
 export const useSocket = (): UseSocketReturn => {
   const [socket, setSocket] = useState<Socket | null>(null);

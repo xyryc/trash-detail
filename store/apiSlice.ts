@@ -32,7 +32,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   return result;
 };
 
-// Add error handling wrapper
 // @ts-ignore
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   console.log("=== API CALL ===");
@@ -64,7 +63,7 @@ export const apiSlice = createApi({
     "Message",
     "ChatHistory",
     "ChatList",
-    "chat",
+    "GroupThread",
   ],
   endpoints: () => ({}),
 });

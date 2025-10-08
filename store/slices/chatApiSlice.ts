@@ -1,38 +1,14 @@
 // store/slices/chatApiSlice.ts
+import { ChatHistory } from "@/types";
 import { apiSlice } from "../apiSlice";
-
-export interface ChatMessage {
-  _id: string;
-  supportId: string;
-  chatType: string;
-  senderId: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  message: string;
-  readBy: string[];
-  createdAt: string;
-}
-
-export interface ChatHistory {
-  success: boolean;
-  data: {
-    supportInfo: {
-      id: string;
-      title: string;
-    };
-    createdByInfo: {
-      createdById: string;
-      name: string;
-      email: string;
-    };
-    messages: ChatMessage[];
-  };
-}
 
 export const chatApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getChatHistoryThread: builder.query({
+      query: (type) => `/messages/conversations?type=${type}`,
+      providesTags: ["GroupThread"],
+    }),
+
     getChatList: builder.query({
       query: (type) => `/messages/conversations?type=${type}`,
       providesTags: ["ChatList"],
@@ -66,6 +42,7 @@ export const chatApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetChatHistoryThreadQuery,
   useGetChatHistoryQuery,
   useSendMessageMutation,
   useGetChatListQuery,

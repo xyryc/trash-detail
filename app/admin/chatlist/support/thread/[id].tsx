@@ -49,7 +49,6 @@ const SupportThread = () => {
             <ChatItem
               item={item}
               onPress={() => {
-                console.log(item.id);
                 router.push(
                   `/admin/chatlist/${customerChats[0]?.type}/${item.id}` as any
                 );
