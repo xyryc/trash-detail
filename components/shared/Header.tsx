@@ -16,7 +16,10 @@ const Header = ({ title, openSidebar }: HeaderProps) => {
         className="flex-row items-center gap-2"
       >
         {openSidebar && <EvilIcons name="navicon" size={24} color="black" />}
-        <Text style={{ fontFamily: "SourceSans3-Medium" }} className="text-lg">
+        <Text
+          style={{ fontFamily: "SourceSans3-Medium" }}
+          className="text-lg capitalize"
+        >
           {title}
         </Text>
       </TouchableOpacity>

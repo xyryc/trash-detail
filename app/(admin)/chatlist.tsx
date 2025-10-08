@@ -2,12 +2,19 @@ import GroupCard from "@/components/admin/GroupCard";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
-import { useGetChatHistoryThreadQuery } from "@/store/slices/chatApiSlice";
+import { useGetChatThreadQuery } from "@/store/slices/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatList = () => {
@@ -16,14 +23,15 @@ const ChatList = () => {
   const router = useRouter();
   const { socket, connectionStatus, markAsRead } = useSocket();
 
-  const { data: chatThread, refetch } = useGetChatHistoryThreadQuery(
-    selectedTab,
-    {
-      pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
-    }
-  );
+  const {
+    data: chatThread,
+    refetch,
+    isFetching,
+  } = useGetChatThreadQuery(selectedTab, {
+    pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
+  });
 
-  console.log("chat thread", chatThread?.data);
+  // console.log("chat thread", chatThread?.data);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -88,12 +96,19 @@ const ChatList = () => {
         <FlatList
           data={chatThread?.data}
           renderItem={({ item }) => (
-            // console.log(item)
             <GroupCard selectedTab={selectedTab} item={item} />
           )}
           keyExtractor={({ item }) => item?.user?.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={refetch}
+              colors={["#22C55E"]}
+              tintColor="#22C55E"
+            />
+          }
           ListEmptyComponent={
             <View className="items-center justify-center h-[60vh]">
               <Ionicons name="chatbubbles-outline" size={64} color="#D1D5DB" />

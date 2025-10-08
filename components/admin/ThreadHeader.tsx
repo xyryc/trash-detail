@@ -3,6 +3,8 @@ import React from "react";
 import { Text, View } from "react-native";
 
 const ThreadHeader = ({ customer }: ThreadHeaderProps) => {
+  // console.log(customer);
+
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
       {/* ID Row */}

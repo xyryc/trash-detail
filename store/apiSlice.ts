@@ -64,6 +64,7 @@ export const apiSlice = createApi({
     "ChatHistory",
     "ChatList",
     "GroupThread",
+    "UserList",
   ],
   endpoints: () => ({}),
 });

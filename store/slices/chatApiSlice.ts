@@ -4,9 +4,15 @@ import { apiSlice } from "../apiSlice";
 
 export const chatApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getChatHistoryThread: builder.query({
+    getChatThread: builder.query({
       query: (type) => `/messages/conversations?type=${type}`,
       providesTags: ["GroupThread"],
+    }),
+
+    getChatThreadByUserId: builder.query({
+      query: ({ userId, type }) =>
+        `/messages/conversations/${userId}?type=${type}`,
+      providesTags: ["UserList"],
     }),
 
     getChatList: builder.query({
@@ -42,7 +48,8 @@ export const chatApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetChatHistoryThreadQuery,
+  useGetChatThreadQuery,
+  useGetChatThreadByUserIdQuery,
   useGetChatHistoryQuery,
   useSendMessageMutation,
   useGetChatListQuery,

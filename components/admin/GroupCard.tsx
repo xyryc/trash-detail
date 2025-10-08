@@ -2,20 +2,20 @@ import { formatRelativeTime } from "@/utils/timeFormat";
 import { Entypo } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const GroupCard = ({ selectedTab, item }) => {
   const router = useRouter();
-  console.log(item);
+  // console.log(item?.user?.id, selectedTab);
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => {
-        if (selectedTab === "problem") {
-          router.push(`/admin/chatlist/problem/thread/${item?.id}`);
-        } else if (selectedTab === "support") {
-          router.push(`/admin/chatlist/support/thread/${item?.id}`);
-        }
+        // if (selectedTab === "problem") {
+        router.push(`/admin/chatlist/thread/${selectedTab}/${item?.user?.id}`);
+        // } else if (selectedTab === "support") {
+        //   router.push(`/admin/chatlist/${selectedTab}/thread/${item?.user?.id}`);
+        // }
       }}
       className="border-b border-neutral-light-active"
     >
@@ -93,7 +93,7 @@ const GroupCard = ({ selectedTab, item }) => {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
