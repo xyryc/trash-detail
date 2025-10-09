@@ -6,7 +6,6 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
 import { useGetChatThreadByUserIdQuery } from "@/store/slices/chatApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
-
 import { FlatList, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -56,7 +55,7 @@ const Thread = () => {
             <ChatItem
               item={item}
               onPress={() => {
-                router.push(`/admin/chatlist/${type}/${item.id}`);
+                router.push(`/admin/chatlist/${type}/${item._id}`);
               }}
             />
           )}

@@ -136,11 +136,13 @@ interface ChatHistory {
     supportInfo: {
       id: string;
       title: string;
+      status: string;
     };
     createdByInfo: {
       createdById: string;
       name: string;
       email: string;
+      number: string;
     };
     messages: ChatMessage[];
   };

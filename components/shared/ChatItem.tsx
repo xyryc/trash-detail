@@ -5,7 +5,7 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 
 const ChatItem = ({ item, onPress }: any) => {
-  // console.log(item);
+  console.log(item?.type);
 
   return (
     <Pressable
@@ -17,10 +17,10 @@ const ChatItem = ({ item, onPress }: any) => {
     >
       {/* message content */}
       <View className="flex-row gap-4">
-        {item.imageUrl ? (
+        {item?.type === "problem" ? (
           <View className="size-[42px] bg-white rounded-lg border border-neutral-light-hover">
             <Image
-              source={require("@/assets/images/left-guy.svg")}
+              source={require("@/assets/images/trash-bin.svg")}
               style={{ width: 42, height: 42 }}
               contentFit="scale-down"
             />

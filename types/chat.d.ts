@@ -53,7 +53,11 @@ export interface Message {
   senderId: string;
   senderRole: string;
   createdAt: string;
-  readBy: string[];
+  readBy?: string[];
+  type: string;
+  content: string;
+  timestamp: string;
+  isOwn: boolean;
 }
 
 export interface TypingUser {

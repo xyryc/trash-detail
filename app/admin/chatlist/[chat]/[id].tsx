@@ -5,9 +5,8 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import RenderMessage from "@/components/shared/RenderMessage";
 import TypingIndicator from "@/components/shared/TypingIndicator";
 import { useSocket } from "@/hooks/useSocket";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
-import { setSupportId } from "@/store/slices/chatSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
@@ -321,12 +320,7 @@ const ChatScreen = () => {
     [socket, connectionStatus, chatType, chatId, uploadImage, emit]
   );
 
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    // Update Redux or context here if needed
-    dispatch(setSupportId(chatId));
-  }, [chatId]);
+  // console.log("chat screen", chatData?.data);
 
   return (
     <SafeAreaView
