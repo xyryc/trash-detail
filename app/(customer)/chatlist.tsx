@@ -1,41 +1,38 @@
-import chatListData from "@/assets/data/chatListData.json";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ChatItem from "@/components/shared/ChatItem";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
+import { useSocket } from "@/hooks/useSocket";
+import { useGetChatListQuery } from "@/store/slices/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
+  Pressable,
+  RefreshControl,
   StatusBar,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatList = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("problem");
   const router = useRouter();
+  const { socket, connectionStatus, markAsRead } = useSocket();
 
-  // Filter chats based on search and tab
-  const filteredChats = chatListData.filter((chat) => {
-    const matchesSearch =
-      chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      chat.description.toLowerCase().includes(searchText.toLowerCase()) ||
-      chat.problemId.toLowerCase().includes(searchText.toLowerCase());
-
-    const matchesTab =
-      selectedTab === "problem"
-        ? chat.category === "problem"
-        : chat.category === "support";
-
-    return matchesSearch && matchesTab;
+  const {
+    data: chatListData,
+    refetch,
+    isFetching,
+  } = useGetChatListQuery(selectedTab, {
+    pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
   });
+  const chatlist = chatListData?.data;
+  console.log("from customer chatlist", chatlist);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -67,7 +64,7 @@ const ChatList = () => {
 
         {/* Tabs */}
         <View className="flex-row gap-3 px-6">
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSelectedTab("problem")}
             className={`px-3.5 py-3 ${selectedTab === "problem" ? "border-b-2 border-green-normal" : ""}`}
           >
@@ -83,9 +80,9 @@ const ChatList = () => {
             </Text>
             {/* Red dot indicator */}
             <View className="absolute top-2.5 right-1 w-2 h-2 bg-error-normal-hover rounded-full" />
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSelectedTab("support")}
             className={`px-3.5 py-3 ${selectedTab === "support" ? "border-b-2 border-green-normal" : ""}`}
           >
@@ -102,21 +99,31 @@ const ChatList = () => {
 
             {/* Red dot indicator */}
             <View className="absolute top-2.5 right-1 w-2 h-2 bg-error-normal-hover rounded-full" />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Chat List */}
         <FlatList
-          data={filteredChats}
+          data={chatlist}
           renderItem={({ item }) => (
             <ChatItem
               item={item}
-              onPress={() => router.push(`/customer/chat/${item.id}`)}
+              onPress={() => {
+                router.push(`/customer/chat/${item.id}`);
+              }}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={refetch}
+              colors={["#22C55E"]}
+              tintColor="#22C55E"
+            />
+          }
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Ionicons name="chatbubbles-outline" size={64} color="#D1D5DB" />

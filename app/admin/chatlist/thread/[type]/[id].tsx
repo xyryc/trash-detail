@@ -50,7 +50,7 @@ const Thread = () => {
 
         <FlatList
           data={chatThread?.data}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <ChatItem
               item={item}

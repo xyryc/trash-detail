@@ -384,7 +384,7 @@ const ChatScreen = () => {
             id={chatData?.data?.createdByInfo?.createdById}
             name={chatData?.data?.createdByInfo?.name}
             number={chatData?.data?.createdByInfo?.number}
-            status={chatData?.data?.supportInfo?.status}
+            supportStatus={chatData?.data?.supportInfo?.status}
             handleCloseSupport={handleCloseSupport}
             showCloseSupport={true}
           />

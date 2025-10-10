@@ -98,7 +98,7 @@ const ChatList = () => {
           renderItem={({ item }) => (
             <GroupCard selectedTab={selectedTab} item={item} />
           )}
-          keyExtractor={({ item }) => item?.user?.id}
+          keyExtractor={({ item }) => item?.user?._id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
           refreshControl={

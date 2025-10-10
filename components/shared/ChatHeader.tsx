@@ -13,6 +13,8 @@ const ChatHeader = ({
   showCloseProblem = false,
   showCloseSupport = false,
 }: ChatHeaderProps) => {
+  console.log(supportStatus);
+
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
       {/* ID Row */}
@@ -142,6 +144,15 @@ const ChatHeader = ({
 
         {showCloseSupport &&
           (supportStatus === "closed" ? (
+            <View className="flex-1 items-end">
+              <Text
+                style={{ fontFamily: "SourceSans3-Medium" }}
+                className="text-sm text-error-normal"
+              >
+                Closed Support
+              </Text>
+            </View>
+          ) : (
             <TouchableOpacity
               onPress={handleCloseSupport}
               className="flex-1 items-end"
@@ -153,15 +164,6 @@ const ChatHeader = ({
                 Close Support
               </Text>
             </TouchableOpacity>
-          ) : (
-            <View className="flex-1 items-end">
-              <Text
-                style={{ fontFamily: "SourceSans3-Medium" }}
-                className="text-sm text-error-normal"
-              >
-                Closed Support
-              </Text>
-            </View>
           ))}
       </View>
     </View>
