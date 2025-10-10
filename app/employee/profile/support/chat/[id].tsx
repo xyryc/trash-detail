@@ -29,8 +29,12 @@ const ChatScreen = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { socket, connectionStatus, joinRoom, stopTyping, emit } = useSocket();
   const flatListRef = useRef<FlatList>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTypingEmitRef = useRef<number>(0);
+  const hasLoadedInitialMessages = useRef(false);
+
   const params = useLocalSearchParams();
-  const supportId = params.id as string;
+  const supportId = params?.id as string;
   const chatType = "support";
 
   // Get chat data
@@ -45,7 +49,6 @@ const ChatScreen = () => {
       refetchOnFocus: true,
     }
   );
-  // console.log("chat data", chatData?.data?.supportInfo);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -53,14 +56,21 @@ const ChatScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isUploadingState, setIsUploadingState] = useState(false);
 
-  // console.log("user 2 typing", typingUsers);
-
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
   const isLoading = isUploadingImage || isUploadingState;
 
-  // Load initial messages
+  // Reset when supportId changes (navigating to different chat)
   useEffect(() => {
+    hasLoadedInitialMessages.current = false;
+    setMessages([]);
+  }, [supportId]);
+
+  // Load initial messages ONLY ONCE per chat
+  useEffect(() => {
+    // Only load if we haven't loaded yet
+    if (hasLoadedInitialMessages.current) return;
+
     if (chatData?.data?.messages) {
       const formattedMessages = chatData.data.messages.map((msg: any) => ({
         id: msg._id || msg.id,
@@ -75,17 +85,16 @@ const ChatScreen = () => {
         isOwn: msg.senderId._id === user?._id,
       }));
       setMessages(formattedMessages.reverse());
+      hasLoadedInitialMessages.current = true;
+    } else if (chatData?.data && !chatData?.data?.messages) {
+      // Empty chat - mark as loaded so we don't keep checking
+      hasLoadedInitialMessages.current = true;
     }
   }, [chatData, user?._id]);
 
   // Join chat room and mark as read
   useEffect(() => {
     if (!socket || !supportId || connectionStatus !== "connected") {
-      console.log("Cannot join room:", {
-        hasSocket: !!socket,
-        supportId,
-        connectionStatus,
-      });
       return;
     }
 
@@ -94,15 +103,14 @@ const ChatScreen = () => {
       supportId: supportId as string,
     };
 
-    // Use the joinRoom function from useSocket hook
     joinRoom(roomData);
-
-    // Mark chat as read when entering
     emit("markChatAsRead", { chatType, chatId: supportId });
 
     return () => {
-      // Stop typing when leaving
-      if (isTyping && user?.id) {
+      if (isTyping && user?._id) {
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
         stopTyping({
           chatType,
           supportId: supportId as string,
@@ -111,7 +119,6 @@ const ChatScreen = () => {
       }
     };
   }, [
-    chatData,
     socket,
     supportId,
     chatType,
@@ -146,7 +153,13 @@ const ChatScreen = () => {
         isOwn: actualSenderId === user?._id,
       };
 
-      setMessages((prev) => [formattedMessage, ...prev]);
+      setMessages((prev) => {
+        // Check for duplicates
+        const exists = prev.some((msg) => msg.id === formattedMessage.id);
+        if (exists) return prev;
+
+        return [formattedMessage, ...prev];
+      });
 
       setTimeout(() => {
         flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
@@ -177,12 +190,9 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?._id, chatData]);
+  }, [socket, user?._id]);
 
-  // typing emitter
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const lastTypingEmitRef = useRef<number>(0);
-
+  // Handle typing
   const handleTextChange = useCallback(
     (text: string) => {
       setInputText(text);
@@ -205,12 +215,10 @@ const ChatScreen = () => {
           }
         }
 
-        // Clear existing timeout
         if (typingTimeoutRef.current) {
           clearTimeout(typingTimeoutRef.current);
         }
 
-        // Set new timeout to stop typing after 3 seconds of inactivity
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
@@ -220,7 +228,6 @@ const ChatScreen = () => {
           });
         }, 3000);
       } else if (text.length === 0 && isTyping) {
-        // Handle when text is cleared - immediately stop typing
         setIsTyping(false);
         if (typingTimeoutRef.current) {
           clearTimeout(typingTimeoutRef.current);
@@ -259,6 +266,9 @@ const ChatScreen = () => {
 
     if (isTyping) {
       setIsTyping(false);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
       stopTyping({
         chatType,
         supportId: supportId as string,

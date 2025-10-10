@@ -26,7 +26,7 @@ const StartChat = () => {
     try {
       const response = await createSupportChat(payload);
       const result = response.data;
-      console.log(result);
+      // console.log(result);
 
       if (result?.success) {
         //@ts-ignore

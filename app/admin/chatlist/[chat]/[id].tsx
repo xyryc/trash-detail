@@ -1,3 +1,5 @@
+// ===== FIXED VERSION FOR USER 1 (Document 10) =====
+
 import ChatHeader from "@/components/shared/ChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
@@ -30,6 +32,11 @@ const ChatScreen = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { socket, connectionStatus, joinRoom, stopTyping, emit } = useSocket();
 
+  const flatListRef = useRef(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTypingEmitRef = useRef<number>(0);
+  const hasLoadedInitialMessages = useRef(false); // ⭐ ADD THIS
+
   // Get chat data
   const { data: chatData } = useGetChatHistoryQuery(
     {
@@ -42,23 +49,27 @@ const ChatScreen = () => {
       refetchOnFocus: true,
     }
   );
-  // console.log("Query result:", chatData?.data);
 
-  const [messages, setMessages] = useState<Message[]>();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isUploadingState, setIsUploadingState] = useState(false);
-  const flatListRef = useRef(null);
-
-  // console.log("user 1 typing", typingUsers);
 
   const [uploadImage, { isLoading: isUploadingImage }] =
     useUploadImageMutation();
   const isLoading = isUploadingImage || isUploadingState;
 
-  // Load initial messages
+  // ⭐ Reset when chatId changes
   useEffect(() => {
+    hasLoadedInitialMessages.current = false;
+    setMessages([]);
+  }, [chatId]);
+
+  // ⭐ Load initial messages ONLY ONCE
+  useEffect(() => {
+    if (hasLoadedInitialMessages.current) return; // Exit if already loaded
+
     if (chatData?.data?.messages) {
       const formattedMessages = chatData.data.messages.map((msg: any) => ({
         id: msg._id || msg.id,
@@ -73,17 +84,16 @@ const ChatScreen = () => {
         isOwn: msg.senderId._id === user?._id,
       }));
       setMessages(formattedMessages.reverse());
+      hasLoadedInitialMessages.current = true;
+    } else if (chatData?.data && !chatData?.data?.messages) {
+      // Empty chat - mark as loaded
+      hasLoadedInitialMessages.current = true;
     }
   }, [chatData, user?._id]);
 
   // Join chat room and mark as read
   useEffect(() => {
     if (!socket || !chatId || connectionStatus !== "connected") {
-      console.log("Cannot join room:", {
-        hasSocket: !!socket,
-        chatId,
-        connectionStatus,
-      });
       return;
     }
 
@@ -92,15 +102,14 @@ const ChatScreen = () => {
       supportId: chatId as string,
     };
 
-    // Use the joinRoom function from useSocket hook
     joinRoom(roomData);
-
-    // Mark chat as read when entering
     emit("markChatAsRead", { chatType, chatId });
 
     return () => {
-      // Stop typing when leaving
       if (isTyping && user?._id) {
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
         stopTyping({
           chatType: chatType as string,
           supportId: chatId as string,
@@ -120,7 +129,7 @@ const ChatScreen = () => {
     stopTyping,
   ]);
 
-  // Handle real-time messages
+  // ⭐ Handle real-time messages - REMOVED chatData from dependencies
   useEffect(() => {
     if (!socket) return;
 
@@ -143,7 +152,13 @@ const ChatScreen = () => {
         isOwn: actualSenderId === user?._id,
       };
 
-      setMessages((prev) => [formattedMessage, ...prev]);
+      setMessages((prev) => {
+        // Check for duplicates
+        const exists = prev.some((msg) => msg.id === formattedMessage.id);
+        if (exists) return prev;
+
+        return [formattedMessage, ...prev];
+      });
 
       setTimeout(() => {
         flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
@@ -174,12 +189,9 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?._id, chatData]);
+  }, [socket, user?._id]); // ⭐ REMOVED chatData
 
-  // typing emitter
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const lastTypingEmitRef = useRef<number>(0);
-
+  // Handle typing
   const handleTextChange = useCallback(
     (text: string) => {
       setInputText(text);
@@ -189,7 +201,6 @@ const ChatScreen = () => {
       if (text.length > 0) {
         const now = Date.now();
 
-        // Emit typing event every 2 seconds while typing to keep indicator alive
         if (now - lastTypingEmitRef.current > 2000) {
           socket.emit("typing", {
             chatType: chatType as string,
@@ -203,12 +214,10 @@ const ChatScreen = () => {
           }
         }
 
-        // Clear existing timeout
         if (typingTimeoutRef.current) {
           clearTimeout(typingTimeoutRef.current);
         }
 
-        // Set new timeout to stop typing after 3 seconds of inactivity
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
@@ -218,7 +227,6 @@ const ChatScreen = () => {
           });
         }, 3000);
       } else if (text.length === 0 && isTyping) {
-        // Handle when text is cleared - immediately stop typing
         setIsTyping(false);
         if (typingTimeoutRef.current) {
           clearTimeout(typingTimeoutRef.current);
@@ -257,6 +265,9 @@ const ChatScreen = () => {
 
     if (isTyping) {
       setIsTyping(false);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
       stopTyping({
         chatType: chatType as string,
         supportId: chatId as string,
@@ -319,8 +330,6 @@ const ChatScreen = () => {
     },
     [socket, connectionStatus, chatType, chatId, uploadImage, emit]
   );
-
-  // console.log("chat screen", chatData?.data);
 
   return (
     <SafeAreaView
