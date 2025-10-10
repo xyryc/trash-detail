@@ -30,7 +30,7 @@ const StartChat = () => {
 
       if (result?.success) {
         //@ts-ignore
-        router.push(`/employee/profile/support/chat/${result?.supportId}`);
+        router.push(`/employee/profile/support/chat/${result?.data?._id}`);
       }
     } catch (error: any) {
       Alert.alert(
@@ -83,7 +83,7 @@ const StartChat = () => {
                 fontFamily: "SourceSans3-Medium",
                 textAlignVertical: "top",
               }}
-              className=" border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark h-32"
+              className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark h-32"
               placeholder="Add more details about your inquiry"
               multiline={true}
               numberOfLines={6}
