@@ -59,6 +59,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: () => [{ type: "User" }],
     }),
+
+    closeSupport: builder.mutation({
+      query: ({ supportId }) => ({
+        url: `/supports/close/${supportId}`,
+        method: "PATCH",
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -72,4 +79,5 @@ export const {
   useGetUserByIdQuery,
   useUpdateProfileMutation,
   useInviteUserMutation,
+  useCloseSupportMutation,
 } = adminApiSlice;

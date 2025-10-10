@@ -1,5 +1,3 @@
-// ===== FIXED VERSION FOR USER 1 (Document 10) =====
-
 import ChatHeader from "@/components/shared/ChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
@@ -8,12 +6,13 @@ import RenderMessage from "@/components/shared/RenderMessage";
 import TypingIndicator from "@/components/shared/TypingIndicator";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
+import { useCloseSupportMutation } from "@/store/slices/adminApiSlice";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -35,7 +34,8 @@ const ChatScreen = () => {
   const flatListRef = useRef(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastTypingEmitRef = useRef<number>(0);
-  const hasLoadedInitialMessages = useRef(false); // ⭐ ADD THIS
+  const hasLoadedInitialMessages = useRef(false);
+  const router = useRouter();
 
   // Get chat data
   const { data: chatData } = useGetChatHistoryQuery(
@@ -60,13 +60,13 @@ const ChatScreen = () => {
     useUploadImageMutation();
   const isLoading = isUploadingImage || isUploadingState;
 
-  // ⭐ Reset when chatId changes
+  // Reset when chatId changes
   useEffect(() => {
     hasLoadedInitialMessages.current = false;
     setMessages([]);
   }, [chatId]);
 
-  // ⭐ Load initial messages ONLY ONCE
+  // Load initial messages ONLY ONCE
   useEffect(() => {
     if (hasLoadedInitialMessages.current) return; // Exit if already loaded
 
@@ -129,7 +129,7 @@ const ChatScreen = () => {
     stopTyping,
   ]);
 
-  // ⭐ Handle real-time messages - REMOVED chatData from dependencies
+  // Handle real-time messages - REMOVED chatData from dependencies
   useEffect(() => {
     if (!socket) return;
 
@@ -189,7 +189,7 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?._id]); // ⭐ REMOVED chatData
+  }, [socket, user?._id]); // REMOVED chatData
 
   // Handle typing
   const handleTextChange = useCallback(
@@ -331,6 +331,38 @@ const ChatScreen = () => {
     [socket, connectionStatus, chatType, chatId, uploadImage, emit]
   );
 
+  // close support
+  const [closeSupport] = useCloseSupportMutation();
+
+  const handleCloseSupport = () => {
+    Alert.alert(
+      "Close Support",
+      "Are you sure you want to close this support chat?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Confirm",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await closeSupport({ supportId: chatId as string }).unwrap();
+
+              // Show success message
+              Alert.alert("Closed", "Support chat has been closed.", [
+                { text: "OK", onPress: () => router.back() },
+              ]);
+            } catch (error: any) {
+              Alert.alert(
+                "Error",
+                error?.data?.message || "Failed to close support."
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -352,6 +384,8 @@ const ChatScreen = () => {
             id={chatData?.data?.createdByInfo?.createdById}
             name={chatData?.data?.createdByInfo?.name}
             number={chatData?.data?.createdByInfo?.number}
+            status={chatData?.data?.supportInfo?.status}
+            handleCloseSupport={handleCloseSupport}
             showCloseSupport={true}
           />
 

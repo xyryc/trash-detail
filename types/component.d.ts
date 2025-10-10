@@ -113,6 +113,8 @@ interface ChatHeaderProps {
   title?: string | undefined;
   name?: string | undefined;
   number?: string | undefined;
+  supportStatus?: string;
+  handleCloseSupport: (event: GestureResponderEvent) => void;
   showProblemDetails?: boolean;
   showCloseProblem?: boolean;
   showCloseSupport?: boolean;

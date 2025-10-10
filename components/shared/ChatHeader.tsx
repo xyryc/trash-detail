@@ -7,6 +7,8 @@ const ChatHeader = ({
   title,
   name,
   number,
+  supportStatus,
+  handleCloseSupport,
   showProblemDetails = false,
   showCloseProblem = false,
   showCloseSupport = false,
@@ -138,16 +140,29 @@ const ChatHeader = ({
           </TouchableOpacity>
         )}
 
-        {showCloseSupport && (
-          <TouchableOpacity className="flex-1 items-end">
-            <Text
-              style={{ fontFamily: "SourceSans3-Medium" }}
-              className="text-sm text-error-normal"
+        {showCloseSupport &&
+          (supportStatus === "closed" ? (
+            <TouchableOpacity
+              onPress={handleCloseSupport}
+              className="flex-1 items-end"
             >
-              Close Support
-            </Text>
-          </TouchableOpacity>
-        )}
+              <Text
+                style={{ fontFamily: "SourceSans3-Medium" }}
+                className="text-sm text-error-normal"
+              >
+                Close Support
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View className="flex-1 items-end">
+              <Text
+                style={{ fontFamily: "SourceSans3-Medium" }}
+                className="text-sm text-error-normal"
+              >
+                Closed Support
+              </Text>
+            </View>
+          ))}
       </View>
     </View>
   );
