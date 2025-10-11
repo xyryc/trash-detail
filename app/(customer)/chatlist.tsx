@@ -32,7 +32,7 @@ const ChatList = () => {
     pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
   });
   const chatlist = chatListData?.data;
-  console.log("from customer chatlist", chatlist);
+  // console.log("from customer chatlist", chatlist);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>

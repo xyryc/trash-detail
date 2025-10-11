@@ -13,7 +13,7 @@ const ChatHeader = ({
   showCloseProblem = false,
   showCloseSupport = false,
 }: ChatHeaderProps) => {
-  console.log(supportStatus);
+  // console.log(supportStatus);
 
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">

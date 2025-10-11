@@ -13,7 +13,13 @@ import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Alert,
   FlatList,
@@ -36,6 +42,21 @@ const ChatScreen = () => {
   const lastTypingEmitRef = useRef<number>(0);
   const hasLoadedInitialMessages = useRef(false);
   const router = useRouter();
+
+  // ⭐ Create room data based on chatType
+  const roomData = useMemo(() => {
+    const data: any = {
+      chatType: chatType as string,
+    };
+
+    if (chatType === "problem") {
+      data.problemId = chatId as string;
+    } else {
+      data.supportId = chatId as string;
+    }
+
+    return data;
+  }, [chatType, chatId]);
 
   // Get chat data
   const { data: chatData } = useGetChatHistoryQuery(
@@ -68,25 +89,24 @@ const ChatScreen = () => {
 
   // Load initial messages ONLY ONCE
   useEffect(() => {
-    if (hasLoadedInitialMessages.current) return; // Exit if already loaded
+    if (hasLoadedInitialMessages.current) return;
 
     if (chatData?.data?.messages) {
       const formattedMessages = chatData.data.messages.map((msg: any) => ({
         id: msg._id || msg.id,
-        message: msg.message || msg.content,
+        message: msg.message || msg.content || "", // ⭐ Ensure never undefined
         senderId: msg.senderId._id,
         senderRole: msg.senderRole,
         createdAt: msg.createdAt,
         imageUrl: msg.imageUrl,
         type: msg.imageUrl ? "image" : "text",
-        content: msg.message || msg.content,
+        content: msg.message || msg.content || "", // ⭐ Ensure never undefined
         timestamp: msg.createdAt,
         isOwn: msg.senderId._id === user?._id,
       }));
       setMessages(formattedMessages.reverse());
       hasLoadedInitialMessages.current = true;
     } else if (chatData?.data && !chatData?.data?.messages) {
-      // Empty chat - mark as loaded
       hasLoadedInitialMessages.current = true;
     }
   }, [chatData, user?._id]);
@@ -97,13 +117,19 @@ const ChatScreen = () => {
       return;
     }
 
-    const roomData = {
+    console.log("🚪 Joining room:", roomData);
+    joinRoom(roomData);
+
+    // ⭐ Mark as read with correct field name based on chatType
+    const markAsReadData = {
       chatType: chatType as string,
-      supportId: chatId as string,
+      ...(chatType === "problem"
+        ? { problemId: chatId as string }
+        : { chatId: chatId as string }),
     };
 
-    joinRoom(roomData);
-    emit("markChatAsRead", { chatType, chatId });
+    console.log("📖 Marking as read:", markAsReadData);
+    emit("markChatAsRead", markAsReadData);
 
     return () => {
       if (isTyping && user?._id) {
@@ -111,8 +137,7 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
         stopTyping({
-          chatType: chatType as string,
-          supportId: chatId as string,
+          ...roomData,
           userId: user._id,
         });
       }
@@ -127,9 +152,10 @@ const ChatScreen = () => {
     isTyping,
     user?._id,
     stopTyping,
+    roomData,
   ]);
 
-  // Handle real-time messages - REMOVED chatData from dependencies
+  // Handle real-time messages
   useEffect(() => {
     if (!socket) return;
 
@@ -141,22 +167,20 @@ const ChatScreen = () => {
 
       const formattedMessage: Message = {
         id: message._id || message.id || Date.now().toString(),
-        message: message.message || message.content,
+        message: message.message || message.content || "", // ⭐ Ensure never undefined
         senderId: actualSenderId,
         senderRole: message.senderRole,
         createdAt: message.createdAt,
         imageUrl: message.imageUrl,
         type: message.imageUrl ? "image" : "text",
-        content: message.message || message.content,
+        content: message.message || message.content || "", // ⭐ Ensure never undefined
         timestamp: message.createdAt,
         isOwn: actualSenderId === user?._id,
       };
 
       setMessages((prev) => {
-        // Check for duplicates
         const exists = prev.some((msg) => msg.id === formattedMessage.id);
         if (exists) return prev;
-
         return [formattedMessage, ...prev];
       });
 
@@ -168,7 +192,6 @@ const ChatScreen = () => {
 
     const handleTyping = ({ userId }: { userId: string }) => {
       if (userId !== user?._id) {
-        //@ts-ignore
         setTypingUsers((prev) => {
           if (!prev.find((u) => u.userId === userId)) {
             return [...prev, { userId }];
@@ -191,7 +214,7 @@ const ChatScreen = () => {
       socket.off("typing", handleTyping);
       socket.off("stop_typing", handleStopTyping);
     };
-  }, [socket, user?._id]); // REMOVED chatData
+  }, [socket, user?._id]);
 
   // Handle typing
   const handleTextChange = useCallback(
@@ -205,8 +228,7 @@ const ChatScreen = () => {
 
         if (now - lastTypingEmitRef.current > 2000) {
           socket.emit("typing", {
-            chatType: chatType as string,
-            supportId: chatId as string,
+            ...roomData, // ⭐ Use roomData
             userId: user._id,
           });
           lastTypingEmitRef.current = now;
@@ -220,12 +242,10 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
 
-        //@ts-ignore
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
-            chatType: chatType as string,
-            supportId: chatId as string,
+            ...roomData, // ⭐ Use roomData
             userId: user._id,
           });
         }, 3000);
@@ -235,13 +255,12 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
         socket.emit("stop_typing", {
-          chatType: chatType as string,
-          supportId: chatId as string,
+          ...roomData, // ⭐ Use roomData
           userId: user._id,
         });
       }
     },
-    [socket, user?._id, isTyping, chatType, chatId]
+    [socket, user?._id, isTyping, roomData]
   );
 
   // Send text message
@@ -251,18 +270,17 @@ const ChatScreen = () => {
     if (connectionStatus !== "connected") {
       Alert.alert(
         "Connection Error",
-        "Unable to send message. Please check your connection and try again.",
-        [{ text: "OK" }]
+        "Unable to send message. Please check your connection and try again."
       );
       return;
     }
 
     const messageData = {
-      chatType,
-      supportId: chatId as string,
+      ...roomData, // ⭐ Use roomData
       message: inputText.trim(),
     };
 
+    console.log("📤 Sending message:", messageData);
     emit("sendMessage", messageData);
     setInputText("");
 
@@ -272,8 +290,7 @@ const ChatScreen = () => {
         clearTimeout(typingTimeoutRef.current);
       }
       stopTyping({
-        chatType: chatType as string,
-        supportId: chatId as string,
+        ...roomData, // ⭐ Use roomData
         userId: user?._id || "",
       });
     }
@@ -281,8 +298,7 @@ const ChatScreen = () => {
     inputText,
     socket,
     connectionStatus,
-    chatType,
-    chatId,
+    roomData,
     isTyping,
     user?._id,
     emit,
@@ -297,15 +313,13 @@ const ChatScreen = () => {
       if (connectionStatus !== "connected") {
         Alert.alert(
           "Connection Error",
-          "Unable to send image. Please check your connection and try again.",
-          [{ text: "OK" }]
+          "Unable to send image. Please check your connection and try again."
         );
         return;
       }
 
       try {
         setIsUploadingState(true);
-
         const imageUrl = await uploadImageToServer(imageUri, uploadImage);
 
         if (!imageUrl) {
@@ -313,8 +327,7 @@ const ChatScreen = () => {
         }
 
         const messageData = {
-          chatType,
-          supportId: chatId as string,
+          ...roomData, // ⭐ Use roomData
           message: caption || "",
           imageUrl: imageUrl,
         };
@@ -322,19 +335,15 @@ const ChatScreen = () => {
         emit("sendMessage", messageData);
       } catch (error) {
         console.error("Error sending image:", error);
-        Alert.alert(
-          "Upload Failed",
-          "Failed to send image. Please try again.",
-          [{ text: "OK" }]
-        );
+        Alert.alert("Upload Failed", "Failed to send image. Please try again.");
       } finally {
         setIsUploadingState(false);
       }
     },
-    [socket, connectionStatus, chatType, chatId, uploadImage, emit]
+    [socket, connectionStatus, roomData, uploadImage, emit]
   );
 
-  // close support
+  // Close support
   const [closeSupport] = useCloseSupportMutation();
 
   const handleCloseSupport = () => {
@@ -349,8 +358,6 @@ const ChatScreen = () => {
           onPress: async () => {
             try {
               await closeSupport({ supportId: chatId as string }).unwrap();
-
-              // Show success message
               Alert.alert("Closed", "Support chat has been closed.", [
                 { text: "OK", onPress: () => router.back() },
               ]);
@@ -372,13 +379,11 @@ const ChatScreen = () => {
       edges={["top", "left", "right", "bottom"]}
     >
       <StatusBar barStyle="dark-content" backgroundColor="white" />
-
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View className="flex-1">
-          {/* header */}
           <View className="px-6">
             <CustomHeader text="Chat" />
           </View>
@@ -394,7 +399,6 @@ const ChatScreen = () => {
 
           <ConnectionStatus connectionStatus={connectionStatus} />
 
-          {/* message list */}
           <FlatList
             className="flex-1 px-6 bg-[#F8FAF8]"
             ref={flatListRef}
@@ -424,13 +428,10 @@ const ChatScreen = () => {
 
           <TypingIndicator typingUsers={typingUsers} />
 
-          {/* Input Section */}
           {chatData?.data?.supportInfo?.status === "closed" ? (
             <TouchableOpacity className="py-4 bg-neutral-light-active">
               <Text
-                style={{
-                  fontFamily: "SourceSans3-Medium",
-                }}
+                style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-error-normal text-center"
               >
                 Closed

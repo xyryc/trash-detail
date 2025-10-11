@@ -77,7 +77,7 @@ const CustomerProfileEditScreen = () => {
     }
   };
 
-  console.log("customer profile", userData, id);
+  // console.log("customer profile", userData, id);
 
   return (
     <SafeAreaView
