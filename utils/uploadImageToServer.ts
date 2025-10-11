@@ -16,7 +16,7 @@ export const uploadImageToServer = async (
     const uploadResult = await uploadImage(formData).unwrap();
 
     // Log the upload result to see its structure
-    console.log("Upload Result:", uploadResult);
+    // console.log("Upload Result:", uploadResult);
 
     // Check the response structure and access imageUrl safely
     if (uploadResult.success) {

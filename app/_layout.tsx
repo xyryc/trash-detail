@@ -47,6 +47,7 @@ export default function RootLayout() {
             <Stack.Screen name="(admin)" />
             <Stack.Screen name="(employee)" />
             <Stack.Screen name="(customer)" />
+            <Stack.Screen name="shared" />
           </Stack>
 
           <StatusBar style="auto" />

@@ -375,7 +375,7 @@ const ChatScreen = () => {
     );
   };
 
-  console.log("from customer chat", chatData?.data?.messages[0]);
+  // console.log("from customer chat", chatData?.data);
 
   return (
     <SafeAreaView
