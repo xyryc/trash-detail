@@ -16,7 +16,6 @@ const ChatHeader = ({
   showCloseSupport = false,
 }: ChatHeaderProps) => {
   // console.log(supportStatus);
-
   const [modalVisible, setModalVisible] = useState(false);
 
   return (

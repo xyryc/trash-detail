@@ -392,8 +392,10 @@ const ChatScreen = () => {
 
           <ChatHeader
             id={chatData?.data?.createdByInfo?.createdById}
+            problemId={chatId as string}
             name={chatData?.data?.createdByInfo?.name}
             number={chatData?.data?.createdByInfo?.number}
+            showProblemDetails={true}
             supportStatus={chatData?.data?.supportInfo?.status}
             handleCloseSupport={handleCloseSupport}
             showCloseSupport={true}

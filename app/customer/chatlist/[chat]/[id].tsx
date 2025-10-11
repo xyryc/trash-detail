@@ -192,6 +192,7 @@ const ChatScreen = () => {
 
     const handleTyping = ({ userId }: { userId: string }) => {
       if (userId !== user?._id) {
+        //@ts-ignore
         setTypingUsers((prev) => {
           if (!prev.find((u) => u.userId === userId)) {
             return [...prev, { userId }];
@@ -242,6 +243,7 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
 
+        // @ts-ignore
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
@@ -391,9 +393,9 @@ const ChatScreen = () => {
           </View>
 
           <ChatHeader
-            id={chatData?.data?.problemInfo?.id}
-            problemId={chatId}
-            name={chatData?.data?.problemInfo?.title}
+            id={(chatData?.data as any)?.problemInfo?.id}
+            problemId={chatId as string}
+            name={(chatData?.data as any)?.problemInfo?.title}
             supportStatus={chatData?.data?.supportInfo?.status}
             showProblemDetails={true}
           />

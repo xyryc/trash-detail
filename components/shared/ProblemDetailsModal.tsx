@@ -7,13 +7,6 @@ import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 interface ProblemDetailsModalProps {
   visible: boolean;
   onClose: () => void;
-  problemData: {
-    _id?: string;
-    imageUrl?: string;
-    locationName?: string;
-    title?: string;
-    additionalNotes?: string;
-  };
   problemId?: string;
 }
 
