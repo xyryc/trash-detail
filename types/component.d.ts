@@ -192,7 +192,7 @@ interface ConnectionStatusProps {
 interface RenderMessageProps {
   item: {
     type: string;
-    message: string;
+    message?: string;
     imageUrl?: string;
     timestamp: string;
     isOwn?: boolean;

@@ -109,7 +109,7 @@ const ChatList = () => {
             <ChatItem
               item={item}
               onPress={() => {
-                router.push(`/customer/chat/${item.id}`);
+                router.push(`/customer/chatlist/${selectedTab}/${item._id}`);
               }}
             />
           )}

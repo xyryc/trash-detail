@@ -161,12 +161,14 @@ const ChatScreen = () => {
       });
 
       setTimeout(() => {
+        //@ts-ignore
         flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }, 100);
     };
 
     const handleTyping = ({ userId }: { userId: string }) => {
       if (userId !== user?._id) {
+        //@ts-ignore
         setTypingUsers((prev) => {
           if (!prev.find((u) => u.userId === userId)) {
             return [...prev, { userId }];
@@ -218,6 +220,7 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
 
+        //@ts-ignore
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
