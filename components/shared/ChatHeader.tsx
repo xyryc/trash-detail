@@ -11,12 +11,15 @@ const ChatHeader = ({
   number,
   supportStatus,
   handleCloseSupport,
-  showProblemDetails = false,
-  showCloseProblem = false,
-  showCloseSupport = false,
+  handleCloseProblem,
+  type, // Use type instead of individual boolean props
 }: ChatHeaderProps) => {
-  // console.log(supportStatus);
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Determine which buttons to show based on type
+  const showProblemDetails = type === "problem";
+  const showCloseProblem = type === "problem";
+  const showCloseSupport = type === "support";
 
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
@@ -135,7 +138,7 @@ const ChatHeader = ({
         )}
 
         {showCloseProblem && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleCloseProblem}>
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-sm text-error-normal"

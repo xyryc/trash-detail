@@ -25,7 +25,10 @@ const Header = ({ title, openSidebar }: HeaderProps) => {
       </TouchableOpacity>
 
       {notification ? (
-        <TouchableOpacity onPress={() => router.push("/shared/notification")}>
+        <TouchableOpacity
+          className="p-2"
+          onPress={() => router.push("/shared/notification")}
+        >
           <Image
             source={require("@/assets/images/notification-active.svg")}
             style={{ width: 24, height: 24, padding: 4 }}
@@ -34,6 +37,7 @@ const Header = ({ title, openSidebar }: HeaderProps) => {
         </TouchableOpacity>
       ) : (
         <Image
+          className="p-2"
           source={require("@/assets/images/notification.svg")}
           style={{ width: 24, height: 24, padding: 4 }}
           contentFit="contain"

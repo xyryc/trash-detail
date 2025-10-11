@@ -1,58 +1,68 @@
-// NotificationCard.tsx
+import { NotificationCardProps } from "@/types";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
-import { Text, View } from "react-native";
-
-interface NotificationCardProps {
-  notification: {
-    _id: string;
-    message: string;
-    problemId: string;
-    read: boolean;
-    type: string;
-    createdAt: string;
-  };
-  className?: string;
-}
+import { Pressable, Text, View } from "react-native";
 
 const NotificationCard = ({
   notification,
   className,
+  onPress, // Now it's in the interface
 }: NotificationCardProps) => {
-  // Extract problem number from message (e.g., "#P39")
-  const problemMatch = notification.message.match(/#(P\d+)/);
-  const problemNumber = problemMatch ? problemMatch[1] : "N/A";
+  const extractId = () => {
+    if (notification.id) {
+      return notification.id;
+    }
+    const match = notification.message.match(/#([PS]\d+)/);
+    return match ? match[1] : "N/A";
+  };
 
-  // Extract status from message (e.g., "forwarded")
-  const statusMatch = notification.message.match(/updated to (\w+)/);
-  const status = statusMatch ? statusMatch[1] : "Updated";
+  const extractStatus = () => {
+    const statusMatch = notification.message.match(/updated to (\w+)/i);
+    if (statusMatch) {
+      return statusMatch[1];
+    }
+
+    if (notification.type === "new_support") {
+      return "New Support";
+    }
+    if (notification.type === "new_problem") {
+      return "New Problem";
+    }
+
+    return "Updated";
+  };
+
+  const problemId = extractId();
+  const status = extractStatus();
 
   return (
-    <View
-      className={`flex-row gap-3 py-4 px-6 border-b border-green-light ${className || ""}`}
-    >
-      <AntDesign
-        className="p-2 bg-white rounded-lg border border-neutral-light-hover"
-        name="question-circle"
-        size={24}
-        color="black"
-      />
+    <Pressable onPress={onPress}>
+      <View
+        className={`flex-row gap-3 py-4 px-6 border-b border-green-light ${className || ""}`}
+      >
+        <AntDesign
+          className="p-2 bg-white rounded-lg border border-neutral-light-hover"
+          name="question-circle"
+          size={24}
+          color="black"
+        />
 
-      <View>
-        <Text
-          style={{ fontFamily: "SourceSans3-Medium" }}
-          className="text-neutral-darker"
-        >
-          ID : {problemNumber} || status updates
-        </Text>
-        <Text
-          style={{ fontFamily: "SourceSans3-Regular" }}
-          className="text-green-normal capitalize"
-        >
-          {status}
-        </Text>
+        <View>
+          <Text
+            style={{ fontFamily: "SourceSans3-Medium" }}
+            className="text-neutral-darker"
+          >
+            ID : {problemId} || status updates
+          </Text>
+          <Text
+            style={{ fontFamily: "SourceSans3-Regular" }}
+            className="text-green-normal capitalize"
+          >
+            {status}
+          </Text>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

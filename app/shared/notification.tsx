@@ -1,6 +1,10 @@
+// Notification.tsx
 import CustomHeader from "@/components/shared/CustomHeader";
 import NotificationCard from "@/components/shared/NotificationCard";
-import { useGetNotificationsQuery } from "@/store/slices/notificationApiSlice";
+import {
+  useGetNotificationsQuery,
+  useMarkAsReadMutation,
+} from "@/store/slices/notificationApiSlice";
 import { useState } from "react";
 import { FlatList, RefreshControl, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +15,8 @@ const Notification = () => {
     isLoading,
     refetch,
   } = useGetNotificationsQuery({});
+
+  const [markAsRead] = useMarkAsReadMutation();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -19,10 +25,29 @@ const Notification = () => {
     setRefreshing(false);
   };
 
+  const handleNotificationPress = async (
+    notificationId: string,
+    isRead: boolean
+  ) => {
+    if (!isRead) {
+      try {
+        await markAsRead({ notificationId }).unwrap();
+        // Force refetch immediately to update UI
+        await refetch();
+      } catch (error) {
+        console.error("Failed to mark as read:", error);
+      }
+    }
+  };
+
   const renderItem = ({ item }: any) => (
     <NotificationCard
       notification={item}
       className={item.read ? "" : "bg-neutral-light"}
+      onPress={() => {
+        console.log(item?._id);
+        handleNotificationPress(item?._id, item.read);
+      }}
     />
   );
 
@@ -48,8 +73,8 @@ const Notification = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={["#10b981"]} // Android
-            tintColor="#10b981" // iOS
+            colors={["#10b981"]}
+            tintColor="#10b981"
           />
         }
       />

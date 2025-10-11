@@ -6,7 +6,10 @@ import RenderMessage from "@/components/shared/RenderMessage";
 import TypingIndicator from "@/components/shared/TypingIndicator";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
-import { useCloseSupportMutation } from "@/store/slices/adminApiSlice";
+import {
+  useCloseProblemMutation,
+  useCloseSupportMutation,
+} from "@/store/slices/adminApiSlice";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
 import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
@@ -345,6 +348,36 @@ const ChatScreen = () => {
     [socket, connectionStatus, roomData, uploadImage, emit]
   );
 
+  // close problem
+  const [closeProblem] = useCloseProblemMutation();
+  console.log(chatId);
+  const handleCloseProblem = () => {
+    Alert.alert(
+      "Close problem",
+      "Are you sure you want to close this problem chat?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Confirm",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await closeProblem({ problemId: chatId as string }).unwrap();
+              Alert.alert("Closed", "Problem chat has been closed.", [
+                { text: "OK", onPress: () => router.back() },
+              ]);
+            } catch (error: any) {
+              Alert.alert(
+                "Error",
+                error?.data?.message || "Failed to close problem."
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
   // Close support
   const [closeSupport] = useCloseSupportMutation();
 
@@ -390,16 +423,25 @@ const ChatScreen = () => {
             <CustomHeader text="Chat" />
           </View>
 
-          <ChatHeader
-            id={chatData?.data?.createdByInfo?.createdById}
-            problemId={chatId as string}
-            name={chatData?.data?.createdByInfo?.name}
-            number={chatData?.data?.createdByInfo?.number}
-            showProblemDetails={true}
-            supportStatus={chatData?.data?.supportInfo?.status}
-            handleCloseSupport={handleCloseSupport}
-            showCloseSupport={true}
-          />
+          {chatType === "support" ? (
+            <ChatHeader
+              id={chatData?.data?.createdByInfo?.createdById}
+              problemId={chatId as string}
+              name={chatData?.data?.createdByInfo?.name}
+              number={chatData?.data?.createdByInfo?.number}
+              type="support"
+              supportStatus={chatData?.data?.supportInfo?.status}
+              handleCloseSupport={handleCloseSupport}
+            />
+          ) : (
+            <ChatHeader
+              id={chatData?.data?.problemInfo?.id}
+              problemId={chatId as string}
+              title={chatData?.data?.problemInfo?.title}
+              type="problem"
+              handleCloseProblem={handleCloseProblem}
+            />
+          )}
 
           <ConnectionStatus connectionStatus={connectionStatus} />
 

@@ -114,11 +114,10 @@ interface ChatHeaderProps {
   title?: string | undefined;
   name?: string | undefined;
   number?: string | undefined;
-  supportStatus: string | undefined;
+  supportStatus?: string | undefined;
   handleCloseSupport?: (event: GestureResponderEvent) => void;
-  showProblemDetails?: boolean;
-  showCloseProblem?: boolean;
-  showCloseSupport?: boolean;
+  handleCloseProblem?: () => void; // Add this for close problem
+  type: "problem" | "support"; // Add this - required prop
 }
 
 interface CustomerScreenProps {
@@ -209,4 +208,17 @@ interface TypingUser {
 
 interface TypingIndicatorProps {
   typingUsers: TypingUser[];
+}
+
+interface NotificationCardProps {
+  notification: {
+    _id: string;
+    id?: string;
+    message: string;
+    type: string;
+    read: boolean;
+    createdAt: string;
+  };
+  className?: string;
+  onPress?: () => void; // Add this
 }

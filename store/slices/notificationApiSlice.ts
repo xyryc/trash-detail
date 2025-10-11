@@ -6,8 +6,18 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
       query: () => "/notifications",
       //   providesTags: () => [{ type: "Notification" }],
     }),
+
+    markAsRead: builder.mutation({
+      query: ({ notificationId }) => ({
+        url: `/notifications/${notificationId}/read`,
+        method: "PATCH",
+      }),
+
+      invalidatesTags: () => [{ type: "Notification" }],
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetNotificationsQuery } = notificationApiSlice;
+export const { useGetNotificationsQuery, useMarkAsReadMutation } =
+  notificationApiSlice;
