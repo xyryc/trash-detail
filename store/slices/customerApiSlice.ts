@@ -11,9 +11,15 @@ export const customerApiSlice = apiSlice.injectEndpoints({
 
       invalidatesTags: () => [{ type: "User" }],
     }),
+
+    getProblemById: builder.query({
+      query: (problemId) => `/problems/${problemId}`,
+      providesTags: (problemId) => [{ type: "Problem" }],
+    }),
   }),
 
   overrideExisting: true,
 });
 
-export const { useUpdateProfileMutation } = customerApiSlice;
+export const { useUpdateProfileMutation, useGetProblemByIdQuery } =
+  customerApiSlice;

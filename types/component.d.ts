@@ -110,11 +110,12 @@ interface UserData {
 
 interface ChatHeaderProps {
   id?: string | undefined;
+  problemId?: string | undefined;
   title?: string | undefined;
   name?: string | undefined;
   number?: string | undefined;
-  supportStatus?: string;
-  handleCloseSupport: (event: GestureResponderEvent) => void;
+  supportStatus: string | undefined;
+  handleCloseSupport?: (event: GestureResponderEvent) => void;
   showProblemDetails?: boolean;
   showCloseProblem?: boolean;
   showCloseSupport?: boolean;

@@ -373,6 +373,8 @@ const ChatScreen = () => {
     );
   };
 
+  console.log("from customer chat", chatData?.data?.messages[0]);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -389,12 +391,11 @@ const ChatScreen = () => {
           </View>
 
           <ChatHeader
-            id={chatData?.data?.createdByInfo?.createdById}
-            name={chatData?.data?.createdByInfo?.name}
-            number={chatData?.data?.createdByInfo?.number}
+            id={chatData?.data?.problemInfo?.id}
+            problemId={chatId}
+            name={chatData?.data?.problemInfo?.title}
             supportStatus={chatData?.data?.supportInfo?.status}
-            handleCloseSupport={handleCloseSupport}
-            showCloseSupport={true}
+            showProblemDetails={true}
           />
 
           <ConnectionStatus connectionStatus={connectionStatus} />

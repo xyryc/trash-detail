@@ -1,9 +1,11 @@
 import { ChatHeaderProps } from "@/types";
-import React from "react";
+import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import ProblemDetailsModal from "./ProblemDetailsModal";
 
 const ChatHeader = ({
   id,
+  problemId,
   title,
   name,
   number,
@@ -14,6 +16,8 @@ const ChatHeader = ({
   showCloseSupport = false,
 }: ChatHeaderProps) => {
   // console.log(supportStatus);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
@@ -121,7 +125,7 @@ const ChatHeader = ({
       {/* buttons */}
       <View className="mt-2 flex-row items-center justify-between">
         {showProblemDetails && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-sm text-info-normal-active"
@@ -166,6 +170,13 @@ const ChatHeader = ({
             </TouchableOpacity>
           ))}
       </View>
+
+      {/* Modal */}
+      <ProblemDetailsModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        problemId={problemId}
+      />
     </View>
   );
 };
