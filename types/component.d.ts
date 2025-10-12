@@ -108,18 +108,6 @@ interface UserData {
   success: boolean;
 }
 
-interface ChatHeaderProps {
-  id?: string | undefined;
-  problemId?: string | undefined;
-  title?: string | undefined;
-  name?: string | undefined;
-  number?: string | undefined;
-  supportStatus?: string | undefined;
-  handleCloseSupport?: (event: GestureResponderEvent) => void;
-  handleCloseProblem?: () => void; // Add this for close problem
-  type: "problem" | "support"; // Add this - required prop
-}
-
 interface CustomerScreenProps {
   activeScreen: string;
   customerData: {

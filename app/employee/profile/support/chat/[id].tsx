@@ -1,4 +1,4 @@
-import ChatHeader from "@/components/shared/ChatHeader";
+import ChatHeader from "@/components/admin/ChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";

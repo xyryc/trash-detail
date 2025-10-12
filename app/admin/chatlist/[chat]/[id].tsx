@@ -1,4 +1,4 @@
-import ChatHeader from "@/components/shared/ChatHeader";
+import ChatHeader from "@/components/admin/ChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";
@@ -411,6 +411,8 @@ const ChatScreen = () => {
     );
   };
 
+  console.log("from chat screen", chatData?.data);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -426,23 +428,22 @@ const ChatScreen = () => {
             <CustomHeader text="Chat" />
           </View>
 
-          {chatType === "support" ? (
+          {chatType === "problem" ? (
             <ChatHeader
               id={chatData?.data?.createdByInfo?.createdById}
-              problemId={chatId as string}
               name={chatData?.data?.createdByInfo?.name}
               number={chatData?.data?.createdByInfo?.number}
-              type="support"
-              supportStatus={chatData?.data?.supportInfo?.status}
-              handleCloseSupport={handleCloseSupport}
+              status={chatData?.data?.problemInfo?.status}
+              showProblemDetails={true}
+              handleCloseProblem={handleCloseProblem}
             />
           ) : (
             <ChatHeader
-              id={chatData?.data?.problemInfo?.id}
-              problemId={chatId as string}
-              title={chatData?.data?.problemInfo?.title}
-              type="problem"
-              handleCloseProblem={handleCloseProblem}
+              id={chatData?.data?.createdByInfo?.createdById}
+              name={chatData?.data?.createdByInfo?.name}
+              number={chatData?.data?.createdByInfo?.number}
+              status={chatData?.data?.supportInfo?.status}
+              handleCloseSupport={handleCloseSupport}
             />
           )}
 
