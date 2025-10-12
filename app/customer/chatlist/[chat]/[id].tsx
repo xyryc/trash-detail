@@ -1,4 +1,4 @@
-import ChatHeader from "@/components/shared/ChatHeader";
+import CustomerChatHeader from "@/components/customer/CustomerChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";
@@ -375,7 +375,7 @@ const ChatScreen = () => {
     );
   };
 
-  // console.log("from customer chat", chatData?.data);
+  console.log("from customer chat", chatData?.data?.problemInfo?.status);
 
   return (
     <SafeAreaView
@@ -392,13 +392,20 @@ const ChatScreen = () => {
             <CustomHeader text="Chat" />
           </View>
 
-          <ChatHeader
-            id={(chatData?.data as any)?.problemInfo?.id}
-            problemId={chatId as string}
-            name={(chatData?.data as any)?.problemInfo?.title}
-            supportStatus={chatData?.data?.supportInfo?.status}
-            showProblemDetails={true}
-          />
+          {chatType === "problem" ? (
+            <CustomerChatHeader
+              id={chatData?.data?.problemInfo?.id}
+              problemId={chatData?.data?.messages[0]?.problemId}
+              title={chatData?.data?.problemInfo?.title}
+              showProblemDetails={true}
+            />
+          ) : (
+            <CustomerChatHeader
+              id={chatData?.data?.supportInfo?.id}
+              problemId={chatData?.data?.messages[0]?.supportId}
+              title={chatData?.data?.supportInfo?.title}
+            />
+          )}
 
           <ConnectionStatus connectionStatus={connectionStatus} />
 
@@ -431,7 +438,8 @@ const ChatScreen = () => {
 
           <TypingIndicator typingUsers={typingUsers} />
 
-          {chatData?.data?.supportInfo?.status === "closed" ? (
+          {chatData?.data?.problemInfo?.status === "closed" ||
+          chatData?.data?.supportInfo?.status === "closed" ? (
             <TouchableOpacity className="py-4 bg-neutral-light-active">
               <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}

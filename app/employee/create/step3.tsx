@@ -1,4 +1,4 @@
-import CustomerCard from "@/components/employee/CustomerCard";
+import CustomerCard from "@/components/customer/CustomerCard";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import SearchBar from "@/components/shared/SearchBar";

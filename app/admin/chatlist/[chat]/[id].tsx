@@ -350,7 +350,7 @@ const ChatScreen = () => {
 
   // close problem
   const [closeProblem] = useCloseProblemMutation();
-  console.log(chatId);
+
   const handleCloseProblem = () => {
     Alert.alert(
       "Close problem",
@@ -362,7 +362,10 @@ const ChatScreen = () => {
           style: "destructive",
           onPress: async () => {
             try {
-              await closeProblem({ problemId: chatId as string }).unwrap();
+              await closeProblem({
+                problemId: chatId as string,
+              }).unwrap();
+
               Alert.alert("Closed", "Problem chat has been closed.", [
                 { text: "OK", onPress: () => router.back() },
               ]);

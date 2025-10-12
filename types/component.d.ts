@@ -222,3 +222,10 @@ interface NotificationCardProps {
   className?: string;
   onPress?: () => void; // Add this
 }
+
+interface CustomerChatHeaderProps {
+  id?: string;
+  problemId?: string;
+  title?: string;
+  showProblemDetails?: boolean;
+}

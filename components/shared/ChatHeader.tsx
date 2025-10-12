@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/store/hooks";
 import { ChatHeaderProps } from "@/types";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -20,6 +21,8 @@ const ChatHeader = ({
   const showProblemDetails = type === "problem";
   const showCloseProblem = type === "problem";
   const showCloseSupport = type === "support";
+
+  const user = useAppSelector((state) => state.auth.user);
 
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
@@ -137,7 +140,7 @@ const ChatHeader = ({
           </TouchableOpacity>
         )}
 
-        {showCloseProblem && (
+        {user?.role === "admin" && showCloseProblem && (
           <TouchableOpacity onPress={handleCloseProblem}>
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
