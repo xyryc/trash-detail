@@ -95,7 +95,7 @@ const AdminDetails = () => {
               <ButtonSecondary
                 onPress={() => {
                   router.push(
-                    `/admin/settings/admin/details/edit/${adminData._id}`
+                    `/(admin)/settings/admin/details/edit/${adminData._id}`
                   );
                 }}
                 title="Edit"

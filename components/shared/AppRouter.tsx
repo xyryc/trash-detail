@@ -30,11 +30,11 @@ const AppRouter = ({ children }: { children: React.ReactNode }) => {
       if (isAuthenticated && user) {
         // Navigate based on user role
         if (user.role === "customer") {
-          router.replace("/(customer)/chatlist");
+          router.replace("/(customer)/(tabs)/chatlist");
         } else if (user.role === "employee") {
-          router.replace("/(employee)/problem");
+          router.replace("/(employee)/(tabs)/problem");
         } else if (user.role === "admin" || user.role === "superadmin") {
-          router.replace("/(admin)/problem");
+          router.replace("/(admin)/(tabs)/problem");
         }
       } else {
         router.replace("/(auth)/login");

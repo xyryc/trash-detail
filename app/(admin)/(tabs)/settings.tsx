@@ -120,7 +120,7 @@ const Settings = () => {
           {/* Add New Button */}
           <ButtonPrimary
             onPress={() =>
-              router.push(`/admin/settings/invitation/${activeScreen}`)
+              router.push(`/(admin)/settings/invitation/${activeScreen}`)
             }
             className="absolute bottom-6 right-6 px-3"
             title="Add New"

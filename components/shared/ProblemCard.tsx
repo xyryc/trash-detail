@@ -120,7 +120,7 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
           </Text>
 
           <TouchableOpacity
-            onPress={() => router.push("/employee/profile/support/start")}
+            onPress={() => router.push("/(employee)/profile/support/start")}
           >
             <Text
               style={{ fontFamily: "SourceSans3-Bold" }}

@@ -15,7 +15,7 @@ const AdminCard = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push(`/admin/settings/admin/details/${item._id}`);
+        router.push(`/(admin)/settings/admin/details/${item._id}`);
       }}
       className="flex-row items-center gap-4 px-6 py-4 border-b border-neutral-light-active"
     >

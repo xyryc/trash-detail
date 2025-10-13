@@ -210,7 +210,7 @@ const ProblemDetailsScreen = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/admin/problem/details/edit/${problem._id}`);
+                router.push(`/(admin)/problem/details/edit/${problem._id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
@@ -221,7 +221,7 @@ const ProblemDetailsScreen = () => {
               {problem?.status === "forwarded" ? (
                 <>
                   <ButtonPrimary
-                    onPress={() => router.push("/(admin)/chatlist")}
+                    onPress={() => router.push("/(admin)/(tabs)/chatlist")}
                     title="Open chat"
                     className="w-full"
                   />

@@ -12,7 +12,9 @@ const GroupCard = ({ selectedTab, item }) => {
     <Pressable
       onPress={() => {
         // if (selectedTab === "problem") {
-        router.push(`/admin/chatlist/thread/${selectedTab}/${item?.user?.id}`);
+        router.push(
+          `/(admin)/chatlist/thread/${selectedTab}/${item?.user?.id}`
+        );
         // } else if (selectedTab === "support") {
         //   router.push(`/admin/chatlist/${selectedTab}/thread/${item?.user?.id}`);
         // }

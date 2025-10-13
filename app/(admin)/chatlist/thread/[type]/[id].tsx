@@ -55,7 +55,7 @@ const Thread = () => {
             <ChatItem
               item={item}
               onPress={() => {
-                router.push(`/admin/chatlist/${type}/${item._id}`);
+                router.push(`/(admin)/chatlist/${type}/${item._id}`);
               }}
             />
           )}

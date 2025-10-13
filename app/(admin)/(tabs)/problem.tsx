@@ -177,7 +177,7 @@ const Problem = () => {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(`/admin/problem/details/${item._id}`)
+                    router.push(`/(admin)/problem/details/${item._id}`)
                   }
                 >
                   <ProblemCard data={item} />
