@@ -271,7 +271,7 @@ const CustomerDetails = () => {
               <ButtonSecondary
                 onPress={() => {
                   router.push(
-                    `/admin/settings/customer/details/edit/${userData._id}`
+                    `/(admin)/settings/customer/details/edit/${userData._id}`
                   );
                 }}
                 title="Edit"

@@ -172,7 +172,7 @@ const ProblemDetailsScreen = () => {
             {/* edit */}
             <ButtonSecondary
               onPress={() => {
-                router.push(`/employee/problem/details/edit/${problem._id}`);
+                router.push(`/(employee)/problem/details/edit/${problem._id}`);
               }}
               title="Edit"
               icon={<Octicons name="pencil" size={24} color="#2E323C" />}
@@ -189,7 +189,9 @@ const ProblemDetailsScreen = () => {
                   To resolve the matter, please contact
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push("/employee/profile/support/start")}
+                  onPress={() =>
+                    router.push("/(employee)/profile/support/start")
+                  }
                 >
                   <Text
                     style={{ fontFamily: "SourceSans3-Bold" }}
@@ -203,7 +205,7 @@ const ProblemDetailsScreen = () => {
 
             {/* contact */}
             <ButtonPrimary
-              onPress={() => router.push("/employee/profile/support/start")}
+              onPress={() => router.push("/(employee)/profile/support/start")}
               title="Contact with Support"
             />
           </View>

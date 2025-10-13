@@ -86,7 +86,7 @@ const Problem = () => {
               ) : (
                 <Pressable
                   onPress={() =>
-                    router.push(`/employee/problem/details/${item._id}`)
+                    router.push(`/(employee)/problem/details/${item._id}`)
                   }
                 >
                   <ProblemCard data={item} />

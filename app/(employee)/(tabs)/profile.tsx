@@ -291,7 +291,7 @@ const EmployeeProfile = () => {
               {/* edit */}
               <ButtonSecondary
                 onPress={() => {
-                  router.push(`/employee/profile/edit/${userData?._id}`);
+                  router.push(`/(employee)/profile/edit/${userData?._id}`);
                 }}
                 title="Edit"
                 icon={<Octicons name="pencil" size={24} color="#2E323C" />}

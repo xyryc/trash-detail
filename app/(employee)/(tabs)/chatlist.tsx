@@ -121,7 +121,7 @@ const SupportChatList = () => {
       });
 
       // Navigate to chat
-      router.push(`/employee/profile/support/chat/${chatId}`);
+      router.push(`/(employee)/profile/support/chat/${chatId}`);
     },
     [markAsRead, router]
   );
@@ -176,7 +176,7 @@ const SupportChatList = () => {
         <ButtonPrimary
           title="Open Now"
           className="absolute bottom-16 right-2.5 px-3 py-2.5"
-          onPress={() => router.push("/employee/profile/support/start")}
+          onPress={() => router.push("/(employee)/profile/support/start")}
         />
       </View>
     </SafeAreaView>

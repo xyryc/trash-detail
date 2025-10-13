@@ -29,8 +29,7 @@ const StartChat = () => {
       // console.log(result);
 
       if (result?.success) {
-        //@ts-ignore
-        router.push(`/employee/profile/support/chat/${result?.data?._id}`);
+        router.push(`/(employee)/profile/support/chat/${result?.data?._id}`);
       }
     } catch (error: any) {
       Alert.alert(

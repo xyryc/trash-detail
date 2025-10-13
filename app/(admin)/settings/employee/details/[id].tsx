@@ -221,7 +221,7 @@ const EmployeeDetails = () => {
               <ButtonSecondary
                 onPress={() => {
                   router.push(
-                    `/admin/settings/employee/details/edit/${userData._id}`
+                    `/(admin)/settings/employee/details/edit/${userData._id}`
                   );
                 }}
                 title="Edit"

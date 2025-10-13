@@ -74,8 +74,7 @@ export default function ProgressFlow() {
         }).unwrap();
 
         if (result.success) {
-          //@ts-ignore
-          router.push(`/employee/create/successful/${result.data.problemId}`);
+          router.push(`/(employee)/create/successful/${result.data.problemId}`);
         }
       } catch (error: any) {
         Alert.alert("Alert!", error.data?.message || "Something went wrong");

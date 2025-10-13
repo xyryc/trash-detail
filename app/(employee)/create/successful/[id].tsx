@@ -49,11 +49,11 @@ const Successful = () => {
         <View className="w-full gap-4">
           <ButtonPrimary
             title="Go to Problem List"
-            onPress={() => router.push("/(employee)/problem")}
+            onPress={() => router.push("/(employee)/(tabs)/problem")}
           />
           <ButtonSecondary
             title="Start New"
-            onPress={() => router.push("/employee/create/progress")}
+            onPress={() => router.push("/(employee)/create/progress")}
           />
         </View>
       </View>
