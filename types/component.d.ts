@@ -208,7 +208,7 @@ interface NotificationCardProps {
     createdAt: string;
   };
   className?: string;
-  onPress?: () => void; // Add this
+  onPress?: () => void;
 }
 
 interface CustomerChatHeaderProps {
@@ -216,4 +216,17 @@ interface CustomerChatHeaderProps {
   problemId?: string;
   title?: string;
   showProblemDetails?: boolean;
+}
+
+interface DropdownItem {
+  label: string;
+  value: string;
+}
+
+interface CustomDropdownProps {
+  value: string | null;
+  onValueChange: (value: string) => void;
+  items: DropdownItem[];
+  placeholder?: string;
+  className?: string;
 }

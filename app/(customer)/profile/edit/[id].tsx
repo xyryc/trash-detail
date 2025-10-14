@@ -1,5 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { STATES } from "@/constants/States";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { useUpdateProfileMutation } from "@/store/slices/customerApiSlice";
 import { useRouter } from "expo-router";
@@ -10,12 +12,10 @@ import {
   Platform,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const CustomerProfileEditScreen = () => {
@@ -27,26 +27,13 @@ const CustomerProfileEditScreen = () => {
     useUpdateProfileMutation();
 
   const [email, setEmail] = useState(userData?.email);
-  const [value, setValue] = useState(userData?.state);
+  const [stateValue, setStateValue] = useState(userData?.state || null);
   const [name, setName] = useState(userData?.name);
   const [number, setNumber] = useState(userData?.number);
   const [addressLane1, setAddressLane1] = useState(userData?.addressLane1);
   const [addressLane2, setAddressLane2] = useState(userData?.addressLane2);
   const [city, setCity] = useState(userData?.city);
   const [zipCode, setZipCode] = useState(userData?.zipCode);
-
-  const states = [
-    { label: "AL", value: "AL" },
-    { label: "AK", value: "AK" },
-    { label: "ZA", value: "ZA" },
-    { label: "CA", value: "CA" },
-    { label: "CO", value: "CO" },
-    { label: "FL", value: "FL" },
-    { label: "GA", value: "GA" },
-    { label: "NY", value: "NY" },
-    { label: "TX", value: "TX" },
-    { label: "WA", value: "WA" },
-  ];
 
   const handleUpdateProfile = async () => {
     const payload = {
@@ -57,7 +44,7 @@ const CustomerProfileEditScreen = () => {
       addressLane2,
       city,
       zipCode,
-      state: value,
+      state: stateValue,
     };
 
     try {
@@ -249,25 +236,12 @@ const CustomerProfileEditScreen = () => {
                     State
                   </Text>
 
-                  <View style={{ zIndex: 1 }}>
-                    <Dropdown
-                      data={states}
-                      labelField="label"
-                      valueField="value"
-                      placeholder="Select state"
-                      value={value}
-                      onChange={(item) => {
-                        console.log("Selected:", item);
-                        setValue(item.value);
-                      }}
-                      style={styles.dropdown}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      containerStyle={styles.containerStyle}
-                      itemTextStyle={styles.itemTextStyle}
-                      search={false}
-                    />
-                  </View>
+                  <CustomDropdown
+                    value={stateValue}
+                    onValueChange={setStateValue}
+                    items={STATES}
+                    placeholder="Select state"
+                  />
                 </View>
               </View>
 
@@ -301,34 +275,4 @@ const CustomerProfileEditScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  dropdown: {
-    height: 50,
-    borderColor: "#D0D3D9",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    backgroundColor: "white",
-  },
-  placeholderStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#9CA3AF",
-  },
-  selectedTextStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#4D5464",
-  },
-  containerStyle: {
-    borderRadius: 8,
-    backgroundColor: "white",
-    borderColor: "#D0D3D9",
-  },
-  itemTextStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#3D3D3D",
-  },
-});
 export default CustomerProfileEditScreen;
