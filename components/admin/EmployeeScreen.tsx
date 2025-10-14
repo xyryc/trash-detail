@@ -56,11 +56,14 @@ export const EmployeeScreen: React.FC<EmployeeScreenProps> = ({
 
   return (
     <View className="flex-1">
+      <View className="mx-6">
+        <SearchBar onSearch={handleSearch} />
+      </View>
+
       <FlatList
         data={filteredEmployees}
         ListHeaderComponent={
           <View className="px-6 py-3">
-            <SearchBar onSearch={handleSearch} value={searchQuery} />
             {searchQuery.trim().length > 0 && (
               <Text
                 className="text-sm text-gray-600 mt-2"
@@ -82,9 +85,6 @@ export const EmployeeScreen: React.FC<EmployeeScreenProps> = ({
           <EmptySearchList
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            emptyTitle="No employees yet"
-            emptyMessage="Employees will appear here once added"
-            emptyIcon="people-outline"
           />
         }
       />

@@ -53,7 +53,7 @@ export const CustomerScreen: React.FC<CustomerScreenProps> = ({
   if (isLoading || isUserLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#22C55E" />
+        <ActivityIndicator size="small" color="#22C55E" />
         <Text
           className="mt-4 text-gray-600"
           style={{ fontFamily: "SourceSans3-Regular" }}
@@ -66,11 +66,14 @@ export const CustomerScreen: React.FC<CustomerScreenProps> = ({
 
   return (
     <View className="flex-1">
+      <View className="mx-6">
+        <SearchBar onSearch={handleSearch} />
+      </View>
+
       <FlatList
         data={filteredCustomers}
         ListHeaderComponent={
           <View className="px-6 py-3">
-            <SearchBar onSearch={handleSearch} />
             {searchQuery.trim().length > 0 && (
               <Text
                 className="text-sm text-gray-600 mt-2"

@@ -1,12 +1,11 @@
 import GroupCard from "@/components/admin/GroupCard";
+import EmptySearchList from "@/components/shared/EmptySearchList";
 import Header from "@/components/shared/Header";
 import SearchBar from "@/components/shared/SearchBar";
 import { useSocket } from "@/hooks/useSocket";
 import { useGetChatThreadQuery } from "@/store/slices/chatApiSlice";
-import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   FlatList,
   Pressable,
@@ -20,7 +19,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const ChatList = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("problem");
-  const router = useRouter();
   const { socket, connectionStatus, markAsRead } = useSocket();
 
   const {
@@ -31,7 +29,27 @@ const ChatList = () => {
     pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
   });
 
-  // console.log("chat thread", chatThread?.data);
+  const filteredChats = useMemo(() => {
+    const chats = chatThread?.data || [];
+
+    if (!searchText.trim()) {
+      return chats;
+    }
+
+    const query = searchText.toLowerCase().trim();
+
+    //@ts-ignore
+    return chats.filter((chat) => {
+      const userName = chat.user?.name?.toLowerCase() || "";
+      const userId = chat.user?.userId?.toLowerCase() || "";
+
+      return userName.includes(query) || userId.includes(query);
+    });
+  }, [chatThread?.data, searchText]);
+
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -49,7 +67,7 @@ const ChatList = () => {
         >
           <Header title={"Chat List"} />
 
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </LinearGradient>
 
         {/* Tabs */}
@@ -94,7 +112,7 @@ const ChatList = () => {
 
         {/* Chat List */}
         <FlatList
-          data={chatThread?.data}
+          data={filteredChats}
           renderItem={({ item }) => (
             <GroupCard selectedTab={selectedTab} item={item} />
           )}
@@ -110,15 +128,10 @@ const ChatList = () => {
             />
           }
           ListEmptyComponent={
-            <View className="items-center justify-center h-[60vh]">
-              <Ionicons name="chatbubbles-outline" size={64} color="#D1D5DB" />
-              <Text
-                className="text-gray-500 text-lg mt-4"
-                style={{ fontFamily: "SourceSans3-Regular" }}
-              >
-                No chats found
-              </Text>
-            </View>
+            <EmptySearchList
+              searchQuery={searchText}
+              setSearchQuery={setSearchText}
+            />
           }
         />
       </View>

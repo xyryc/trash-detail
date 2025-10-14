@@ -1,11 +1,12 @@
+import EmptySearchList from "@/components/shared/EmptySearchList";
 import Header from "@/components/shared/Header";
 import ProblemCard from "@/components/shared/ProblemCard";
 import SearchBar from "@/components/shared/SearchBar";
 import { useAppSelector } from "@/store/hooks";
 import { useGetAdminProblemListQuery } from "@/store/slices/adminApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter, useSegments } from "expo-router";
-import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -22,38 +23,54 @@ const Problem = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const router = useRouter();
-  const segement = useSegments();
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const { data, isLoading, isFetching, isError, refetch } =
-    useGetAdminProblemListQuery(undefined, {
+  const { data, isLoading, isFetching, refetch } = useGetAdminProblemListQuery(
+    undefined,
+    {
       skip: !isAuthenticated || !user,
       refetchOnMountOrArgChange: true,
-    });
+    }
+  );
   const problems = data?.data || [];
-  // console.log(data);
 
   // Filter problems (not chatListData) based on search and tab
-  const filteredProblems = problems.filter((problem) => {
-    const matchesSearch =
-      problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.customerId.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.problemId.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.locationName.toLowerCase().includes(searchText.toLowerCase()) ||
-      problem.additionalNotes.toLowerCase().includes(searchText.toLowerCase());
+  const filteredProblems = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
 
-    // Filter by problem status, not category
-    const matchesTab =
-      selectedTab === "all"
-        ? true // Show all problems regardless of status
-        : selectedTab === "pending"
-          ? problem.status === "pending"
-          : selectedTab === "forwarded"
-            ? problem.status === "forwarded"
-            : false;
+    if (!query) {
+      // If no search, just filter by tab
+      return problems.filter((problem) => {
+        if (selectedTab === "all") return true;
+        if (selectedTab === "pending") return problem.status === "pending";
+        if (selectedTab === "forwarded") return problem.status === "forwarded";
+        return false;
+      });
+    }
 
-    return matchesSearch && matchesTab;
-  });
+    return problems.filter((problem) => {
+      // Safe access with fallback to empty string
+      const title = problem.title?.toLowerCase() || "";
+      const customerId = problem.customerId?.toLowerCase() || "";
+      const problemId = problem.problemId?.toLowerCase() || "";
+      const locationName = problem.locationName?.toLowerCase() || "";
+      const additionalNotes = problem.additionalNotes?.toLowerCase() || "";
+
+      const matchesSearch =
+        title.includes(query) ||
+        customerId.includes(query) ||
+        problemId.includes(query) ||
+        locationName.includes(query) ||
+        additionalNotes.includes(query);
+
+      const matchesTab =
+        selectedTab === "all" ||
+        (selectedTab === "pending" && problem.status === "pending") ||
+        (selectedTab === "forwarded" && problem.status === "forwarded");
+
+      return matchesSearch && matchesTab;
+    });
+  }, [problems, searchText, selectedTab]);
 
   // Calculate counts for each tab
   const allCount = problems.length;
@@ -61,6 +78,8 @@ const Problem = () => {
   const forwardedCount = problems.filter(
     (p) => p.status === "forwarded"
   ).length;
+
+  // console.log(filteredProblems);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -78,7 +97,7 @@ const Problem = () => {
         >
           <Header title={"Problem List"} />
 
-          <SearchBar />
+          <SearchBar onSearch={(text) => setSearchText(text)} />
         </LinearGradient>
 
         {/* Tabs */}
@@ -194,16 +213,10 @@ const Problem = () => {
                 />
               }
               ListEmptyComponent={
-                <View className="flex-1 items-center justify-center py-20">
-                  <Text
-                    className="text-gray-500 text-base"
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                  >
-                    {searchText
-                      ? `No problems found for "${searchText}"`
-                      : `No ${selectedTab === "all" ? "" : selectedTab} problems found`}
-                  </Text>
-                </View>
+                <EmptySearchList
+                  searchQuery={searchText}
+                  setSearchQuery={setSearchText}
+                />
               }
             />
           )}
