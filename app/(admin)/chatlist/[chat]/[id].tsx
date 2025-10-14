@@ -411,7 +411,7 @@ const ChatScreen = () => {
     );
   };
 
-  console.log("from chat screen", chatData?.data);
+  // console.log("from chat screen", chatData?.data);
 
   return (
     <SafeAreaView
