@@ -79,10 +79,13 @@ const Settings = () => {
     switch (activeScreen) {
       case "customer":
         return "Customer List";
+
       case "employee":
         return "Employee List";
+
       case "superadmin":
         return "Admin List";
+
       default:
         return "Customer List";
     }
@@ -93,6 +96,8 @@ const Settings = () => {
   const handleLogout = async () => {
     await logout().unwrap();
   };
+
+  console.log(loggedInUser?.data?.role);
 
   return (
     <>
@@ -238,7 +243,7 @@ const Settings = () => {
                 </TouchableOpacity>
 
                 {/* Admin */}
-                {loggedInUser?.data.role === "superadmin" && (
+                {loggedInUser?.data?.role === "superadmin" && (
                   <TouchableOpacity
                     onPress={() => handleSidebarNavigation("superadmin")}
                     style={{

@@ -1,4 +1,4 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -61,7 +61,7 @@ export default function EmployeeTabLayout() {
             <View
               className={`w-20 h-16 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
-              <AntDesign
+              <Feather
                 name="user"
                 size={24}
                 color={focused ? "#386B45" : color}

@@ -2,7 +2,7 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { useUpdateProfileMutation } from "@/store/slices/customerApiSlice";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -21,7 +21,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const CustomerProfileEditScreen = () => {
   const router = useRouter();
 
-  const { id } = useLocalSearchParams();
   const { data, isLoading } = useGetLoggedInUserDataQuery();
   const userData = data?.data;
   const [updateUserProfile, { isLoading: isUpdating }] =
@@ -250,19 +249,25 @@ const CustomerProfileEditScreen = () => {
                     State
                   </Text>
 
-                  <Dropdown
-                    data={states}
-                    labelField="label"
-                    valueField="value"
-                    placeholder="Select state"
-                    value={value}
-                    onChange={(item) => setValue(item.value)}
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    containerStyle={styles.containerStyle}
-                    itemTextStyle={styles.itemTextStyle}
-                  />
+                  <View style={{ zIndex: 1 }}>
+                    <Dropdown
+                      data={states}
+                      labelField="label"
+                      valueField="value"
+                      placeholder="Select state"
+                      value={value}
+                      onChange={(item) => {
+                        console.log("Selected:", item);
+                        setValue(item.value);
+                      }}
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      containerStyle={styles.containerStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      search={false}
+                    />
+                  </View>
                 </View>
               </View>
 
@@ -298,10 +303,12 @@ const CustomerProfileEditScreen = () => {
 
 const styles = StyleSheet.create({
   dropdown: {
-    borderWidth: 1,
+    height: 50,
     borderColor: "#D0D3D9",
+    borderWidth: 1,
     borderRadius: 8,
-    padding: 12,
+    paddingHorizontal: 10,
+    backgroundColor: "white",
   },
   placeholderStyle: {
     fontFamily: "SourceSans3-Medium",
@@ -309,18 +316,19 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
   },
   selectedTextStyle: {
+    fontFamily: "SourceSans3-Medium",
     fontSize: 14,
     color: "#4D5464",
   },
   containerStyle: {
     borderRadius: 8,
     backgroundColor: "white",
+    borderColor: "#D0D3D9",
   },
   itemTextStyle: {
+    fontFamily: "SourceSans3-Medium",
     fontSize: 14,
     color: "#3D3D3D",
-    fontFamily: "SourceSans3-Medium",
   },
 });
-
 export default CustomerProfileEditScreen;

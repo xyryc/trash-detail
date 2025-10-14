@@ -7,7 +7,7 @@ import { useGetChatListQuery } from "@/store/slices/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   FlatList,
   Pressable,
@@ -25,14 +25,51 @@ const ChatList = () => {
   const { socket, connectionStatus, markAsRead } = useSocket();
 
   const {
-    data: chatListData,
+    data: chatlist,
     refetch,
     isFetching,
   } = useGetChatListQuery(selectedTab, {
     pollingInterval: connectionStatus !== "connected" ? 30000 : 0,
   });
-  const chatlist = chatListData?.data;
-  // console.log("from customer chatlist", chatlist);
+
+  // Filter chats based on search text
+  const filteredChats = useMemo(() => {
+    if (!chatlist?.data) return [];
+
+    //@ts-ignore
+    return chatlist.data.filter((item) => {
+      const query = searchText.toLowerCase().trim();
+
+      if (!query) return true;
+
+      // Check problemId / supportId
+      if (item.problemId && item.problemId.toLowerCase().includes(query)) {
+        return true;
+      }
+      if (item.supportId && item.supportId.toLowerCase().includes(query)) {
+        return true;
+      }
+
+      // Check title
+      if (item.title && item.title.toLowerCase().includes(query)) {
+        return true;
+      }
+
+      // Optional: Search customer name
+      if (
+        item.customer?.name &&
+        item.customer.name.toLowerCase().includes(query)
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [chatlist, searchText]);
+
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -44,7 +81,7 @@ const ChatList = () => {
           <ButtonPrimary
             title="Open Now"
             className="absolute bottom-8 right-6 px-3 z-10"
-            onPress={() => router.push("/customer/support/start")}
+            onPress={() => router.push("/(customer)/support/start")}
           />
         )}
 
@@ -59,7 +96,7 @@ const ChatList = () => {
         >
           <Header title={"Chat List"} />
 
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </LinearGradient>
 
         {/* Tabs */}
@@ -104,12 +141,12 @@ const ChatList = () => {
 
         {/* Chat List */}
         <FlatList
-          data={chatlist}
+          data={filteredChats}
           renderItem={({ item }) => (
             <ChatItem
               item={item}
               onPress={() => {
-                router.push(`/customer/chatlist/${selectedTab}/${item._id}`);
+                router.push(`/(customer)/chatlist/${selectedTab}/${item._id}`);
               }}
             />
           )}

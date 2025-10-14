@@ -27,17 +27,14 @@ const Login = () => {
 
     try {
       const result = await login({ email, password }).unwrap();
-      // console.log(result.user);
-      // console.log("Auth token", await AsyncStorage.getItem("auth_token"));
-      // console.log("User data", await AsyncStorage.getItem("user_data"));
 
       // role based navigation
       if (result.user.role === "customer") {
-        router.replace("/(customer)/chatlist");
+        router.replace("/(customer)/(tabs)/chatlist");
       } else if (result.user.role === "employee") {
-        router.replace("/(employee)/problem");
+        router.replace("/(employee)/(tabs)/problem");
       } else if (result.user.role === "admin" || "superadmin") {
-        router.replace("/(admin)/problem");
+        router.replace("/(admin)/(tabs)/problem");
       }
     } catch (error: any) {
       Alert.alert(

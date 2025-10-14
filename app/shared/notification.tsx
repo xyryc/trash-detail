@@ -45,7 +45,6 @@ const Notification = () => {
       notification={item}
       className={item.read ? "" : "bg-neutral-light"}
       onPress={() => {
-        console.log(item?._id);
         handleNotificationPress(item?._id, item.read);
       }}
     />
