@@ -5,6 +5,7 @@ import CustomHeader from "@/components/shared/CustomHeader";
 import { ROLES } from "@/constants/Roles";
 import {
   useGetUserByIdQuery,
+  useRemoveAdminMutation,
   useUpdateProfileMutation,
 } from "@/store/slices/adminApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -31,6 +32,7 @@ const EditAdmin = () => {
 
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateProfileMutation();
+  const [removeAdmin, { isLoading: isRemoving }] = useRemoveAdminMutation();
 
   const handleUpdateProfile = async () => {
     const payload = {
@@ -50,6 +52,22 @@ const EditAdmin = () => {
       }
     } catch (error: any) {
       console.error("Error updating profile:", error);
+      Alert.alert("Error", error.data.message);
+    }
+  };
+
+  const handleRemoveAdmin = async () => {
+    try {
+      const response = await removeAdmin({
+        userId: adminData?._id,
+      }).unwrap();
+
+      if (response.success) {
+        Alert.alert("Success", "Admin access removed!");
+        router.push("/(admin)/(tabs)/settings");
+      }
+    } catch (error: any) {
+      console.error("Error removing profile:", error);
       Alert.alert("Error", error.data.message);
     }
   };
@@ -130,7 +148,12 @@ const EditAdmin = () => {
 
             {/* remove  */}
             <View className="mb-5">
-              <ButtonSecondary title="Remove" textColor="!text-error-normal" />
+              <ButtonSecondary
+                onPress={handleRemoveAdmin}
+                isLoading={isRemoving}
+                title="Remove"
+                textColor="!text-error-normal"
+              />
             </View>
 
             {/* edit */}

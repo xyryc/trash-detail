@@ -51,6 +51,15 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: () => [{ type: "User" }],
     }),
 
+    removeAdmin: builder.mutation({
+      query: ({ userId }) => ({
+        url: `/users/${userId}`,
+        method: "DELETE",
+      }),
+
+      invalidatesTags: () => [{ type: "User" }],
+    }),
+
     inviteUser: builder.mutation({
       query: (payload) => ({
         url: "/users/",
@@ -85,6 +94,7 @@ export const {
   useGetUserListQuery,
   useGetUserByIdQuery,
   useUpdateProfileMutation,
+  useRemoveAdminMutation,
   useInviteUserMutation,
   useCloseProblemMutation,
   useCloseSupportMutation,
