@@ -38,7 +38,7 @@ const CustomerProfile = () => {
         {/* main content */}
         {isLoading ? (
           <View className="flex-1 justify-center">
-            <ActivityIndicator size="large" color="#386B45" />
+            <ActivityIndicator size="small" color="#386B45" />
           </View>
         ) : (
           <ScrollView
