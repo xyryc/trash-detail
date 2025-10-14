@@ -4,7 +4,7 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useGetProblemListQuery } from "@/store/slices/employeeApiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -24,7 +24,29 @@ const Problem = () => {
     isFetching,
     refetch,
   } = useGetProblemListQuery();
-  const problems = problemList?.data;
+
+  const problems = problemList?.data || [];
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProblems = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return problems;
+    }
+
+    const query = searchQuery.trim().toLowerCase();
+    return problems.filter(
+      (problem) =>
+        problem.problemId.toLowerCase().includes(query) ||
+        problem.title.toLowerCase().includes(query) ||
+        problem.customerId.toLowerCase().includes(query) ||
+        (problem.additionalNotes &&
+          problem.additionalNotes.toLowerCase().includes(query))
+    );
+  }, [problems, searchQuery]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -40,7 +62,7 @@ const Problem = () => {
           <EmployeeHeader name={"Anik"} email={"mdtalathunnabi@gmail.com"} />
 
           <View className="pt-8 pb-6">
-            <SearchBar />
+            <SearchBar onSearch={handleSearch} />
           </View>
         </LinearGradient>
 
@@ -76,7 +98,7 @@ const Problem = () => {
 
           {/* problem cards */}
           <FlatList
-            data={problems}
+            data={filteredProblems}
             keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) =>
               isLoading ? (
