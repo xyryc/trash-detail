@@ -1,35 +1,58 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
+import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
+import { ROLES } from "@/constants/Roles";
+import {
+  useGetUserByIdQuery,
+  useUpdateProfileMutation,
+} from "@/store/slices/adminApiSlice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const EditCustomer = () => {
+const EditAdmin = () => {
   const router = useRouter();
-  const [value, setValue] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const { id } = useLocalSearchParams();
   const { data, isLoading } = useGetUserByIdQuery(id);
   const adminData = data?.data;
 
-  const roles = [
-    { label: "Super Admin", value: "super" },
-    { label: "Admin", value: "admin" },
-  ];
-
-  const [role, setRole] = useState(adminData?.role);
   const [email, setEmail] = useState(adminData?.email);
-  const [password, setPassword] = useState(adminData?.password);
+  const [password, setPassword] = useState("");
+
+  const [updateUserProfile, { isLoading: isUpdating }] =
+    useUpdateProfileMutation();
+
+  const handleUpdateProfile = async () => {
+    const payload = {
+      role,
+      password,
+    };
+
+    try {
+      const response = await updateUserProfile({
+        userId: adminData?._id,
+        payload,
+      }).unwrap();
+
+      if (response.success) {
+        Alert.alert("Success", "Profile updated successfully");
+        router.back();
+      }
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
+      Alert.alert("Error", error.data.message);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -57,18 +80,11 @@ const EditCustomer = () => {
                 Select Role
               </Text>
 
-              <Dropdown
-                data={roles}
-                labelField="label"
-                valueField="value"
-                placeholder="Admin"
+              <CustomDropdown
                 value={role}
-                onChange={(item) => setValue(item.value)}
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                containerStyle={styles.containerStyle}
-                itemTextStyle={styles.itemTextStyle}
+                onValueChange={setRole}
+                items={ROLES}
+                placeholder={adminData?.role}
               />
             </View>
 
@@ -83,11 +99,13 @@ const EditCustomer = () => {
               >
                 Email
               </Text>
-              <TextInput
+
+              <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                value={email}
-              />
+              >
+                {email}
+              </Text>
             </View>
 
             {/* divider */}
@@ -105,6 +123,8 @@ const EditCustomer = () => {
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
                 value={password}
+                onChangeText={(text) => setPassword(text)}
+                placeholder="Enter a new temporary password"
               />
             </View>
 
@@ -115,10 +135,9 @@ const EditCustomer = () => {
 
             {/* edit */}
             <ButtonPrimary
-              onPress={() => {
-                router.back();
-              }}
+              onPress={handleUpdateProfile}
               title="Save Change"
+              isLoading={isUpdating || isLoading}
             />
           </View>
         </ScrollView>
@@ -127,34 +146,4 @@ const EditCustomer = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  dropdown: {
-    fontFamily: "SourceSans3-Medium",
-
-    borderWidth: 1,
-    borderColor: "#D0D3D9",
-    borderRadius: 8,
-    padding: 12,
-  },
-  placeholderStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#9CA3AF",
-  },
-  selectedTextStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#4D5464",
-  },
-  containerStyle: {
-    borderRadius: 8,
-    backgroundColor: "white",
-  },
-  itemTextStyle: {
-    fontSize: 14,
-    color: "#3D3D3D",
-    fontFamily: "SourceSans3-Medium",
-  },
-});
-
-export default EditCustomer;
+export default EditAdmin;

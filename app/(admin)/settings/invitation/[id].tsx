@@ -1,5 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { ROLES } from "@/constants/Roles";
 import { useInviteUserMutation } from "@/store/slices/adminApiSlice";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -13,7 +15,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SendInvitation = () => {
@@ -21,13 +22,8 @@ const SendInvitation = () => {
   const router = useRouter();
   const [inviteUser, { isLoading }] = useInviteUserMutation();
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState(id);
   const [password, setPassword] = useState("123456");
-
-  const roles = [
-    { label: "Admin", value: "admin" },
-    { label: "Super Admin", value: "superadmin" },
-  ];
+  const [role, setRole] = useState<string | null>(null);
 
   const handleSendInvite = async () => {
     const payload = { email, role, password };
@@ -55,7 +51,9 @@ const SendInvitation = () => {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
-        <CustomHeader text={`Add ${id}`} />
+        <CustomHeader
+          text={`${id === "superadmin" ? `Add Admin` : `Add ${id}`}`}
+        />
 
         {/* input fields */}
         <ScrollView
@@ -80,27 +78,20 @@ const SendInvitation = () => {
           </View>
 
           {/* role */}
-          {id === "admin" && (
+          {id === "superadmin" && (
             <View className="mb-5">
               <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}
                 className="text-neutral-normal mb-2"
               >
-                State
+                Select Role
               </Text>
 
-              <Dropdown
-                data={roles}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Role"
+              <CustomDropdown
                 value={role}
-                onChange={(item) => setRole(item.value)}
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                containerStyle={styles.containerStyle}
-                itemTextStyle={styles.itemTextStyle}
+                onValueChange={setRole}
+                items={ROLES}
+                placeholder="Select a role"
               />
             </View>
           )}

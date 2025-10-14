@@ -2,7 +2,8 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -15,9 +16,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const CustomerDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { data, isLoading } = useGetUserByIdQuery(id);
+  const { data, isLoading, refetch } = useGetUserByIdQuery(id);
   const userData = data?.data;
   // console.log("From details", userData);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -30,7 +37,7 @@ const CustomerDetails = () => {
         {/* main content */}
         {isLoading ? (
           <View className="flex-1 justify-center">
-            <ActivityIndicator size="large" color="#386B45" />
+            <ActivityIndicator size="small" color="#386B45" />
           </View>
         ) : (
           <ScrollView

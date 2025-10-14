@@ -33,7 +33,12 @@ const Settings = () => {
 
   const { data: loggedInUser, isLoading: isUserLoading } =
     useGetLoggedInUserDataQuery();
-  const { data: userList, isLoading } = useGetUserListQuery(activeScreen);
+
+  const {
+    data: userList,
+    isLoading,
+    refetch,
+  } = useGetUserListQuery(activeScreen);
 
   const openSidebar = () => {
     setIsSidebarVisible(true);
@@ -66,7 +71,13 @@ const Settings = () => {
         );
 
       case "superadmin":
-        return <AdminScreen activeScreen={activeScreen} adminData={userList} />;
+        return (
+          <AdminScreen
+            activeScreen={activeScreen}
+            adminData={userList}
+            refetch={refetch}
+          />
+        );
 
       default:
         return (
@@ -97,7 +108,7 @@ const Settings = () => {
     await logout().unwrap();
   };
 
-  console.log(loggedInUser?.data?.role);
+  // console.log(loggedInUser?.data?.role);
 
   return (
     <>

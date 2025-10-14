@@ -2,7 +2,8 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { useGetUserByIdQuery } from "@/store/slices/adminApiSlice";
 import { Octicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -15,8 +16,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const AdminDetails = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { data, isLoading } = useGetUserByIdQuery(id);
+  const { data, isLoading, refetch } = useGetUserByIdQuery(id);
   const adminData = data?.data;
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
+  // console.log(adminData?.role);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
@@ -29,7 +38,7 @@ const AdminDetails = () => {
         {/* main content */}
         {isLoading ? (
           <View className="flex-1 justify-center">
-            <ActivityIndicator size="large" color="#386b45" />
+            <ActivityIndicator size="small" color="#386b45" />
           </View>
         ) : (
           <ScrollView
@@ -49,7 +58,9 @@ const AdminDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active capitalize"
                 >
-                  {adminData?.role}
+                  {adminData?.role === "superadmin"
+                    ? "Super Admin"
+                    : adminData?.role}
                 </Text>
               </View>
 
@@ -87,7 +98,7 @@ const AdminDetails = () => {
                   style={{ fontFamily: "SourceSans3-SemiBold" }}
                   className="text-neutral-dark-active"
                 >
-                  123456
+                  {adminData?.password}
                 </Text>
               </View>
 

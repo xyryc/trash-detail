@@ -1,5 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { STATES } from "@/constants/States";
 import {
   useGetUserByIdQuery,
   useUpdateProfileMutation,
@@ -12,15 +14,13 @@ import {
   Platform,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const EditCustomer = () => {
+const EditEmployee = () => {
   const [value, setValue] = useState<string | null>(null);
   const router = useRouter();
 
@@ -38,19 +38,6 @@ const EditCustomer = () => {
   const [city, setCity] = useState(userData.city);
   const [state, setState] = useState(userData.state);
   const [zipCode, setZipCode] = useState(userData.zipCode);
-
-  const states = [
-    { label: "AL", value: "AL" },
-    { label: "AK", value: "AK" },
-    { label: "ZA", value: "ZA" },
-    { label: "CA", value: "CA" },
-    { label: "CO", value: "CO" },
-    { label: "FL", value: "FL" },
-    { label: "GA", value: "GA" },
-    { label: "NY", value: "NY" },
-    { label: "TX", value: "TX" },
-    { label: "WA", value: "WA" },
-  ];
 
   const handleUpdateProfile = async () => {
     const payload = {
@@ -250,18 +237,11 @@ const EditCustomer = () => {
                     State
                   </Text>
 
-                  <Dropdown
-                    data={states}
-                    labelField="label"
-                    valueField="value"
-                    placeholder="Select state"
+                  <CustomDropdown
                     value={state}
-                    onChange={(item) => setState(item.value)}
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    containerStyle={styles.containerStyle}
-                    itemTextStyle={styles.itemTextStyle}
+                    onValueChange={setState}
+                    items={STATES}
+                    placeholder={state}
                   />
                 </View>
               </View>
@@ -296,31 +276,4 @@ const EditCustomer = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  dropdown: {
-    borderWidth: 1,
-    borderColor: "#D0D3D9",
-    borderRadius: 8,
-    padding: 12,
-  },
-  placeholderStyle: {
-    fontFamily: "SourceSans3-Medium",
-    fontSize: 14,
-    color: "#9CA3AF",
-  },
-  selectedTextStyle: {
-    fontSize: 14,
-    color: "#4D5464",
-  },
-  containerStyle: {
-    borderRadius: 8,
-    backgroundColor: "white",
-  },
-  itemTextStyle: {
-    fontSize: 14,
-    color: "#3D3D3D",
-    fontFamily: "SourceSans3-Medium",
-  },
-});
-
-export default EditCustomer;
+export default EditEmployee;
