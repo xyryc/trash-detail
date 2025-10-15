@@ -17,7 +17,25 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.xyryc.trashdetail"
+      "package": "com.xyryc.trashdetail",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO"
+      ],
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "usesCleartextTraffic": true,
+      "usesFeature": {
+        "name": "android.hardware.camera",
+        "required": false
+      }
     },
     "web": {
       "bundler": "metro",
@@ -32,11 +50,31 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#ffffff",
+           "androidSplash": {
+            "resizeMode": "contain"
+          }
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow trash-detail to access your camera",
+          "microphonePermission": "Allow trash-detail to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow trash-detail to access your photos.",
+          "savePhotosPermission": "Allow trash-detail to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
     ],
+    
     "experiments": {
       "typedRoutes": true
     },

@@ -37,7 +37,7 @@ const SendInvitation = () => {
       }
     } catch (error: any) {
       Alert.alert(
-        "Login Failed",
+        "Failed to send invitation",
         error.data?.message || "Something went wrong"
       );
     }

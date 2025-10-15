@@ -6,6 +6,12 @@ export const uploadImageToServer = async (
   uploadImage: ReturnType<typeof useUploadImageMutation>[0]
 ): Promise<string> => {
   try {
+    // Fix Android file path
+    // let uri = imageUri;
+    // if (Platform.OS === "android") {
+    //   uri = uri.replace("file://", "");
+    // }
+
     const formData = new FormData();
     formData.append("image", {
       uri: imageUri,

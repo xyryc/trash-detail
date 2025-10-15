@@ -45,7 +45,7 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
         url: "/upload",
         method: "POST",
         body: formData,
-        formData: true,
+        // formData: true,
       }),
     }),
 
