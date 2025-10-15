@@ -13,6 +13,8 @@ const CustomerLayout = () => {
         name="chatlist/[chat]/[id]"
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen name="support/start" options={{ headerShown: false }} />
     </Stack>
   );
 };

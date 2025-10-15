@@ -16,10 +16,21 @@ export const customerApiSlice = apiSlice.injectEndpoints({
       query: (problemId) => `/problems/${problemId}`,
       providesTags: (problemId) => [{ type: "Problem" }],
     }),
+
+    createCustomerSupportChat: builder.mutation({
+      query: (payload) => ({
+        url: "/supports",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 
   overrideExisting: true,
 });
 
-export const { useUpdateProfileMutation, useGetProblemByIdQuery } =
-  customerApiSlice;
+export const {
+  useUpdateProfileMutation,
+  useGetProblemByIdQuery,
+  useCreateCustomerSupportChatMutation,
+} = customerApiSlice;

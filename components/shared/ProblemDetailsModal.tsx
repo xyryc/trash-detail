@@ -16,7 +16,7 @@ const ProblemDetailsModal = ({
   problemId,
 }: ProblemDetailsModalProps) => {
   const { data: problemData } = useGetProblemByIdQuery(problemId);
-  //   console.log(problemData?.data);
+  // console.log(problemData?.data, problemId);
 
   return (
     <Modal

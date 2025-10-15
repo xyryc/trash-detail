@@ -17,7 +17,6 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
   } = data;
 
   const router = useRouter();
-
   const { data: userData } = useGetLoggedInUserDataQuery();
 
   return (
@@ -110,27 +109,29 @@ const ProblemCard = ({ data }: { data: ProblemItem }) => {
       </View>
 
       {/* bottom row */}
-      {status === "cancelled" && userData?.data?.role !== "admin" && (
-        <View className="px-2 py-0.5 bg-info-light border border-info-light-active rounded-[2px] mt-2 flex-row gap-1">
-          <Text
-            style={{ fontFamily: "SourceSans3-Regular" }}
-            className="text-xs text-info-normal"
-          >
-            To resolve the matter, please contact
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => router.push("/(employee)/profile/support/start")}
-          >
+      {status === "cancelled" &&
+        userData?.data?.role !== "admin" &&
+        userData?.data?.role !== "superadmin" && (
+          <View className="px-2 py-0.5 bg-info-light border border-info-light-active rounded-[2px] mt-2 flex-row gap-1">
             <Text
-              style={{ fontFamily: "SourceSans3-Bold" }}
-              className="text-info-normal-active text-xs"
+              style={{ fontFamily: "SourceSans3-Regular" }}
+              className="text-xs text-info-normal"
             >
-              support.
+              To resolve the matter, please contact
             </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+
+            <TouchableOpacity
+              onPress={() => router.push("/(employee)/profile/support/start")}
+            >
+              <Text
+                style={{ fontFamily: "SourceSans3-Bold" }}
+                className="text-info-normal-active text-xs"
+              >
+                support.
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
     </View>
   );
 };

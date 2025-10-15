@@ -51,6 +51,8 @@ const ChatList = () => {
     setSearchText(text);
   };
 
+  // console.log(filteredChats);
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -116,7 +118,7 @@ const ChatList = () => {
           renderItem={({ item }) => (
             <GroupCard selectedTab={selectedTab} item={item} />
           )}
-          keyExtractor={({ item }) => item?.user?._id}
+          keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
           refreshControl={

@@ -1,4 +1,4 @@
-import ChatHeader from "@/components/admin/ChatHeader";
+import AdminChatHeader from "@/components/admin/AdminChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";
@@ -411,7 +411,7 @@ const ChatScreen = () => {
     );
   };
 
-  // console.log("from chat screen", chatData?.data);
+  console.log("from chat screen", chatData?.data?.messages[0]?.problemId);
 
   return (
     <SafeAreaView
@@ -429,8 +429,9 @@ const ChatScreen = () => {
           </View>
 
           {chatType === "problem" ? (
-            <ChatHeader
+            <AdminChatHeader
               id={chatData?.data?.createdByInfo?.createdById}
+              problemId={chatData?.data?.messages[0]?.problemId}
               name={chatData?.data?.createdByInfo?.name}
               number={chatData?.data?.createdByInfo?.number}
               status={chatData?.data?.problemInfo?.status}
@@ -438,7 +439,7 @@ const ChatScreen = () => {
               handleCloseProblem={handleCloseProblem}
             />
           ) : (
-            <ChatHeader
+            <AdminChatHeader
               id={chatData?.data?.createdByInfo?.createdById}
               name={chatData?.data?.createdByInfo?.name}
               number={chatData?.data?.createdByInfo?.number}
@@ -478,7 +479,8 @@ const ChatScreen = () => {
 
           <TypingIndicator typingUsers={typingUsers} />
 
-          {chatData?.data?.supportInfo?.status === "closed" ? (
+          {chatData?.data?.problemInfo?.status === "closed" ||
+          chatData?.data?.supportInfo?.status === "closed" ? (
             <TouchableOpacity className="py-4 bg-neutral-light-active">
               <Text
                 style={{ fontFamily: "SourceSans3-Medium" }}

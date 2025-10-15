@@ -1,4 +1,4 @@
-import ChatHeader from "@/components/admin/ChatHeader";
+import EmployeeChatHeader from "@/components/employee/EmployeeChatHeader";
 import ChatInputSection from "@/components/shared/ChatInputSection";
 import ConnectionStatus from "@/components/shared/ConnectionStatus";
 import CustomHeader from "@/components/shared/CustomHeader";
@@ -219,6 +219,7 @@ const ChatScreen = () => {
           clearTimeout(typingTimeoutRef.current);
         }
 
+        // @ts-ignore
         typingTimeoutRef.current = setTimeout(() => {
           setIsTyping(false);
           socket.emit("stop_typing", {
@@ -332,6 +333,8 @@ const ChatScreen = () => {
     [socket, connectionStatus, chatType, supportId, uploadImage, emit]
   );
 
+  // console.log(chatData?.data?.supportInfo?.title);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
@@ -350,7 +353,7 @@ const ChatScreen = () => {
           </View>
 
           {/* Chat Header with support info */}
-          <ChatHeader
+          <EmployeeChatHeader
             id={chatData?.data?.supportInfo?.id}
             title={chatData?.data?.supportInfo?.title}
           />

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import ProblemDetailsModal from "../shared/ProblemDetailsModal";
 
-const ChatHeader = ({
+const AdminChatHeader = ({
   id,
+  problemId,
   name,
   number,
   status,
@@ -12,7 +13,7 @@ const ChatHeader = ({
   handleCloseSupport,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  console.log("header", id, name, number);
+  // console.log("header", id, name, number);
 
   return (
     <View className="bg-white p-4 border-[0.5px] border-neutral-light rounded-lg">
@@ -156,10 +157,10 @@ const ChatHeader = ({
       <ProblemDetailsModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        problemId={id}
+        problemId={problemId}
       />
     </View>
   );
 };
 
-export default ChatHeader;
+export default AdminChatHeader;

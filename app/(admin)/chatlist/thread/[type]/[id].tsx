@@ -48,7 +48,7 @@ const Thread = () => {
     });
   }, [chatThread?.data, searchText, type]);
 
-  console.log("from thread", chatThread?.data);
+  // console.log("from thread", chatThread?.data);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "left", "right"]}>
