@@ -36,6 +36,7 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+<<<<<<< HEAD
     // uploadImage: builder.mutation<UploadImageResponse, FormData>({
     //   query: (formData) => ({
     //     url: "/upload",
@@ -44,6 +45,16 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
     //     // formData: true,
     //   }),
     // }),
+=======
+    uploadImage: builder.mutation<UploadImageResponse, FormData>({
+      query: (formData) => ({
+        url: "/upload",
+        method: "POST",
+        body: formData,
+        // formData: true,
+      }),
+    }),
+>>>>>>> b79d0312455b6fa0b006805751cf6fedf3435773
 
     updateProfile: builder.mutation({
       query: ({ userId, payload }) => ({

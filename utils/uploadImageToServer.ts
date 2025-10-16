@@ -5,10 +5,17 @@ export const uploadImageToServer = async (
 ): Promise<string> => {
   try {
     // Fix Android file path
+<<<<<<< HEAD
     let uri = imageUri;
     if (Platform.OS === "android") {
       uri = uri.replace("file://", "");
     }
+=======
+    // let uri = imageUri;
+    // if (Platform.OS === "android") {
+    //   uri = uri.replace("file://", "");
+    // }
+>>>>>>> b79d0312455b6fa0b006805751cf6fedf3435773
 
     const formData = new FormData();
     formData.append("file", {
