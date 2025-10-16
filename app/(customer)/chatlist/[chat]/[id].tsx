@@ -8,7 +8,6 @@ import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/store/hooks";
 import { useCloseSupportMutation } from "@/store/slices/adminApiSlice";
 import { useGetChatHistoryQuery } from "@/store/slices/chatApiSlice";
-import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
 import { Message, TypingUser } from "@/types/chat";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -77,9 +76,7 @@ const ChatScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isUploadingState, setIsUploadingState] = useState(false);
 
-  const [uploadImage, { isLoading: isUploadingImage }] =
-    useUploadImageMutation();
-  const isLoading = isUploadingImage || isUploadingState;
+  const isLoading = isUploadingState;
 
   // Reset when chatId changes
   useEffect(() => {
@@ -117,7 +114,7 @@ const ChatScreen = () => {
       return;
     }
 
-    console.log("🚪 Joining room:", roomData);
+    // console.log("🚪 Joining room:", roomData);
     joinRoom(roomData);
 
     // ⭐ Mark as read with correct field name
@@ -128,7 +125,7 @@ const ChatScreen = () => {
         : { chatId: chatId as string }),
     };
 
-    console.log("📖 Marking as read:", markAsReadData);
+    // console.log("📖 Marking as read:", markAsReadData);
     emit("markChatAsRead", markAsReadData);
 
     return () => {
@@ -282,7 +279,7 @@ const ChatScreen = () => {
       message: inputText.trim(),
     };
 
-    console.log("📤 Sending message:", messageData);
+    // console.log("📤 Sending message:", messageData);
     emit("sendMessage", messageData);
     setInputText("");
 
@@ -322,7 +319,7 @@ const ChatScreen = () => {
 
       try {
         setIsUploadingState(true);
-        const imageUrl = await uploadImageToServer(imageUri, uploadImage);
+        const imageUrl = await uploadImageToServer(imageUri);
 
         if (!imageUrl) {
           throw new Error("Failed to upload image");
@@ -342,7 +339,7 @@ const ChatScreen = () => {
         setIsUploadingState(false);
       }
     },
-    [socket, connectionStatus, roomData, uploadImage, emit]
+    [socket, connectionStatus, roomData, emit]
   );
 
   // Close support
@@ -375,7 +372,7 @@ const ChatScreen = () => {
     );
   };
 
-  console.log("from customer chat", chatData?.data?.problemInfo?.status);
+  // console.log("from customer chat", chatData?.data?.problemInfo?.status);
 
   return (
     <SafeAreaView

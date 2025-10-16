@@ -24,7 +24,7 @@ const ResetPassword = () => {
         router.push("/(auth)/password-changed");
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Error", error.data?.message || "Password reset failed");
     }
   };

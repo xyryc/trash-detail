@@ -31,10 +31,9 @@ export default function ProgressFlow() {
     customerId: "",
     reportedDate: new Date().toISOString(),
   });
+  const [loading, setLoading] = useState(false);
 
   const [createProblem, { isLoading }] = useCreateProblemMutation();
-  // const [uploadImage, { isLoading: isUploadingImage }] =
-  //   useUploadImageMutation();
 
   const handleNext = async (data: StepFormData) => {
     if (data?.imageUri) {
@@ -51,12 +50,13 @@ export default function ProgressFlow() {
     } else {
       // After Step 4 → Go to Overview Screen
       try {
+        setLoading(true);
         let uploadedImageUrl = stepData.imageUri;
 
         // Upload image if we have one
         if (stepData.imageUri) {
           uploadedImageUrl = await uploadImageToServer(stepData.imageUri);
-          console.log("from progress", uploadedImageUrl);
+          // console.log("from progress", uploadedImageUrl);
         }
 
         const result = await createProblem({
@@ -69,9 +69,11 @@ export default function ProgressFlow() {
         }).unwrap();
 
         if (result.success) {
+          setLoading(false);
           router.push(`/(employee)/create/successful/${result.data.problemId}`);
         }
       } catch (error: any) {
+        setLoading(false);
         Alert.alert("Alert!", error.data?.message || "Something went wrong");
       }
     }
@@ -163,10 +165,7 @@ export default function ProgressFlow() {
               onComplete={handleNext}
               entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
-              isLoading={
-                isLoading
-                //|| isUploadingImage
-              }
+              isLoading={isLoading || loading}
             />
           )}
         </View>

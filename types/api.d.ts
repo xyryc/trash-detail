@@ -38,7 +38,7 @@ interface VerifyCodeResponse {
 }
 
 interface SetNewPasswordRequest {
-  email: string;
+  email: string | string[];
   password: string;
   confirmPassword: string;
 }

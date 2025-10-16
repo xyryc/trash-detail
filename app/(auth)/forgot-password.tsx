@@ -27,7 +27,7 @@ const ForgotPassword = () => {
         });
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Error", error.data?.message || "Failed to send reset code");
     }
   };

@@ -17,19 +17,19 @@ export const useSocket = (): UseSocketReturn => {
   const connect = useCallback(() => {
     // Don't create new socket if already connected
     if (socketRef.current?.connected) {
-      console.log("Socket already connected");
+      // console.log("Socket already connected");
       return;
     }
 
     // Disconnect old socket if exists
     if (socketRef.current) {
-      console.log("Disconnecting old socket");
+      // console.log("Disconnecting old socket");
       socketRef.current.disconnect();
       socketRef.current = null;
     }
 
-    console.log("Creating new socket connection");
-    console.log("Socket URL:", process.env.EXPO_PUBLIC_SOCKET_URL);
+    // console.log("Creating new socket connection");
+    // console.log("Socket URL:", process.env.EXPO_PUBLIC_SOCKET_URL);
     setConnectionStatus("connecting");
 
     const newSocket = io(
@@ -45,13 +45,13 @@ export const useSocket = (): UseSocketReturn => {
     );
 
     newSocket.on("connect", () => {
-      console.log("✅ Socket connected successfully");
+      // console.log("✅ Socket connected successfully");
       setConnectionStatus("connected");
       reconnectAttemptsRef.current = 0;
     });
 
     newSocket.on("disconnect", (reason) => {
-      console.log("❌ Socket disconnected:", reason);
+      // console.log("❌ Socket disconnected:", reason);
       setConnectionStatus("disconnected");
 
       // Auto-reconnect for most disconnect reasons
@@ -61,7 +61,7 @@ export const useSocket = (): UseSocketReturn => {
         reason === "transport error" ||
         reason === "ping timeout"
       ) {
-        console.log("🔄 Will attempt to reconnect...");
+        // console.log("🔄 Will attempt to reconnect...");
         handleReconnect();
       }
     });
@@ -83,7 +83,7 @@ export const useSocket = (): UseSocketReturn => {
 
   const handleReconnect = useCallback(() => {
     if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-      console.log("❌ Max reconnect attempts reached");
+      // console.log("❌ Max reconnect attempts reached");
       setConnectionStatus("error");
       return;
     }
@@ -93,9 +93,9 @@ export const useSocket = (): UseSocketReturn => {
       30000
     );
 
-    console.log(
-      `🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`
-    );
+    // console.log(
+    //   `🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`
+    // );
 
     reconnectTimeoutRef.current = setTimeout(() => {
       reconnectAttemptsRef.current++;
@@ -104,7 +104,7 @@ export const useSocket = (): UseSocketReturn => {
   }, [connect]);
 
   const disconnect = useCallback(() => {
-    console.log("🔌 Disconnecting socket");
+    // console.log("🔌 Disconnecting socket");
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
     }
@@ -116,7 +116,7 @@ export const useSocket = (): UseSocketReturn => {
 
   const emit = useCallback((event: string, data: any) => {
     if (socketRef.current?.connected) {
-      console.log("📤 Emitting:", event, data);
+      // console.log("📤 Emitting:", event, data);
       socketRef.current.emit(event, data);
     } else {
       console.warn("⚠️ Socket not connected, cannot emit:", event);
@@ -129,7 +129,7 @@ export const useSocket = (): UseSocketReturn => {
       problemId?: string;
       supportId?: string;
     }) => {
-      console.log("🚪 Joining room:", roomData);
+      // console.log("🚪 Joining room:", roomData);
       if (socketRef.current?.connected) {
         socketRef.current.emit("joinRoom", roomData);
       } else {
@@ -185,16 +185,16 @@ export const useSocket = (): UseSocketReturn => {
   // Initialize socket connection
   useEffect(() => {
     if (token) {
-      console.log("🔌 Token available, connecting socket");
+      // console.log("🔌 Token available, connecting socket");
       connect();
     } else {
-      console.log("❌ No token, disconnecting socket");
+      // console.log("❌ No token, disconnecting socket");
       disconnect();
     }
 
     // Cleanup on unmount
     return () => {
-      console.log("🧹 Cleaning up socket");
+      // console.log("🧹 Cleaning up socket");
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
       }

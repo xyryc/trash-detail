@@ -20,13 +20,13 @@ const Register = () => {
 
   const handleNext = () => {
     // Handle account creation logic
-    console.log("Creating account...");
+    // console.log("Creating account...");
     router.push("/(auth)/login");
   };
 
   const handleSignIn = () => {
     // Handle navigation to sign in
-    console.log("Navigate to sign in...");
+    // console.log("Navigate to sign in...");
     router.push("/(auth)/login");
   };
 

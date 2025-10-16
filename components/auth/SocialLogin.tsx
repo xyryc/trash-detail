@@ -5,7 +5,7 @@ import { Text, TouchableOpacity } from "react-native";
 const SocialLogin = ({}) => {
   const handleGoogleSignIn = () => {
     // Handle Google sign in
-    console.log("Sign in with Google...");
+    // console.log("Sign in with Google...");
   };
 
   return (

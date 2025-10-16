@@ -9,7 +9,7 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     } else {
-      console.log("NO TOKEN FOUND!");
+      // console.log("NO TOKEN FOUND!");
     }
 
     headers.set("content-type", "application/json");
@@ -34,17 +34,17 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 // @ts-ignore
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
-  console.log("=== API CALL ===");
-  console.log("Endpoint:", args);
+  // console.log("=== API CALL ===");
+  // console.log("Endpoint:", args);
 
   const result = await baseQuery(args, api, extraOptions);
 
-  console.log("API Response:", {
-    data: result.data,
-    error: result.error,
-    meta: result.meta,
-  });
-  console.log("================");
+  // console.log("API Response:", {
+  //   data: result.data,
+  //   error: result.error,
+  //   meta: result.meta,
+  // });
+  // console.log("================");
 
   return result;
 };
