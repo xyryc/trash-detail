@@ -4,29 +4,27 @@ export const uploadImageToServer = async (
   imageUri: string
 ): Promise<string> => {
   try {
-    // Fix Android file path
-<<<<<<< HEAD
+    // Properly format URI for Android
     let uri = imageUri;
-    if (Platform.OS === "android") {
-      uri = uri.replace("file://", "");
+    if (Platform.OS === "android" && !uri.startsWith("file://")) {
+      uri = `file://${uri}`;
     }
-=======
-    // let uri = imageUri;
-    // if (Platform.OS === "android") {
-    //   uri = uri.replace("file://", "");
-    // }
->>>>>>> b79d0312455b6fa0b006805751cf6fedf3435773
 
     const formData = new FormData();
+    
+    // For React Native, FormData expects an object with uri, type, and name
     formData.append("file", {
-      uri,
+      uri: uri,
       type: "image/jpeg",
       name: `problem-${Date.now()}.jpg`,
-    });
+    } as any);
+    
     formData.append(
       "upload_preset",
-      process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+      process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""
     );
+
+    console.log("Uploading image with URI:", uri);
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -34,20 +32,19 @@ export const uploadImageToServer = async (
         method: "POST",
         body: formData,
         headers: {
-          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
 
     const result = await response.json();
-    console.log("image upload result", result);
+    console.log("Image upload result:", result);
 
     if (!response.ok) {
       console.error("Cloudinary upload error:", result);
       throw new Error(result.error?.message || "Upload failed");
     }
 
-    // Cloudinary returns `secure_url` (HTTPS URL)
     return result.secure_url;
   } catch (error) {
     console.error("Image upload error:", error);
