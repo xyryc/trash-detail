@@ -1,5 +1,7 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
+import { STATES } from "@/constants/States";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { useUpdateProfileMutation } from "@/store/slices/employeeApiSlice";
 import { useRouter } from "expo-router";
@@ -14,7 +16,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const EmployeeProfileEditScreen = () => {
@@ -28,24 +29,11 @@ const EmployeeProfileEditScreen = () => {
   const [addressLane1, setAddressLane1] = useState(userData?.addressLane1);
   const [addressLane2, setAddressLane2] = useState(userData?.addressLane2);
   const [city, setCity] = useState(userData?.city);
-  const [state, setState] = useState(userData?.state);
+  const [stateValue, setStateValue] = useState(userData?.state || null);
   const [zipCode, setZipCode] = useState(userData?.zipCode);
 
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateProfileMutation();
-
-  const states = [
-    { label: "AL", value: "AL" },
-    { label: "AK", value: "AK" },
-    { label: "ZA", value: "ZA" },
-    { label: "CA", value: "CA" },
-    { label: "CO", value: "CO" },
-    { label: "FL", value: "FL" },
-    { label: "GA", value: "GA" },
-    { label: "NY", value: "NY" },
-    { label: "TX", value: "TX" },
-    { label: "WA", value: "WA" },
-  ];
 
   const handleUpdateProfile = async () => {
     const payload = {
@@ -55,7 +43,7 @@ const EmployeeProfileEditScreen = () => {
       addressLane2,
       city,
       zipCode,
-      state,
+      state: stateValue,
     };
     // console.log("payload", payload);
 
@@ -235,6 +223,7 @@ const EmployeeProfileEditScreen = () => {
                   >
                     City
                   </Text>
+
                   <TextInput
                     style={{ fontFamily: "SourceSans3-Medium" }}
                     className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
@@ -253,18 +242,11 @@ const EmployeeProfileEditScreen = () => {
                     State
                   </Text>
 
-                  <Dropdown
-                    data={states}
-                    labelField="label"
-                    valueField="value"
+                  <CustomDropdown
+                    value={stateValue}
+                    onValueChange={setStateValue}
+                    items={STATES}
                     placeholder="Select state"
-                    value={state}
-                    onChange={(item) => setState(item.value)}
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    containerStyle={styles.containerStyle}
-                    itemTextStyle={styles.itemTextStyle}
                   />
                 </View>
               </View>

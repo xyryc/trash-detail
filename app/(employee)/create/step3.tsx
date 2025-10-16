@@ -5,7 +5,7 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useGetCustomerListQuery } from "@/store/slices/employeeApiSlice";
 import { StepComponentProps } from "@/types";
 import { Image } from "expo-image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -27,6 +27,7 @@ export default function Step3({
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const { data: customerList, isLoading } = useGetCustomerListQuery();
   const customers = customerList?.data || [];
+  const [searchQuery, setSearchQuery] = useState("");
 
   // console.log("step3", customerId, selectedCustomerId);
 
@@ -35,8 +36,24 @@ export default function Step3({
       customerId,
     };
 
-    // Call onComplete function to update the data object in the parent component
     onComplete(updatedData);
+  };
+
+  const filteredCustomers = useMemo(() => {
+    if (!customerList?.data) return [];
+
+    if (!searchQuery.trim()) {
+      return customerList.data;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+    return customerList.data.filter((customer) =>
+      customer.userId?.toLowerCase().includes(query)
+    );
+  }, [customerList?.data, searchQuery]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   return (
@@ -66,16 +83,16 @@ export default function Step3({
 
           {/* customer list */}
           <View className="my-4">
-            <SearchBar className="bg-[#F2F2F2]" />
+            <SearchBar className="bg-[#F2F2F2]" onSearch={handleSearch} />
 
             <View className="my-3 px-2 bg-neutral-light rounded-lg h-2/3 border border-neutral-light-hover">
               {isLoading ? (
                 <View className="flex-1 justify-center items-center">
-                  <ActivityIndicator size="large" />
+                  <ActivityIndicator size="small" />
                 </View>
               ) : (
                 <FlatList
-                  data={customers}
+                  data={filteredCustomers}
                   renderItem={({ item }) => (
                     <CustomerCard
                       customer={item}
