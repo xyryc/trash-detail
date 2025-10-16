@@ -1,29 +1,47 @@
-import { useUploadImageMutation } from "@/store/slices/employeeApiSlice";
+import { Platform } from "react-native";
 
-// Function to upload image to the server
 export const uploadImageToServer = async (
-  imageUri: string,
-  uploadImage: ReturnType<typeof useUploadImageMutation>[0]
+  imageUri: string
 ): Promise<string> => {
   try {
+    // Fix Android file path
+    let uri = imageUri;
+    if (Platform.OS === "android") {
+      uri = uri.replace("file://", "");
+    }
+
     const formData = new FormData();
-    formData.append("image", {
-      uri: imageUri,
+    formData.append("file", {
+      uri,
       type: "image/jpeg",
       name: `problem-${Date.now()}.jpg`,
-    } as any);
+    });
+    formData.append(
+      "upload_preset",
+      process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+    );
 
-    const uploadResult = await uploadImage(formData).unwrap();
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
 
-    // Log the upload result to see its structure
-    // console.log("Upload Result:", uploadResult);
+    const result = await response.json();
+    console.log("image upload result", result);
 
-    // Check the response structure and access imageUrl safely
-    if (uploadResult.success) {
-      return uploadResult.fileUrl; // Assuming `fileUrl` contains the image URL
-    } else {
-      throw new Error("Image upload failed: No success or data returned");
+    if (!response.ok) {
+      console.error("Cloudinary upload error:", result);
+      throw new Error(result.error?.message || "Upload failed");
     }
+
+    // Cloudinary returns `secure_url` (HTTPS URL)
+    return result.secure_url;
   } catch (error) {
     console.error("Image upload error:", error);
     throw error;

@@ -23,7 +23,7 @@ const SendInvitation = () => {
   const [inviteUser, { isLoading }] = useInviteUserMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("123456");
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState(id);
 
   const handleSendInvite = async () => {
     const payload = { email, role, password };
@@ -37,7 +37,7 @@ const SendInvitation = () => {
       }
     } catch (error: any) {
       Alert.alert(
-        "Login Failed",
+        "Failed to send invitation",
         error.data?.message || "Something went wrong"
       );
     }

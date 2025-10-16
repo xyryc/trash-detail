@@ -26,7 +26,7 @@ const ProblemDetailsScreen = () => {
   if (isLoading) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#E2F2E5" />
+        <ActivityIndicator size="small" color="#E2F2E5" />
       </SafeAreaView>
     );
   }

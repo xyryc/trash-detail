@@ -74,7 +74,7 @@ const CustomerProfileEditScreen = () => {
 
       <View className="flex-1 px-6">
         {/* header */}
-        <CustomHeader text="Edit Profiledadadw" />
+        <CustomHeader text="Edit Profile" />
 
         <KeyboardAvoidingView
           style={{ flex: 1 }}

@@ -1,9 +1,6 @@
 import CustomHeader from "@/components/shared/CustomHeader";
 import { getStepName } from "@/constants/Steps";
-import {
-  useCreateProblemMutation,
-  useUploadImageMutation,
-} from "@/store/slices/employeeApiSlice";
+import { useCreateProblemMutation } from "@/store/slices/employeeApiSlice";
 import { StepFormData } from "@/types";
 import { uploadImageToServer } from "@/utils/uploadImageToServer";
 import { useRouter } from "expo-router";
@@ -36,8 +33,8 @@ export default function ProgressFlow() {
   });
 
   const [createProblem, { isLoading }] = useCreateProblemMutation();
-  const [uploadImage, { isLoading: isUploadingImage }] =
-    useUploadImageMutation();
+  // const [uploadImage, { isLoading: isUploadingImage }] =
+  //   useUploadImageMutation();
 
   const handleNext = async (data: StepFormData) => {
     if (data?.imageUri) {
@@ -58,10 +55,8 @@ export default function ProgressFlow() {
 
         // Upload image if we have one
         if (stepData.imageUri) {
-          uploadedImageUrl = await uploadImageToServer(
-            stepData.imageUri,
-            uploadImage
-          );
+          uploadedImageUrl = await uploadImageToServer(stepData.imageUri);
+          console.log("from progress", uploadedImageUrl);
         }
 
         const result = await createProblem({
@@ -168,7 +163,10 @@ export default function ProgressFlow() {
               onComplete={handleNext}
               entering={getAnimationStyle(4)}
               goToStep={setCurrentStep}
-              isLoading={isLoading || isUploadingImage}
+              isLoading={
+                isLoading
+                //|| isUploadingImage
+              }
             />
           )}
         </View>

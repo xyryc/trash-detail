@@ -1,8 +1,4 @@
-import {
-  GetCustomerListResponse,
-  GetProblemListResponse,
-  UploadImageResponse,
-} from "@/types";
+import { GetCustomerListResponse, GetProblemListResponse } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiSlice } from "../apiSlice";
 
@@ -40,14 +36,14 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    uploadImage: builder.mutation<UploadImageResponse, FormData>({
-      query: (formData) => ({
-        url: "/upload",
-        method: "POST",
-        body: formData,
-        formData: true,
-      }),
-    }),
+    // uploadImage: builder.mutation<UploadImageResponse, FormData>({
+    //   query: (formData) => ({
+    //     url: "/upload",
+    //     method: "POST",
+    //     body: formData,
+    //     // formData: true,
+    //   }),
+    // }),
 
     updateProfile: builder.mutation({
       query: ({ userId, payload }) => ({
@@ -94,7 +90,7 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetCustomerListQuery,
   useCreateProblemMutation,
-  useUploadImageMutation,
+  // useUploadImageMutation,
   useGetProblemListQuery,
   useGetProblemByIdQuery,
   useUpdateProblemMutation,

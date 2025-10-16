@@ -48,6 +48,13 @@ const EmployeeLayout = () => {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen
+        name="create/successful/[id]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };
