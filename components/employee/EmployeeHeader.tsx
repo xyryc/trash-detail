@@ -9,7 +9,6 @@ const EmployeeHeader = ({ name, email }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
   const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
-  console.log(user?.email);
 
   return (
     <View className="flex-row items-center justify-between py-[5px]">
