@@ -106,7 +106,10 @@ export default function Step3({
                   )}
                   keyExtractor={(item) => item._id}
                   showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{ paddingVertical: 8 }}
+                  contentContainerStyle={{
+                    paddingVertical: 8,
+                    paddingBottom: 100,
+                  }}
                 />
               )}
             </View>

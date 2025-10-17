@@ -345,34 +345,7 @@ const ChatScreen = () => {
   // Close support
   const [closeSupport] = useCloseSupportMutation();
 
-  const handleCloseSupport = () => {
-    Alert.alert(
-      "Close Support",
-      "Are you sure you want to close this support chat?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Confirm",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await closeSupport({ supportId: chatId as string }).unwrap();
-              Alert.alert("Closed", "Support chat has been closed.", [
-                { text: "OK", onPress: () => router.back() },
-              ]);
-            } catch (error: any) {
-              Alert.alert(
-                "Error",
-                error?.data?.message || "Failed to close support."
-              );
-            }
-          },
-        },
-      ]
-    );
-  };
-
-  // console.log("from customer chat", chatData?.data?.problemInfo?.status);
+  console.log("from customer chat", chatData?.data?.problemInfo?.status);
 
   return (
     <SafeAreaView

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiSlice } from "../apiSlice";
 
 export const customerApiSlice = apiSlice.injectEndpoints({
@@ -8,8 +9,28 @@ export const customerApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: payload,
       }),
+      async onQueryStarted({ userId, payload }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: response } = await queryFulfilled;
+          if (response.success) {
+            // Update AsyncStorage
+            await AsyncStorage.setItem(
+              "user_data",
+              JSON.stringify(response.data)
+            );
 
-      invalidatesTags: () => [{ type: "User" }],
+            // Invalidate specific profile cache
+            dispatch(
+              apiSlice.util.invalidateTags([
+                { type: "Profile", id: "CURRENT_USER" },
+              ])
+            );
+          }
+        } catch (error) {
+          console.error("Profile update error:", error);
+        }
+      },
+      invalidatesTags: [{ type: "Profile", id: "CURRENT_USER" }],
     }),
 
     getProblemById: builder.query({

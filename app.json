@@ -23,19 +23,13 @@
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",
         "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
         "READ_MEDIA_IMAGES",
+        "WRITE_MEDIA_IMAGES",
         "READ_MEDIA_VIDEO",
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "WRITE_MEDIA_VIDEO",
+        "android.permission.CAMERA",   
         "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
-        "android.permission.ACCESS_MEDIA_LOCATION",
-        "android.permission.READ_MEDIA_IMAGES",
-        "android.permission.READ_MEDIA_VIDEO",
-        "android.permission.READ_MEDIA_AUDIO"
+        "android.permission.ACCESS_MEDIA_LOCATION"
       ],
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -80,7 +74,8 @@
         {
           "photosPermission": "Allow trash-detail to access your photos.",
           "savePhotosPermission": "Allow trash-detail to save photos.",
-          "isAccessMediaLocationEnabled": true
+          "isAccessMediaLocationEnabled": true,
+          "granularPermissions": ["READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO"]
         }
       ]
     ],

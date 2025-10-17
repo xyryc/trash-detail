@@ -55,6 +55,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
           // Clear storage and Redux state
           await AsyncStorage.removeItem("auth_token");
           await AsyncStorage.removeItem("user_data");
+
+          // Clear RTK Query cache
+          dispatch(apiSlice.util.resetApiState());
+
+          // Clear Redux state
           dispatch(logoutAction());
         }
       },
