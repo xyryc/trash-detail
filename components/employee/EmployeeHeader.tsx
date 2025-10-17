@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/store/hooks";
 import { HeaderProps } from "@/types";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -7,16 +8,20 @@ import { Text, TouchableOpacity, View } from "react-native";
 const EmployeeHeader = ({ name, email }: HeaderProps) => {
   const [notification, setNotification] = useState(true);
   const router = useRouter();
+  const { user } = useAppSelector((state) => state.auth);
+  console.log(user?.email);
 
   return (
     <View className="flex-row items-center justify-between py-[5px]">
       <View>
-        <Text style={{ fontFamily: "SourceSans3-Medium" }}>Hi, {name}</Text>
+        <Text style={{ fontFamily: "SourceSans3-Medium" }}>
+          Hi, {user?.name || "there"}
+        </Text>
         <Text
           style={{ fontFamily: "SourceSans3-Regular" }}
           className="text-neutral-normal-hover"
         >
-          {email}
+          {user?.email || "Welcome Back"}
         </Text>
       </View>
 
