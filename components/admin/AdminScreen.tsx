@@ -17,11 +17,11 @@ export const AdminScreen = ({ activeScreen, adminData, refetch }: any) => {
   };
 
   const superAdmins = useMemo(() => {
-    return adminData.data.filter((admin: any) => admin.role === "superadmin");
+    return adminData?.data?.filter((admin: any) => admin.role === "superadmin");
   }, [adminData]);
 
   const regularAdmins = useMemo(() => {
-    return adminData.data.filter((admin: any) => admin.role === "admin");
+    return adminData?.data?.filter((admin: any) => admin.role === "admin");
   }, [adminData]);
 
   return (
@@ -39,10 +39,10 @@ export const AdminScreen = ({ activeScreen, adminData, refetch }: any) => {
       }
     >
       {/* Super Admins Section */}
-      {superAdmins.length > 0 && (
+      {superAdmins?.length > 0 && (
         <>
           <Text className="px-6" style={{ fontFamily: "SourceSans3-Regular" }}>
-            Super Admins ({superAdmins.length})
+            Super Admins ({superAdmins?.length})
           </Text>
 
           {superAdmins.map((item: any, index: string) => (
@@ -56,13 +56,13 @@ export const AdminScreen = ({ activeScreen, adminData, refetch }: any) => {
       )}
 
       {/* Regular Admins Section */}
-      {regularAdmins.length > 0 && (
+      {regularAdmins?.length > 0 && (
         <>
           <Text
             className="px-6 mt-6"
             style={{ fontFamily: "SourceSans3-Regular" }}
           >
-            Admins ({regularAdmins.length})
+            Admins ({regularAdmins?.length})
           </Text>
 
           {regularAdmins.map((item: any, index: string) => (
@@ -76,7 +76,7 @@ export const AdminScreen = ({ activeScreen, adminData, refetch }: any) => {
       )}
 
       {/* Empty State */}
-      {superAdmins.length === 0 && regularAdmins.length === 0 && (
+      {superAdmins?.length === 0 && regularAdmins?.length === 0 && (
         <View className="flex-1 justify-center items-center py-20">
           <Text className="text-gray-500 text-lg">No admins found</Text>
         </View>
