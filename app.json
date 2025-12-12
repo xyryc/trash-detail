@@ -34,12 +34,7 @@
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE"
-      ],
-      "usesCleartextTraffic": true,
-      "usesFeature": {
-        "name": "android.hardware.camera",
-        "required": false
-      }
+      ]
     },
     "web": {
       "bundler": "metro",
