@@ -345,7 +345,7 @@ const ChatScreen = () => {
   // Close support
   const [closeSupport] = useCloseSupportMutation();
 
-  console.log("from customer chat", chatData?.data?.problemInfo?.status);
+  // console.log("from customer chat", chatData?.data?.problemInfo?.status);
 
   return (
     <SafeAreaView
