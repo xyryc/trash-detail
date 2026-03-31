@@ -47,11 +47,11 @@ const ProblemDetailsModal = ({
               <View className="mt-4">
                 <Image
                   source={{ uri: problemData?.data?.imageUrl }}
+                  contentFit="cover"
                   style={{
                     width: 110,
                     height: 110,
                     borderRadius: 6,
-                    resizeMode: "cover",
                   }}
                 />
               </View>
@@ -84,10 +84,10 @@ const ProblemDetailsModal = ({
                 <View className="flex-row items-center gap-1">
                   <Image
                     source={require("@/assets/images/location.svg")}
+                    contentFit="contain"
                     style={{
                       width: 14,
                       height: 14,
-                      resizeMode: "contain",
                     }}
                   />
 
@@ -156,3 +156,4 @@ const ProblemDetailsModal = ({
 };
 
 export default ProblemDetailsModal;
+
