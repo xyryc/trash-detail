@@ -1,10 +1,11 @@
-import { OTPInput } from "@/components/auth/OTPInput";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useVerifyCodeMutation } from "@/store/slices/authApiSlice";
+import { toast } from "@baronha/ting";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { OTPInput } from "input-otp-native";
 import React, { useState } from "react";
-import { Alert, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const VerifyCode = () => {
@@ -15,21 +16,36 @@ const VerifyCode = () => {
 
   const handleNext = async () => {
     const numericOTP = parseInt(otp, 10);
-    // console.log(numericOTP);
 
     try {
       const result = await verifyCode({ code: numericOTP }).unwrap();
-      // console.log(result);
-      Alert.alert("Success", result.message);
+
       if (result.success) {
+        toast({
+          title: "Success",
+          message: result.message,
+          preset: "done",
+          haptic: "success",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
+
         router.push({
           pathname: "/(auth)/reset-password",
           params: { email },
         });
       }
     } catch (error: any) {
-      // console.log(error);
-      Alert.alert("Error", error.data?.message || "Failed to verify code");
+      toast({
+        title: "Error",
+        message: error.data?.message || "Failed to verify code",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
 
@@ -37,18 +53,17 @@ const VerifyCode = () => {
     <SafeAreaView className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-      {/* Form Content */}
-      <View className="flex-1 px-6 mt-32">
+      <View className="mt-32 flex-1 px-6">
         <Text
           style={{ fontFamily: "SourceSans3-SemiBold" }}
-          className="text-2xl text-center text-neutral-dark-active"
+          className="text-center text-2xl text-neutral-dark-active"
         >
           Verify Code
         </Text>
 
         <Text
           style={{ fontFamily: "SourceSans3-Regular" }}
-          className="text-center mb-5 text-neutral-normal w-10/12 mx-auto"
+          className="mx-auto mb-5 w-10/12 text-center text-neutral-normal"
         >
           We sent OTP code to your email{" "}
           <Text
@@ -60,10 +75,37 @@ const VerifyCode = () => {
           . Enter the code below to verify.
         </Text>
 
-        {/* otp */}
-        <OTPInput length={4} value={otp} onChange={setOTP} autoFocus />
+        <OTPInput
+          maxLength={4}
+          value={otp}
+          onChange={setOTP}
+          textAlign="center"
+          pattern="[0-9]*"
+          containerStyle={{ marginHorizontal: 8 }}
+          render={({ slots }) => (
+            <View className="mb-1 flex-row justify-center gap-3">
+              {slots.map((slot, index) => (
+                <Pressable
+                  key={index}
+                  onPress={slot.focus}
+                  className={`h-16 w-14 items-center justify-center rounded-xl border ${
+                    slot.isActive
+                      ? "border-green-normal"
+                      : "border-neutral-light-active"
+                  }`}
+                >
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-2xl text-neutral-dark-active"
+                  >
+                    {slot.char ?? ""}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
+        />
 
-        {/* Next Button */}
         <View className="mb-5 mt-6">
           <ButtonPrimary
             title={"Next"}
@@ -72,7 +114,6 @@ const VerifyCode = () => {
           />
         </View>
 
-        {/* resend */}
         <View className="flex-row justify-center gap-1">
           <Text
             style={{ fontFamily: "SourceSans3-Medium" }}
@@ -82,6 +123,7 @@ const VerifyCode = () => {
           </Text>
 
           <TouchableOpacity>
+            {/* TODO: integrate resend OTP API for didn't receive OTP flow */}
             <Text
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="text-green-normal"
@@ -93,7 +135,7 @@ const VerifyCode = () => {
 
         <TouchableOpacity
           onPress={() => router.push("/(auth)/login")}
-          className="flex-row items-center justify-center py-2.5 mt-6"
+          className="mt-6 flex-row items-center justify-center py-2.5"
         >
           <Image
             source={require("@/assets/images/arrow-left.svg")}
@@ -118,3 +160,4 @@ const VerifyCode = () => {
 };
 
 export default VerifyCode;
+

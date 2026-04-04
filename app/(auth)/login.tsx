@@ -1,10 +1,10 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useLoginMutation } from "@/store/slices/authApiSlice";
+import { toast } from "@baronha/ting";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -41,14 +41,21 @@ const Login = () => {
 
   const handleNext = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert("Error", "Please fill in both fields");
+      toast({
+        title: "Error",
+        message: "Please fill in both fields",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
       return;
     }
 
     try {
       const result = await login({ email, password }).unwrap();
 
-      // role based navigation
       if (result.user.role === "customer") {
         router.replace("/(customer)/(tabs)/chatlist");
       } else if (result.user.role === "employee") {
@@ -57,10 +64,15 @@ const Login = () => {
         router.replace("/(admin)/(tabs)/problem");
       }
     } catch (error: any) {
-      Alert.alert(
-        "Login Failed",
-        error.data?.message || "Something went wrong",
-      );
+      toast({
+        title: "Login Failed",
+        message: error.data?.message || "Something went wrong",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
 
@@ -84,17 +96,14 @@ const Login = () => {
             keyboardDismissMode="on-drag"
             showsVerticalScrollIndicator={false}
           >
-            {/* Header Illustration */}
             <View className="items-center">
               <View className="flex-row items-center justify-center gap-2">
-                {/* left guy */}
                 <Image
                   source={require("@/assets/images/left-guy.svg")}
                   style={{ width: 108, height: 168 }}
                   contentFit="contain"
                 />
 
-                {/* right guy */}
                 <Image
                   source={require("@/assets/images/right-guy.svg")}
                   style={{ width: 108, height: 168 }}
@@ -103,7 +112,6 @@ const Login = () => {
               </View>
             </View>
 
-            {/* Form Content */}
             <View className="px-6">
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
@@ -112,7 +120,6 @@ const Login = () => {
                 Login
               </Text>
 
-              {/* Email Input */}
               <View className="mb-5">
                 <Text
                   style={{
@@ -135,7 +142,6 @@ const Login = () => {
                 />
               </View>
 
-              {/* Password Input */}
               <View className="mb-5">
                 <Text
                   style={{
@@ -173,7 +179,6 @@ const Login = () => {
                 </Pressable>
               </View>
 
-              {/* Next Button */}
               <View className="mb-5">
                 <ButtonPrimary
                   title={"Login"}

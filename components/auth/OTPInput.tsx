@@ -1,5 +1,4 @@
-// components/auth/OTPInput/OTPInput.tsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { TextInput, View } from "react-native";
 
 interface OTPInputProps {
@@ -18,59 +17,47 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   disabled = false,
 }) => {
   const inputs = useRef<(TextInput | null)[]>([]);
-  const otpArray = value
-    .split("")
-    .concat(Array(length - value.length).fill(""));
+
+  const otpArray = useMemo(() => {
+    const clean = (value || "").replace(/\D/g, "").slice(0, length);
+    return Array.from({ length }, (_, i) => clean[i] || "");
+  }, [length, value]);
 
   useEffect(() => {
-    if (autoFocus && inputs.current[0]) {
-      inputs.current[0].focus();
+    if (autoFocus) {
+      setTimeout(() => inputs.current[0]?.focus(), 80);
     }
   }, [autoFocus]);
 
   const handleChangeText = (text: string, index: number) => {
-    // Only allow numeric input
-    const numericText = text.replace(/[^0-9]/g, "");
+    const numericText = text.replace(/\D/g, "");
 
+    // Paste scenario (e.g., user pastes full OTP)
     if (numericText.length > 1) {
-      // Handle paste scenario
-      const pastedOTP = numericText.slice(0, length);
-      onChange(pastedOTP);
+      const pasted = numericText.slice(0, length);
+      onChange(pasted);
 
-      // Focus on the last filled input or next empty one
-      const nextIndex = Math.min(pastedOTP.length - 1, length - 1);
-      inputs.current[nextIndex]?.focus();
+      const focusIndex = Math.min(pasted.length, length - 1);
+      setTimeout(() => inputs.current[focusIndex]?.focus(), 80);
       return;
     }
 
-    // Single digit input
-    const newOTP = otpArray
-      .map((digit, i) => (i === index ? numericText : digit))
-      .join("")
-      .replace(/undefined/g, "");
+    const next = [...otpArray];
+    next[index] = numericText;
+    const nextValue = next.join("").slice(0, length);
+    onChange(nextValue);
 
-    onChange(newOTP);
-
-    // Auto-focus next input
     if (numericText && index < length - 1) {
-      inputs.current[index + 1]?.focus();
+      setTimeout(() => inputs.current[index + 1]?.focus(), 80);
     }
   };
 
-  const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === "Backspace") {
-      if (!otpArray[index] && index > 0) {
-        // Move to previous input if current is empty
-        inputs.current[index - 1]?.focus();
-      }
-    }
-  };
-
-  const handleFocus = (index: number) => {
-    // Clear the input when focused if it's not the first empty one
-    const firstEmptyIndex = otpArray.findIndex((digit) => !digit);
-    if (firstEmptyIndex !== -1 && index > firstEmptyIndex) {
-      inputs.current[firstEmptyIndex]?.focus();
+  const handleKeyPress = (
+    e: { nativeEvent: { key: string } },
+    index: number,
+  ) => {
+    if (e.nativeEvent.key === "Backspace" && !otpArray[index] && index > 0) {
+      setTimeout(() => inputs.current[index - 1]?.focus(), 80);
     }
   };
 
@@ -79,19 +66,19 @@ export const OTPInput: React.FC<OTPInputProps> = ({
       {Array.from({ length }, (_, index) => (
         <TextInput
           key={index}
-          ref={(ref) => (inputs.current[index] = ref)}
+          ref={(ref) => {
+            inputs.current[index] = ref;
+          }}
           className={`
               w-14 h-14 mx-3 border rounded-lg text-center text-sm font-medium
               ${otpArray[index] ? "border-green-normal bg-green-50" : "border-gray-300"}
               ${disabled ? "bg-green-normal-active" : "bg-white"}
             `}
-          value={otpArray[index] || ""}
+          value={otpArray[index]}
           onChangeText={(text) => handleChangeText(text, index)}
-          onKeyPress={(e) => handleKeyPress(e, index)}
-          onFocus={() => handleFocus(index)}
-          keyboardType="numeric"
+          onKeyPress={(e) => handleKeyPress(e as any, index)}
+          keyboardType="number-pad"
           maxLength={1}
-          selectTextOnFocus
           editable={!disabled}
           placeholder="0"
           placeholderTextColor="#9CA3AF"
@@ -100,3 +87,4 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     </View>
   );
 };
+

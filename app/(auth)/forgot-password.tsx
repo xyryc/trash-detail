@@ -1,9 +1,9 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import { toast } from "@baronha/ting";
 import { useForgotPasswordMutation } from "@/store/slices/authApiSlice";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -23,7 +23,15 @@ const ForgotPassword = () => {
 
   const handleNext = async () => {
     if (!email) {
-      Alert.alert("Error", "Please enter your email");
+      toast({
+        title: "Error",
+        message: "Please enter your email",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
       return;
     }
 
@@ -37,7 +45,15 @@ const ForgotPassword = () => {
         });
       }
     } catch (error: any) {
-      Alert.alert("Error", error.data?.message || "Failed to send reset code");
+      toast({
+        title: "Error",
+        message: error.data?.message || "Failed to send reset code",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
 
@@ -47,7 +63,7 @@ const ForgotPassword = () => {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 24}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
         className="flex-1"
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
