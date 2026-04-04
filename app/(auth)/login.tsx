@@ -2,7 +2,7 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useLoginMutation } from "@/store/slices/authApiSlice";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -21,8 +21,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
+
+  useEffect(() => {
+    const show = Keyboard.addListener("keyboardDidShow", () =>
+      setIsKeyboardVisible(true),
+    );
+    const hide = Keyboard.addListener("keyboardDidHide", () =>
+      setIsKeyboardVisible(false),
+    );
+
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
 
   const handleNext = async () => {
     if (!email.trim() || !password.trim()) {
@@ -44,7 +59,7 @@ const Login = () => {
     } catch (error: any) {
       Alert.alert(
         "Login Failed",
-        error.data?.message || "Something went wrong"
+        error.data?.message || "Something went wrong",
       );
     }
   };
@@ -55,16 +70,22 @@ const Login = () => {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 24}
         className="flex-1"
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: isKeyboardVisible ? "flex-start" : "center",
+              paddingBottom: 24,
+            }}
             keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
             showsVerticalScrollIndicator={false}
           >
             {/* Header Illustration */}
-            <View className="items-center pt-8">
+            <View className="items-center">
               <View className="flex-row items-center justify-center gap-2">
                 {/* left guy */}
                 <Image
@@ -83,7 +104,7 @@ const Login = () => {
             </View>
 
             {/* Form Content */}
-            <View className="flex-1 px-6">
+            <View className="px-6">
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-xl text-center my-5 text-neutral-dark-active"

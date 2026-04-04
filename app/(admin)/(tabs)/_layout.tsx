@@ -111,7 +111,7 @@ export default function AdminTabLayout() {
                 }}
                 className={`text-sm ${focused ? "text-green-normal" : ""}`}
               >
-                Settings
+                Manage
               </Text>
             </View>
           ),
