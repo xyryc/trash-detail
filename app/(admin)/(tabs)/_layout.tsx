@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
@@ -94,15 +94,12 @@ export default function AdminTabLayout() {
             <View
               className={`w-20 h-16 flex justify-center items-center gap-1.5 rounded-lg  ${focused ? " bg-[#E2F2E5]" : "border border-neutral-light-hover"}`}
             >
-              <Image
-                source={require("@/assets/images/setting.svg")}
-                style={{
-                  width: 24,
-                  height: 24,
-                  tintColor: focused ? "#386B45" : "black",
-                }}
-                cachePolicy="memory-disk"
+              <MaterialCommunityIcons
+                name="account-cog-outline"
+                size={24}
+                color={focused ? "#386B45" : color}
               />
+
               <Text
                 style={{
                   fontFamily: focused

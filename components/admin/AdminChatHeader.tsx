@@ -57,7 +57,7 @@ const AdminChatHeader = ({
             :
           </Text>
           <Text
-            className="flex-1 text-neutral-dark-active"
+            className="flex-1 text-neutral-dark-active capitalize"
             style={{ fontFamily: "SourceSans3-SemiBold" }}
           >
             {name}

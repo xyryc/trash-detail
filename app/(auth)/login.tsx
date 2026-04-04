@@ -145,6 +145,7 @@ const Login = () => {
                 >
                   Password
                 </Text>
+
                 <TextInput
                   style={{
                     fontFamily: "SourceSans3-Medium",
@@ -159,7 +160,7 @@ const Login = () => {
 
                 <Pressable
                   onPress={() => router.push("/(auth)/forgot-password")}
-                  className="mt-2"
+                  className="mt-2 self-end"
                 >
                   <Text
                     style={{

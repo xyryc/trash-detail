@@ -13,7 +13,7 @@ const GroupCard = ({ selectedTab, item }) => {
       onPress={() => {
         // if (selectedTab === "problem") {
         router.push(
-          `/(admin)/chatlist/thread/${selectedTab}/${item?.user?.id}`
+          `/(admin)/chatlist/thread/${selectedTab}/${item?.user?.id}`,
         );
         // } else if (selectedTab === "support") {
         //   router.push(`/admin/chatlist/${selectedTab}/thread/${item?.user?.id}`);
@@ -60,7 +60,7 @@ const GroupCard = ({ selectedTab, item }) => {
 
             <Text
               style={{ fontFamily: "SourceSans3-SemiBold" }}
-              className="text-lg text-neutral-dark-active"
+              className="text-lg text-neutral-dark-active capitalize"
               numberOfLines={1}
             >
               {item?.user?.name}
