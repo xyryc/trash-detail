@@ -4,13 +4,13 @@ import {
   useGetProblemByIdQuery,
   useUpdateProblemMutation,
 } from "@/store/slices/adminApiSlice";
+import { toast } from "@baronha/ting";
 import { format } from "date-fns";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -28,12 +28,18 @@ const EditProblemScreen = () => {
   const problem = data?.data;
   const [updateProblem, { isLoading: isUpdating }] = useUpdateProblemMutation();
 
-  const [charCount, setCharCount] = useState(problem?.title?.length || 0);
-  const [title, setTitle] = useState(problem.title);
-  const [locationName, setLocationName] = useState(problem.locationName);
-  const [additionalNotes, setAdditionalNotes] = useState(
-    problem.additionalNotes
-  );
+  const [charCount, setCharCount] = useState(0);
+  const [title, setTitle] = useState("");
+  const [locationName, setLocationName] = useState("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
+
+  useEffect(() => {
+    if (!problem) return;
+    setTitle(problem.title || "");
+    setLocationName(problem.locationName || "");
+    setAdditionalNotes(problem.additionalNotes || "");
+    setCharCount((problem.title || "").length);
+  }, [problem]);
 
   const handleUpdateProblem = async () => {
     const payload = {
@@ -49,22 +55,29 @@ const EditProblemScreen = () => {
       }).unwrap();
 
       if (response.success) {
-        Alert.alert("Success", "Problem details updated successfully");
+        toast({
+          title: "Success",
+          message: "Problem details updated successfully",
+          preset: "done",
+          haptic: "success",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
         router.back();
       }
     } catch (error: any) {
-      console.error("Error updating problem details:", error);
-      Alert.alert("Error", error.data.message);
+      toast({
+        title: "Error",
+        message: error.data?.message || "Failed to update problem details",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
-
-  if (isLoading || isUpdating) {
-    return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="small" color="#E2F2E5" />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView
@@ -78,157 +91,156 @@ const EditProblemScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View className="flex-1 px-6">
-          {/* header */}
           <CustomHeader text="Edit" />
 
-          {/* main content */}
-          <ScrollView
-            className="py-4"
-            contentContainerClassName="pb-10"
-            showsVerticalScrollIndicator={false}
-          >
-            <Image
-              source={problem?.image}
-              style={{ width: "100%", height: 326, borderRadius: 6 }}
-              contentFit="fill"
-            />
+          {isLoading || isUpdating ? (
+            <View className="flex-1 items-center justify-center">
+              <ActivityIndicator size="small" color="#E2F2E5" />
+            </View>
+          ) : (
+            <ScrollView
+              className="py-4"
+              contentContainerClassName="pb-10"
+              showsVerticalScrollIndicator={false}
+            >
+              <Image
+                source={problem?.image}
+                style={{ width: "100%", height: 326, borderRadius: 6 }}
+                contentFit="fill"
+              />
 
-            <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
-              {/* status */}
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="mb-5 text-secondary-orange-600 capitalize"
-              >
-                {problem.status}
-              </Text>
-
-              {/* first row */}
-              <View className="flex-row">
-                <View className="w-[50vw]">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                    className="text-neutral-normal mb-2"
-                  >
-                    Problem ID:
-                  </Text>
-                  <Text
-                    style={{ fontFamily: "SourceSans3-SemiBold" }}
-                    className="text-neutral-dark-active"
-                  >
-                    {problem?.problemId}
-                  </Text>
-                </View>
-
-                <View>
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                    className="text-neutral-normal mb-2"
-                  >
-                    Customer ID:
-                  </Text>
-                  <Text
-                    style={{ fontFamily: "SourceSans3-SemiBold" }}
-                    className="text-neutral-dark-active"
-                  >
-                    {problem?.customerId}
-                  </Text>
-                </View>
-              </View>
-
-              {/* divider */}
-              <View className="h-px bg-neutral-light-hover my-5" />
-
-              {/* second row */}
-              <View>
+              <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
+                  className="mb-5 text-secondary-orange-600 capitalize"
                 >
-                  Date Reported
+                  {problem?.status}
                 </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  {format(new Date(problem.reportedDate), "MMMM d, yyyy")}
-                </Text>
-              </View>
 
-              {/* divider */}
-              <View className="h-px bg-neutral-light-hover my-5" />
+                <View className="flex-row">
+                  <View className="w-[50vw]">
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Problem ID:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {problem?.problemId}
+                    </Text>
+                  </View>
 
-              {/* third row */}
-              <View>
-                <View className="mb-5">
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                    className="text-neutral-normal mb-2"
-                  >
-                    Problem Title:
-                  </Text>
-
-                  <TextInput
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                    maxLength={20}
-                    value={title}
-                    onChangeText={(text) => {
-                      setCharCount(text.length);
-                      setTitle(text);
-                    }}
-                  />
-
-                  <Text
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                    className="text-neutral-normal text-xs text-right mt-1"
-                  >
-                    {charCount}/20
-                  </Text>
+                  <View>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Customer ID:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {problem?.customerId}
+                    </Text>
+                  </View>
                 </View>
+
+                <View className="h-px bg-neutral-light-hover my-5" />
 
                 <View>
                   <Text
                     style={{ fontFamily: "SourceSans3-Regular" }}
                     className="text-neutral-normal mb-2"
                   >
-                    Location:
+                    Date Reported
                   </Text>
-
-                  <TextInput
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                    value={locationName}
-                    onChangeText={(text) => setLocationName(text)}
-                  />
-                </View>
-
-                <View className="my-5">
                   <Text
-                    style={{ fontFamily: "SourceSans3-Regular" }}
-                    className="text-neutral-normal mb-2"
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
                   >
-                    Additional Notes:
+                    {problem?.reportedDate
+                      ? format(new Date(problem.reportedDate), "MMMM d, yyyy")
+                      : ""}
                   </Text>
-
-                  <TextInput
-                    style={{ fontFamily: "SourceSans3-Medium" }}
-                    className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
-                    multiline={true}
-                    numberOfLines={2}
-                    value={additionalNotes}
-                    onChangeText={(text) => setAdditionalNotes(text)}
-                  />
                 </View>
-              </View>
 
-              {/* save */}
-              <ButtonPrimary
-                title="Save"
-                onPress={handleUpdateProblem}
-                isLoading={isLoading || isUpdating}
-              />
-            </View>
-          </ScrollView>
+                <View className="h-px bg-neutral-light-hover my-5" />
+
+                <View>
+                  <View className="mb-5">
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Problem Title:
+                    </Text>
+
+                    <TextInput
+                      style={{ fontFamily: "SourceSans3-Medium" }}
+                      className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                      maxLength={20}
+                      value={title}
+                      onChangeText={(text) => {
+                        setCharCount(text.length);
+                        setTitle(text);
+                      }}
+                    />
+
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal text-xs text-right mt-1"
+                    >
+                      {charCount}/20
+                    </Text>
+                  </View>
+
+                  <View>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Location:
+                    </Text>
+
+                    <TextInput
+                      style={{ fontFamily: "SourceSans3-Medium" }}
+                      className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                      value={locationName}
+                      onChangeText={(text) => setLocationName(text)}
+                    />
+                  </View>
+
+                  <View className="my-5">
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Additional Notes:
+                    </Text>
+
+                    <TextInput
+                      style={{ fontFamily: "SourceSans3-Medium" }}
+                      className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                      multiline={true}
+                      numberOfLines={2}
+                      value={additionalNotes}
+                      onChangeText={(text) => setAdditionalNotes(text)}
+                    />
+                  </View>
+                </View>
+
+                <ButtonPrimary
+                  title="Save"
+                  onPress={handleUpdateProblem}
+                  isLoading={isUpdating}
+                />
+              </View>
+            </ScrollView>
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -236,3 +248,5 @@ const EditProblemScreen = () => {
 };
 
 export default EditProblemScreen;
+
+

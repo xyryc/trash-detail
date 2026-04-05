@@ -40,7 +40,7 @@ const Problem = () => {
         problem.title.toLowerCase().includes(query) ||
         problem.customerId.toLowerCase().includes(query) ||
         (problem.additionalNotes &&
-          problem.additionalNotes.toLowerCase().includes(query))
+          problem.additionalNotes.toLowerCase().includes(query)),
     );
   }, [problems, searchQuery]);
 
@@ -59,7 +59,7 @@ const Problem = () => {
           end={{ x: 0, y: 1 }} // Bottom (180deg)
           style={{ paddingHorizontal: 24 }}
         >
-          <EmployeeHeader name={"Anik"} email={"mdtalathunnabi@gmail.com"} />
+          <EmployeeHeader name={"User"} email={"user@gmail.com"} />
 
           <View className="pt-8 pb-6">
             <SearchBar onSearch={handleSearch} />

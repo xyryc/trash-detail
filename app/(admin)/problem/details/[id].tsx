@@ -6,19 +6,13 @@ import {
   useGetProblemByIdQuery,
   useUpdateProblemStatusMutation,
 } from "@/store/slices/adminApiSlice";
+import { toast } from "@baronha/ting";
 import { Octicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  StatusBar,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProblemDetailsScreen = () => {
@@ -44,24 +38,29 @@ const ProblemDetailsScreen = () => {
       }).unwrap();
 
       if (result.success) {
-        Alert.alert("Success", "Problem status updated successfully");
+        toast({
+          title: "Success",
+          message: "Problem status updated successfully",
+          preset: "done",
+          haptic: "success",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
         router.back();
       }
     } catch (error: any) {
-      Alert.alert(
-        "Status update Failed",
-        error.data?.message || "Something went wrong"
-      );
+      toast({
+        title: "Status Update Failed",
+        message: error.data?.message || "Something went wrong",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
-
-  if (isLoading || isUpdating) {
-    return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="small" color="#E2F2E5" />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView
@@ -71,237 +70,228 @@ const ProblemDetailsScreen = () => {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <View className="flex-1 px-6">
-        {/* header */}
         <CustomHeader />
 
-        {/* main content */}
-        <ScrollView
-          className="py-4"
-          contentContainerClassName="pb-10"
-          showsVerticalScrollIndicator={false}
-        >
-          <Image
-            className="rounded-md"
-            source={problem?.imageUrl}
-            style={{ width: "100%", height: 326, borderRadius: 6 }}
-            contentFit="fill"
-          />
-
-          <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
-            <Text
-              style={{ fontFamily: "SourceSans3-Regular" }}
-              className={`mb-5 capitalize ${
-                (problem?.status === "pending" &&
-                  "text-secondary-orange-600") ||
-                (problem?.status === "cancelled" && "text-error-normal") ||
-                (problem?.status === "forwarded" && "text-green-normal")
-              }`}
+        {isLoading || isUpdating ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="small" color="#E2F2E5" />
+          </View>
+        ) : (
+          <>
+            <ScrollView
+              className="py-4"
+              contentContainerClassName="pb-10"
+              showsVerticalScrollIndicator={false}
             >
-              {problem?.status}
-            </Text>
+              <Image
+                className="rounded-md"
+                source={problem?.imageUrl}
+                style={{ width: "100%", height: 326, borderRadius: 6 }}
+                contentFit="fill"
+              />
 
-            {/* first row */}
-            <View className="flex-row">
-              <View className="w-[50vw]">
+              <View className="border border-neutral-light-hover p-4 rounded-lg mt-6">
                 <Text
                   style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
+                  className={`mb-5 capitalize ${
+                    (problem?.status === "pending" &&
+                      "text-secondary-orange-600") ||
+                    (problem?.status === "cancelled" && "text-error-normal") ||
+                    (problem?.status === "forwarded" && "text-green-normal")
+                  }`}
                 >
-                  Problem ID:
+                  {problem?.status}
                 </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  {problem?.problemId}
-                </Text>
+
+                <View className="flex-row">
+                  <View className="w-[50vw]">
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Problem ID:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {problem?.problemId}
+                    </Text>
+                  </View>
+
+                  <View>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Customer ID:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {problem?.customerId}
+                    </Text>
+                  </View>
+                </View>
+
+                <View className="h-px bg-neutral-light-hover my-5" />
+
+                <View className="flex-row ">
+                  <View className="w-[50vw]">
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Problem Title:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {problem?.title}
+                    </Text>
+                  </View>
+
+                  <View>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Regular" }}
+                      className="text-neutral-normal mb-2"
+                    >
+                      Date Reported:
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "SourceSans3-SemiBold" }}
+                      className="text-neutral-dark-active"
+                    >
+                      {format(new Date(problem?.reportedDate), "MMMM d, yyyy")}
+                    </Text>
+                  </View>
+                </View>
+
+                <View className="h-px bg-neutral-light-hover my-5" />
+
+                <View>
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Regular" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    <Octicons name="location" size={16} color="black" /> Location:
+                  </Text>
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    {problem?.locationName}
+                  </Text>
+                </View>
+
+                <View className="h-px bg-neutral-light-hover my-5" />
+
+                <View className="mb-5">
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Regular" }}
+                    className="text-neutral-normal mb-2"
+                  >
+                    Additional Notes:
+                  </Text>
+                  <Text
+                    style={{ fontFamily: "SourceSans3-SemiBold" }}
+                    className="text-neutral-dark-active"
+                  >
+                    {problem?.additionalNotes}
+                  </Text>
+                </View>
+
+                <ButtonSecondary
+                  onPress={() => {
+                    router.push(`/(admin)/problem/details/edit/${problem._id}`);
+                  }}
+                  title="Edit"
+                  icon={<Octicons name="pencil" size={24} color="#2E323C" />}
+                />
+
+                <View className="flex-row gap-5 pt-5">
+                  {problem?.status === "forwarded" ? (
+                    <ButtonPrimary
+                      onPress={() => router.push("/(admin)/(tabs)/chatlist")}
+                      title="Open chat"
+                      className="w-full"
+                    />
+                  ) : (
+                    <>
+                      <ButtonPrimary
+                        onPress={() => setShowCancelModal(true)}
+                        title={
+                          problem?.status === "cancelled" ? "Cancelled" : "Cancel"
+                        }
+                        className={`${problem?.status === "cancelled" ? "!bg-error-light-active" : "!bg-error-normal"} w-[48%]`}
+                        disabled={problem?.status === "cancelled"}
+                      />
+
+                      <ButtonPrimary
+                        onPress={() => {
+                          if (problem?.status === "cancelled") {
+                            setShowForwardAgainModal(true);
+                          } else {
+                            setShowForwardModal(true);
+                          }
+                        }}
+                        title={
+                          problem?.status === "cancelled"
+                            ? "Forward Again"
+                            : "Forward"
+                        }
+                        className="w-[48%]"
+                      />
+                    </>
+                  )}
+                </View>
               </View>
+            </ScrollView>
 
-              <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Customer ID:
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  {problem?.customerId}
-                </Text>
-              </View>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* second row */}
-            <View className="flex-row ">
-              <View className="w-[50vw]">
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Problem Title:
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  {problem?.title}
-                </Text>
-              </View>
-
-              <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Regular" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Date Reported:
-                </Text>
-                <Text
-                  style={{ fontFamily: "SourceSans3-SemiBold" }}
-                  className="text-neutral-dark-active"
-                >
-                  {format(new Date(problem?.reportedDate), "MMMM d, yyyy")}
-                </Text>
-              </View>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* third row */}
-            <View>
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                <Octicons name="location" size={16} color="black" /> Location:
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                {problem?.locationName}
-              </Text>
-            </View>
-
-            {/* divider */}
-            <View className="h-px bg-neutral-light-hover my-5" />
-
-            {/* fourth row */}
-            <View className="mb-5">
-              <Text
-                style={{ fontFamily: "SourceSans3-Regular" }}
-                className="text-neutral-normal mb-2"
-              >
-                Additional Notes:
-              </Text>
-              <Text
-                style={{ fontFamily: "SourceSans3-SemiBold" }}
-                className="text-neutral-dark-active"
-              >
-                {problem?.additionalNotes}
-              </Text>
-            </View>
-
-            {/* edit */}
-            <ButtonSecondary
-              onPress={() => {
-                router.push(`/(admin)/problem/details/edit/${problem._id}`);
+            <ConfirmationModal
+              visible={showCancelModal}
+              title="Cancel Problem"
+              message="Are you sure?"
+              type="cancel"
+              onConfirm={() => {
+                handleUpdateProblemStatus("cancelled");
+                setShowCancelModal(false);
               }}
-              title="Edit"
-              icon={<Octicons name="pencil" size={24} color="#2E323C" />}
+              onCancel={() => setShowCancelModal(false)}
             />
 
-            {/* buttons */}
-            <View className="flex-row gap-5 pt-5">
-              {problem?.status === "forwarded" ? (
-                <>
-                  <ButtonPrimary
-                    onPress={() => router.push("/(admin)/(tabs)/chatlist")}
-                    title="Open chat"
-                    className="w-full"
-                  />
-                </>
-              ) : (
-                <>
-                  <ButtonPrimary
-                    onPress={() => setShowCancelModal(true)}
-                    title={
-                      problem?.status === "cancelled" ? "Cancelled" : "Cancel"
-                    }
-                    className={`${problem?.status === "cancelled" ? "!bg-error-light-active" : "!bg-error-normal"} w-[48%]`}
-                    disabled={problem?.status === "cancelled"}
-                  />
+            <ConfirmationModal
+              visible={showForwardModal}
+              title="Forward Problem"
+              message="Are you sure?"
+              type="warning"
+              onConfirm={() => {
+                handleUpdateProblemStatus("forwarded");
+                setShowForwardModal(false);
+              }}
+              onCancel={() => setShowForwardModal(false)}
+            />
 
-                  <ButtonPrimary
-                    onPress={() => {
-                      if (problem?.status === "cancelled") {
-                        setShowForwardAgainModal(true);
-                      } else {
-                        setShowForwardModal(true);
-                      }
-                    }}
-                    title={
-                      problem?.status === "cancelled"
-                        ? "Forward Again"
-                        : "Forward"
-                    }
-                    className="w-[48%]"
-                  />
-                </>
-              )}
-            </View>
-          </View>
-        </ScrollView>
-
-        {/* Cancel Modal */}
-        <ConfirmationModal
-          visible={showCancelModal}
-          title="Cancel Problem"
-          message="Are you sure?"
-          type="cancel"
-          onConfirm={() => {
-            // Your action here
-            handleUpdateProblemStatus("cancelled");
-            setShowCancelModal(false);
-          }}
-          onCancel={() => setShowCancelModal(false)}
-        />
-
-        {/* forward Modal */}
-        <ConfirmationModal
-          visible={showForwardModal}
-          title="Forward Problem"
-          message="Are you sure?"
-          type="warning"
-          onConfirm={() => {
-            // Your action here
-            handleUpdateProblemStatus("forwarded");
-            setShowForwardModal(false);
-          }}
-          onCancel={() => setShowForwardModal(false)}
-        />
-
-        {/* forward Modal */}
-        <ConfirmationModal
-          visible={showForwardAgainModal}
-          title="Forward Problem Again"
-          message="Are you sure?"
-          type="warning"
-          onConfirm={() => {
-            // Your action here
-            handleUpdateProblemStatus("forwarded");
-            setShowForwardAgainModal(false);
-          }}
-          onCancel={() => setShowForwardAgainModal(false)}
-        />
+            <ConfirmationModal
+              visible={showForwardAgainModal}
+              title="Forward Problem Again"
+              message="Are you sure?"
+              type="warning"
+              onConfirm={() => {
+                handleUpdateProblemStatus("forwarded");
+                setShowForwardAgainModal(false);
+              }}
+              onCancel={() => setShowForwardAgainModal(false)}
+            />
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
 };
 
 export default ProblemDetailsScreen;
+
+

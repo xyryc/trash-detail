@@ -140,7 +140,7 @@ const ProblemDetailsScreen = () => {
                 style={{ fontFamily: "SourceSans3-Regular" }}
                 className="text-neutral-normal mb-2"
               >
-                <Octicons name="location" size={16} color="black" /> Location:
+                <Octicons name="location" size={14} color="black" /> Location:
               </Text>
               <Text
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
