@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.caitlan.trashdetail"
+      "bundleIdentifier": "com.caitlan.trashdetail",
+      "buildNumber": "1.0.1"
     },
     "android": {
       "package": "com.caitlan.trashdetail",
