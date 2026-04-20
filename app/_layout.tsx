@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import AppRouter from "@/components/shared/AppRouter";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { store } from "@/store/store";
@@ -11,6 +12,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import "./global.css";
 
@@ -37,22 +39,26 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-        <AppRouter>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="splash" />
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="(admin)" />
-            <Stack.Screen name="(employee)" />
-            <Stack.Screen name="(customer)" />
-            <Stack.Screen name="shared" />
-          </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <ThemeProvider
+          value={colorScheme === "light" ? DarkTheme : DefaultTheme}
+        >
+          <AppRouter>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="splash" />
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(admin)" />
+              <Stack.Screen name="(employee)" />
+              <Stack.Screen name="(customer)" />
+              <Stack.Screen name="shared" />
+            </Stack>
 
-          <StatusBar style="auto" />
-        </AppRouter>
-      </ThemeProvider>
-    </Provider>
+            <StatusBar style="auto" />
+          </AppRouter>
+        </ThemeProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }
