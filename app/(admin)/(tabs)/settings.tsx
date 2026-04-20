@@ -149,7 +149,7 @@ const Settings = () => {
       <Modal
         visible={isSidebarVisible}
         transparent
-        animationType="fade"
+        animationType="slide"
         onRequestClose={closeSidebar}
       >
         <View style={{ flex: 1, flexDirection: "row" }}>
