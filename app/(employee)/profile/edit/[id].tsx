@@ -2,13 +2,13 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import CustomHeader from "@/components/shared/CustomHeader";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { useUpdateProfileMutation } from "@/store/slices/employeeApiSlice";
+import { toast } from "@baronha/ting";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -38,15 +38,15 @@ const EmployeeProfileEditScreen = () => {
     useUpdateProfileMutation();
 
   const handleUpdateProfile = async () => {
-      const payload = {
-        name,
-        number,
-        addressLane1,
-        addressLane2,
-        city,
-        zipCode,
-        state: stateValue || null,
-      };
+    const payload = {
+      name,
+      number,
+      addressLane1,
+      addressLane2,
+      city,
+      zipCode,
+      state: stateValue || null,
+    };
     // console.log("payload", payload);
 
     try {
@@ -56,12 +56,28 @@ const EmployeeProfileEditScreen = () => {
       }).unwrap();
 
       if (response.success) {
-        Alert.alert("Success", "Profile updated successfully");
+        toast({
+          title: "Success",
+          message: "Profile updated successfully",
+          preset: "done",
+          haptic: "success",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
         router.back();
       }
     } catch (error: any) {
       console.error("Error updating profile:", error);
-      Alert.alert("Error", error.data.message);
+      toast({
+        title: "Error",
+        message: error.data?.message || "Failed to update profile",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     }
   };
 
@@ -73,10 +89,15 @@ const EmployeeProfileEditScreen = () => {
       const permission =
         await Location.requestForegroundPermissionsAsync();
       if (permission.status !== "granted") {
-        Alert.alert(
-          "Location permission required",
-          "Enable location access to autofill your address."
-        );
+        toast({
+          title: "Permission required",
+          message: "Enable location access to autofill your address.",
+          preset: "error",
+          haptic: "error",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
         return;
       }
 
@@ -90,7 +111,15 @@ const EmployeeProfileEditScreen = () => {
       });
 
       if (!place) {
-        Alert.alert("Error", "Couldn't find an address for your location.");
+        toast({
+          title: "Error",
+          message: "Couldn't find an address for your location.",
+          preset: "error",
+          haptic: "error",
+          backgroundColor: "#1F2937",
+          titleColor: "#FFFFFF",
+          messageColor: "#E5E7EB",
+        });
         return;
       }
 
@@ -110,7 +139,15 @@ const EmployeeProfileEditScreen = () => {
       if (place.region) setStateValue(place.region);
     } catch (error) {
       console.error("Locate me error:", error);
-      Alert.alert("Error", "Couldn't get your current location.");
+      toast({
+        title: "Error",
+        message: "Couldn't get your current location.",
+        preset: "error",
+        haptic: "error",
+        backgroundColor: "#1F2937",
+        titleColor: "#FFFFFF",
+        messageColor: "#E5E7EB",
+      });
     } finally {
       setIsLocating(false);
     }
