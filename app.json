@@ -14,13 +14,6 @@
       "buildNumber": "1",
       "appleTeamId": "Y86TJ8D9UZ",
       "infoPlist": {
-        "NSAppTransportSecurity": {
-         "NSExceptionDomains": {
-            "76.13.109.111": {
-              "NSExceptionAllowsInsecureHTTPLoads": true
-            }
-          }
-        },
         "NSLocationWhenInUseUsageDescription": "Allow Trash Detail to use your location to autofill addresses and tag problem locations."
       }
     },
