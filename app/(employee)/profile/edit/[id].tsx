@@ -1,11 +1,11 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import CustomDropdown from "@/components/shared/CustomDropDown";
 import CustomHeader from "@/components/shared/CustomHeader";
-import { STATES } from "@/constants/States";
 import { useGetLoggedInUserDataQuery } from "@/store/slices/authApiSlice";
 import { useUpdateProfileMutation } from "@/store/slices/employeeApiSlice";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as Location from "expo-location";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -14,6 +14,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,22 +30,23 @@ const EmployeeProfileEditScreen = () => {
   const [addressLane1, setAddressLane1] = useState(userData?.addressLane1);
   const [addressLane2, setAddressLane2] = useState(userData?.addressLane2);
   const [city, setCity] = useState(userData?.city);
-  const [stateValue, setStateValue] = useState(userData?.state || null);
+  const [stateValue, setStateValue] = useState(userData?.state || "");
   const [zipCode, setZipCode] = useState(userData?.zipCode);
+  const [isLocating, setIsLocating] = useState(false);
 
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateProfileMutation();
 
   const handleUpdateProfile = async () => {
-    const payload = {
-      name,
-      number,
-      addressLane1,
-      addressLane2,
-      city,
-      zipCode,
-      state: stateValue,
-    };
+      const payload = {
+        name,
+        number,
+        addressLane1,
+        addressLane2,
+        city,
+        zipCode,
+        state: stateValue || null,
+      };
     // console.log("payload", payload);
 
     try {
@@ -62,6 +64,57 @@ const EmployeeProfileEditScreen = () => {
       Alert.alert("Error", error.data.message);
     }
   };
+
+  const handleLocateMe = useCallback(async () => {
+    try {
+      if (isLocating) return;
+      setIsLocating(true);
+
+      const permission =
+        await Location.requestForegroundPermissionsAsync();
+      if (permission.status !== "granted") {
+        Alert.alert(
+          "Location permission required",
+          "Enable location access to autofill your address."
+        );
+        return;
+      }
+
+      const position = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
+      const [place] = await Location.reverseGeocodeAsync({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+
+      if (!place) {
+        Alert.alert("Error", "Couldn't find an address for your location.");
+        return;
+      }
+
+      const line1 = [place.streetNumber, place.street]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+
+      if (line1) setAddressLane1(line1);
+      else if (place.name) setAddressLane1(place.name);
+
+      if (place.city) setCity(place.city);
+      else if (place.subregion) setCity(place.subregion);
+
+      if (place.postalCode) setZipCode(place.postalCode);
+
+      if (place.region) setStateValue(place.region);
+    } catch (error) {
+      console.error("Locate me error:", error);
+      Alert.alert("Error", "Couldn't get your current location.");
+    } finally {
+      setIsLocating(false);
+    }
+  }, [isLocating]);
 
   return (
     <SafeAreaView
@@ -166,12 +219,38 @@ const EmployeeProfileEditScreen = () => {
 
               {/* fifth row */}
               <View>
-                <Text
-                  style={{ fontFamily: "SourceSans3-Medium" }}
-                  className="text-neutral-normal mb-2"
-                >
-                  Address Line 1
-                </Text>
+                <View className="flex-row items-center justify-between mb-2">
+                  <Text
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="text-neutral-normal"
+                  >
+                    Address Line 1
+                  </Text>
+
+                  <TouchableOpacity
+                    onPress={handleLocateMe}
+                    disabled={isLocating}
+                    accessibilityRole="button"
+                    accessibilityLabel="Locate me"
+                    className="flex-row items-center gap-1"
+                  >
+                    {isLocating ? (
+                      <ActivityIndicator size="small" color="#386B45" />
+                    ) : (
+                      <MaterialIcons
+                        name="my-location"
+                        size={20}
+                        color="black"
+                      />
+                    )}
+                    <Text
+                      style={{ fontFamily: "SourceSans3-Medium" }}
+                      className="text-neutral-dark"
+                    >
+                      Locate me
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 <TextInput
                   style={{ fontFamily: "SourceSans3-Medium" }}
                   className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
@@ -242,11 +321,12 @@ const EmployeeProfileEditScreen = () => {
                     State
                   </Text>
 
-                  <CustomDropdown
+                  <TextInput
+                    style={{ fontFamily: "SourceSans3-Medium" }}
+                    className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
+                    placeholder="State"
                     value={stateValue}
-                    onValueChange={setStateValue}
-                    items={STATES}
-                    placeholder="Select state"
+                    onChangeText={setStateValue}
                   />
                 </View>
               </View>
