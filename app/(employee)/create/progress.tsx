@@ -25,7 +25,8 @@ export default function ProgressFlow() {
   const router = useRouter();
   const [stepData, setStepData] = useState({
     imageUri: null as string | null,
-    location: "",
+    locationName: "",
+    location: null as { type: "Point"; coordinates: [number, number] } | null,
     problemTitle: "",
     additionalNotes: "",
     customerId: "",
@@ -63,7 +64,8 @@ export default function ProgressFlow() {
           title: stepData.problemTitle,
           additionalNotes: stepData.additionalNotes,
           imageUrl: uploadedImageUrl,
-          locationName: stepData.location,
+          location: stepData.location,
+          locationName: stepData.locationName,
           customerId: stepData.customerId,
           reportedDate: stepData.reportedDate,
         }).unwrap();

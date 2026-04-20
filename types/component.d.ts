@@ -36,14 +36,15 @@ type ProblemItem = {
   title: string;
 };
 
-type StepFormData = {
-  imageUri?: string | null;
-  location?: string;
-  problemTitle?: string;
-  additionalNotes?: string;
-  customerId?: string;
-  reportedDate?: string;
-};
+	type StepFormData = {
+	  imageUri?: string | null;
+	  locationName?: string;
+	  location?: { type: "Point"; coordinates: [number, number] } | null;
+	  problemTitle?: string;
+	  additionalNotes?: string;
+	  customerId?: string;
+	  reportedDate?: string;
+	};
 
 type StepComponentProps = {
   data: StepFormData;

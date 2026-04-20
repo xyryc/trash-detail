@@ -1,10 +1,19 @@
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { StepComponentProps } from "@/types";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useState } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import * as Location from "expo-location";
+import { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -14,12 +23,72 @@ export default function Step2({
   onComplete,
   goToStep,
 }: StepComponentProps) {
-  const [location, setLocation] = useState(data.location);
+  const [locationName, setLocationName] = useState(data.locationName || "");
+  const [location, setLocation] = useState(data.location || null);
   const [problemTitle, setProblemTitle] = useState(data.problemTitle);
   const [additionalNotes, setAdditionalNotes] = useState(data.additionalNotes);
+  const [isLocating, setIsLocating] = useState(false);
+
+  const handleLocateMe = useCallback(async () => {
+    try {
+      if (isLocating) return;
+      setIsLocating(true);
+
+      const permission = await Location.requestForegroundPermissionsAsync();
+      if (permission.status !== "granted") {
+        Alert.alert(
+          "Permission required",
+          "Enable location access to autofill the problem location."
+        );
+        return;
+      }
+
+      const position = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
+      const point = {
+        type: "Point" as const,
+        coordinates: [position.coords.longitude, position.coords.latitude] as [
+          number,
+          number,
+        ],
+      };
+      setLocation(point);
+
+      const [place] = await Location.reverseGeocodeAsync({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+
+      if (place) {
+        const line1 = [place.streetNumber, place.street]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+
+        const city = place.city || place.subregion;
+        const region = place.region;
+        const country = place.country;
+
+        const friendly = [line1 || place.name, city, region, country]
+          .filter(Boolean)
+          .join(", ")
+          .trim();
+
+        if (friendly) setLocationName(friendly);
+      }
+    } catch (error) {
+      console.error("Locate me error:", error);
+      Alert.alert("Error", "Couldn't get your current location.");
+    } finally {
+      setIsLocating(false);
+    }
+  }, [isLocating]);
 
   const handleNext = () => {
     const updatedData = {
+      locationName,
       location,
       problemTitle,
       additionalNotes,
@@ -87,9 +156,29 @@ export default function Step2({
               style={{ fontFamily: "SourceSans3-Medium" }}
               className="border border-neutral-light-active p-3 rounded-lg focus:border-neutral-darker text-neutral-dark"
               placeholder="5th Avenue, Manhattan, New York"
-              value={location}
-              onChangeText={setLocation}
+              value={locationName}
+              onChangeText={setLocationName}
             />
+
+            <TouchableOpacity
+              onPress={handleLocateMe}
+              disabled={isLocating}
+              accessibilityRole="button"
+              accessibilityLabel="Locate me"
+              className="flex-row items-center gap-2 mt-3"
+            >
+              {isLocating ? (
+                <ActivityIndicator size="small" color="#386B45" />
+              ) : (
+                <MaterialIcons name="my-location" size={18} color="black" />
+              )}
+              <Text
+                style={{ fontFamily: "SourceSans3-Medium" }}
+                className="text-neutral-dark"
+              >
+                Locate me
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <View className="my-5">

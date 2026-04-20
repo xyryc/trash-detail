@@ -123,7 +123,7 @@ export default function Step4({
                 style={{ fontFamily: "SourceSans3-SemiBold" }}
                 className="text-neutral-dark-active"
               >
-                {data.location}
+                {data.locationName}
               </Text>
             </View>
 
