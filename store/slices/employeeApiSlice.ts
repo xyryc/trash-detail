@@ -34,6 +34,7 @@ export const employeeApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: payload,
       }),
+      invalidatesTags: [{ type: "Problem", id: "EMPLOYEE" }, { type: "Problem" }],
     }),
 
     // uploadImage: builder.mutation<UploadImageResponse, FormData>({
