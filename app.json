@@ -2,7 +2,7 @@
   "expo": {
     "name": "Trash Detail",
     "slug": "trash-detail",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "trashdetail",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.caitlan.trashdetail",
-      "buildNumber": "1",
+      "buildNumber": "3",
       "appleTeamId": "Y86TJ8D9UZ",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Allow Trash Detail to use your location to autofill addresses and tag problem locations."
@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "com.caitlan.trashdetail",
-      "versionCode": 2,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -30,21 +30,20 @@
         "android.permission.ACCESS_NETWORK_STATE",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
-        "CAMERA",
-        "READ_MEDIA_IMAGES",
-        "WRITE_MEDIA_IMAGES",
-        "READ_MEDIA_VIDEO",
-        "WRITE_MEDIA_VIDEO",
-        "android.permission.CAMERA",
-        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
-        "android.permission.ACCESS_MEDIA_LOCATION",
-        "android.permission.RECORD_AUDIO",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA"
       ],
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.WRITE_MEDIA_IMAGES",
+        "android.permission.WRITE_MEDIA_VIDEO",
+        "android.permission.ACCESS_MEDIA_LOCATION",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW"
       ]
     },
     "web": {
@@ -74,15 +73,7 @@
           "recordAudioAndroid": false
         }
       ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow Trash Detail to access your photos.",
-          "savePhotosPermission": "Allow Trash Detail to save photos.",
-          "isAccessMediaLocationEnabled": true,
-          "granularPermissions": ["READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO"]
-        }
-      ]
+      "expo-image-picker"
     ],
     "experiments": {
       "typedRoutes": true

@@ -148,3 +148,62 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+---
+
+## Play Store (Android) — Signed AAB
+
+This repo includes `upload-keystore.jks` (upload key) and a helper script to generate a **signed** Android App Bundle (`.aab`) using Gradle.
+
+### 1) Set signing env vars
+
+From the project root:
+
+```bash
+export ANDROID_KEYSTORE_FILE="upload-keystore.jks"
+export ANDROID_KEYSTORE_PASSWORD="***"
+export ANDROID_KEY_ALIAS="***"
+export ANDROID_KEY_PASSWORD="***" # optional (defaults to ANDROID_KEYSTORE_PASSWORD)
+```
+
+### 2) Build the signed AAB
+
+```bash
+npm run android:aab
+```
+
+Output:
+
+`android/app/build/outputs/bundle/release/app-release.aab`
+
+Note: if you specifically need to run `clean` first, some React Native New Architecture projects may fail during native clean due to missing codegen folders. You can opt-in via:
+
+```bash
+ANDROID_GRADLE_CLEAN=1 npm run android:aab
+```
+
+By default the build script also verifies signing (fails if it detects the debug keystore). To disable verification:
+
+```bash
+ANDROID_VERIFY_SIGNING=0 npm run android:aab
+```
+
+### 3) Verify keystore + AAB signature
+
+List keystore details (fingerprints/owner):
+
+```bash
+keytool -list -v -keystore upload-keystore.jks -alias "$ANDROID_KEY_ALIAS"
+```
+
+Verify the generated AAB is signed:
+
+```bash
+jarsigner -verify -verbose -certs android/app/build/outputs/bundle/release/app-release.aab
+```
+
+You can also view the Gradle signing configuration:
+
+```bash
+npm run android:signingReport
+```

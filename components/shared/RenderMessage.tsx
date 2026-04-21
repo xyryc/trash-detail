@@ -2,12 +2,12 @@ import { RenderMessageProps } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
-import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   Platform,
+  Share,
   Text,
   TouchableOpacity,
   View,
@@ -39,18 +39,6 @@ const RenderMessage = ({ item, currentUserId }: RenderMessageProps) => {
     try {
       setIsDownloading(true);
 
-      // Request permissions
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission Required",
-          "Please grant media library permissions to download images"
-        );
-        setIsDownloading(false);
-        return;
-      }
-
       // Get file extension from URL
       const fileExtension = imageUrl.split(".").pop()?.split("?")[0] || "jpg";
       const fileName = `image_${Date.now()}.${fileExtension}`;
@@ -63,20 +51,13 @@ const RenderMessage = ({ item, currentUserId }: RenderMessageProps) => {
         throw new Error("Download failed");
       }
 
-      // Save to media library
-      const asset = await MediaLibrary.createAssetAsync(downloadResult.uri);
-
-      // Optionally create an album
-      if (Platform.OS === "android") {
-        const album = await MediaLibrary.getAlbumAsync("Downloads");
-        if (album == null) {
-          await MediaLibrary.createAlbumAsync("Downloads", asset, false);
-        } else {
-          await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-        }
-      }
-
-      Alert.alert("Success", "Image saved to gallery", [{ text: "OK" }]);
+      // Use the system share sheet instead of requesting broad media permissions.
+      // This avoids READ_MEDIA_* permissions which can block Play Console submissions.
+      await Share.share(
+        Platform.OS === "android"
+          ? { url: downloadResult.uri, message: "Downloaded image" }
+          : { url: downloadResult.uri }
+      );
     } catch (error) {
       console.error("Download error:", error);
       Alert.alert(

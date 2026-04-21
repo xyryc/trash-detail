@@ -90,17 +90,6 @@ const ChatInputSection: React.FC<ChatInputSectionProps> = ({
   };
 
   const openGallery = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        "Permission required",
-        "Gallery permission is needed to select photos"
-      );
-      return;
-    }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
