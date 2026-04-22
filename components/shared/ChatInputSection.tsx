@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   Keyboard,
+  Linking,
   Text,
   TextInput,
   TouchableOpacity,
@@ -84,12 +85,33 @@ const ChatInputSection: React.FC<ChatInputSectionProps> = ({
       quality: 0.8,
     });
 
-    if (!result.canceled && result.assets[0]) {
-      onSendImage(result.assets[0].uri, "");
+    const asset = result.canceled ? undefined : result.assets?.[0];
+    if (asset?.uri) {
+      onSendImage(asset.uri, "");
     }
   };
 
   const openGallery = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      const buttons =
+        permissionResult.canAskAgain === false
+          ? [
+              { text: "Cancel", style: "cancel" as const },
+              { text: "Open Settings", onPress: () => Linking.openSettings() },
+            ]
+          : [{ text: "OK", style: "default" as const }];
+
+      Alert.alert(
+        "Permission required",
+        "Photo library permission is needed to select photos",
+        buttons
+      );
+      return;
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -97,8 +119,9 @@ const ChatInputSection: React.FC<ChatInputSectionProps> = ({
       quality: 0.8,
     });
 
-    if (!result.canceled && result.assets[0]) {
-      onSendImage(result.assets[0].uri, "");
+    const asset = result.canceled ? undefined : result.assets?.[0];
+    if (asset?.uri) {
+      onSendImage(asset.uri, "");
     }
   };
 

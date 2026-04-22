@@ -11,10 +11,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.caitlan.trashdetail",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "appleTeamId": "Y86TJ8D9UZ",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow Trash Detail to use your location to autofill addresses and tag problem locations."
+        "NSLocationWhenInUseUsageDescription": "Allow Trash Detail to use your location to autofill addresses and tag problem locations.",
+        "NSCameraUsageDescription": "Allow Trash Detail to use your camera to take photos and attach them to a collection issue report.",
+        "NSPhotoLibraryUsageDescription": "Allow Trash Detail to access your photo library to attach an existing photo to a collection issue report."
       }
     },
     "android": {
@@ -69,11 +71,17 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow Trash Detail to access your camera",
+          "cameraPermission": "Allow Trash Detail to use your camera to take photos and attach them to a collection issue report.",
           "recordAudioAndroid": false
         }
       ],
-      "expo-image-picker"
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow Trash Detail to use your camera to take photos and attach them to a collection issue report.",
+          "photosPermission": "Allow Trash Detail to access your photo library to attach an existing photo to a collection issue report."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
