@@ -238,8 +238,8 @@
 
         <div class="content">
             <div class="meta-info">
-                <p><strong>Effective Date:</strong> January 11, 2026</p>
-                <p><strong>Last Updated:</strong> January 11, 2026</p>
+                <p><strong>Effective Date:</strong> April 20, 2026</p>
+                <p><strong>Last Updated:</strong> April 20, 2026</p>
             </div>
 
             <div class="toc">
@@ -274,7 +274,7 @@
                 <h3>2.1 Personal Information</h3>
                 <p>We collect the following personal information when you register and use our app:</p>
                 <ul>
-                    <li><strong>Account Information:</strong> Name, email address, password (encrypted), user ID</li>
+                    <li><strong>Account Information:</strong> Name, email address, password (hashed), user ID</li>
                     <li><strong>Profile Information:</strong> Phone number, profile photo</li>
                     <li><strong>Address Information:</strong> Street address (Lane 1 & 2), city, state, ZIP code</li>
                     <li><strong>Role Information:</strong> User type (Customer, Employee, or Administrator)</li>
@@ -301,6 +301,7 @@
 	                <h3>2.4 Technical Information</h3>
 	                <ul>
 	                    <li><strong>Device Information:</strong> Device type, operating system (iOS/Android), app version</li>
+                        <li><strong>Usage Data:</strong> App activity and interactions (for example, features used) to help us troubleshoot and improve the app</li>
 	                    <li><strong>Network Information:</strong> Internet connectivity status</li>
 	                    <li><strong>Support Diagnostics (Optional):</strong> If you contact us for support, you may choose to share additional diagnostic information (e.g., screenshots) to help us troubleshoot</li>
 	                </ul>
@@ -361,6 +362,9 @@
 
 	                <h3>4.3 Expo Services</h3>
 	                <p>Our app is built using Expo. For more information about Expo's privacy practices, review <a href="https://expo.dev/privacy" target="_blank">Expo's Privacy Policy</a>.</p>
+
+                    <h3>4.4 Email Services</h3>
+                    <p>We send account-related emails (such as password reset codes) using an email service provider.</p>
             </section>
 
             <section id="section5">
@@ -374,6 +378,7 @@
                 </ul>
 
                 <h3>5.2 Third-Party Service Providers</h3>
+                <p>We do not sell or rent your personal information.</p>
                 <p>We share data with trusted service providers who assist in operating our app (e.g., cloud storage, hosting services). These providers are bound by confidentiality agreements.</p>
 
                 <h3>5.3 Legal Requirements</h3>
@@ -388,10 +393,9 @@
                 
 	                <h3>6.1 Security Measures</h3>
 	                <ul>
-	                    <li>Encrypted password storage</li>
-	                    <li>Secure connections for data transmission (HTTPS where available)</li>
+	                    <li>Hashed password storage</li>
+	                    <li>Encrypted connections (TLS/HTTPS) for data transmission</li>
 	                    <li>Token-based authentication</li>
-	                    <li>Regular security audits</li>
 	                    <li>Access controls based on user roles</li>
 	                </ul>
 

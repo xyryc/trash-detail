@@ -1,7 +1,7 @@
 # **Privacy Policy for TrashDetail**
 
-**Effective Date:** January 11, 2026  
-**Last Updated:** January 11, 2026
+**Effective Date:** April 20, 2026  
+**Last Updated:** April 20, 2026
 
 ## **1. Introduction**
 
@@ -14,7 +14,7 @@ By using TrashDetail, you agree to the collection and use of information in acco
 ### **2.1 Personal Information**
 We collect the following personal information when you register and use our app:
 
-- **Account Information:** Name, email address, password (encrypted), user ID
+- **Account Information:** Name, email address, password (hashed), user ID
 - **Profile Information:** Phone number, profile photo
 - **Address Information:** Street address (Lane 1 & 2), city, state, ZIP code
 - **Role Information:** User type (Customer, Employee, or Administrator)
@@ -36,9 +36,9 @@ When you report waste collection issues, we collect:
 
 ### **2.4 Technical Information**
 - **Device Information:** Device type, operating system (iOS/Android), app version
-- **Usage Data:** App interactions, features used, session duration
 - **Network Information:** Internet connectivity status
-- **Error Logs:** Crash reports and performance data
+- **Support Diagnostics (Optional):** If you contact us for support, you may choose to share additional diagnostic information (e.g., screenshots) to help us troubleshoot
+ - **Usage Data:** App activity and interactions (for example, features used) to help us troubleshoot and improve the app
 
 ### **2.5 Camera and Media Access**
 - **Camera Access:** To capture photos of waste collection problems
@@ -83,7 +83,10 @@ We use Cloudinary for image storage and delivery. Photos you upload are stored o
 Real-time chat functionality is powered by Socket.io for instant messaging between users.
 
 ### **4.3 Expo Services**
-Our app is built using Expo, which may collect anonymous usage statistics. Review [Expo's Privacy Policy](https://expo.dev/privacy) for more information.
+Our app is built using Expo. Review [Expo's Privacy Policy](https://expo.dev/privacy) for more information.
+
+### **4.4 Email Services**
+We send account-related emails (such as password reset codes) using an email service provider.
 
 ## **5. Data Sharing and Disclosure**
 
@@ -93,6 +96,8 @@ Our app is built using Expo, which may collect anonymous usage statistics. Revie
 - **Administrators** have access to all problems, users, and communications for management purposes
 
 ### **5.2 Third-Party Service Providers**
+We do not sell or rent your personal information.
+
 We share data with trusted service providers who assist in operating our app (e.g., cloud storage, hosting services). These providers are bound by confidentiality agreements.
 
 ### **5.3 Legal Requirements**
@@ -104,10 +109,9 @@ In the event of a merger, acquisition, or sale of assets, your information may b
 ## **6. Data Storage and Security**
 
 ### **6.1 Security Measures**
-- Encrypted password storage
-- Secure HTTPS connections for data transmission
+- Hashed password storage
+- Encrypted connections (TLS/HTTPS) for data transmission
 - Token-based authentication
-- Regular security audits
 - Access controls based on user roles
 
 ### **6.2 Data Retention**
@@ -122,7 +126,7 @@ Your data is stored on secure servers. Image data is stored with Cloudinary, whi
 You can access and update your profile information within the app's settings section.
 
 ### **7.2 Data Deletion**
-You may request deletion of your account and associated data by contacting us at [your-support-email@example.com].
+You may request deletion of your account and associated data by contacting us at trashdetail@gmail.com.
 
 ### **7.3 Communication Preferences**
 You can manage notification settings within the app to control what alerts you receive.
@@ -174,11 +178,9 @@ If you are in the European Economic Area, you have the right to:
 If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:
 
 **TrashDetail Support**  
-Email: [your-support-email@example.com]  
-Address: [Your Company Address]  
-Phone: [Your Contact Number]
-
-**Data Protection Officer:** [DPO Contact Information, if applicable]
+Email: trashdetail@gmail.com  
+Address: 1104 W Colonial Ave, Elizabeth City, NC 27909-4112, United States  
+Phone: +1 (252) 256-2180
 
 ---
 
